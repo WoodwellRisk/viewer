@@ -196,7 +196,7 @@ const Layers = ({ getters, setters }) => {
               <Slider
                 min={climRanges[variable].min}
                 max={climRanges[variable].max}
-                step={(variable == 'lethal_heat') ? 0.25 : (variable == 'slr') ? 0.01 : 0.1}
+                step={(variable == 'lethal_heat') ? 0.25 : ((variable == 'slr') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
                 sx={{ width: '150px', display: 'inline-block', ml: 2,}}
                 value={clim[0]}
                 onChange={(e) =>
@@ -223,7 +223,7 @@ const Layers = ({ getters, setters }) => {
                 <Slider
                   min={climRanges[variable].min}
                   max={climRanges[variable].max}
-                  step={(variable == 'lethal_heat') ? 0.25 : (variable == 'slr') ? 0.01 : 0.1}
+                  step={(variable == 'lethal_heat') ? 0.25 : ((variable == 'slr') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
                   sx={{ width: '150px', display: 'inline-block', ml: 2,}}
                   value={clim[1]}
                   onChange={(e) => {
