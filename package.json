@@ -1,0 +1,63 @@
+{
+  "name": "risk-data-viewer",
+  "version": "1.0",
+  "description": "Woodwell interactive climate risk maps",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next -p 3000",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [
+    "Woodwell",
+    "risk",
+    "mapping",
+    "carbonplan",
+    "webgl",
+    "mapbox",
+    "regl"
+  ],
+  "author": "jakidxav",
+  "license": "MIT",
+  "dependencies": {
+    "@carbonplan/colormaps": "^4.0.0",
+    "@carbonplan/components": "^12.6.1",
+    "@carbonplan/icons": "^2.0.0",
+    "@carbonplan/layouts": "^4.1.0",
+    "@carbonplan/maps": "^3.3.1",
+    "@carbonplan/theme": "^8.1.0",
+    "@emotion/react": "^11.11.4",
+    "@theme-ui/color": "^0.16.2",
+    "@theme-ui/match-media": "^0.16.2",
+    "@turf/turf": "^6.5.0",
+    "d3-array": "^2.12.1",
+    "d3-axis": "^2.1.0",
+    "d3-geo": "^2.0.2",
+    "d3-scale": "^2.2.2",
+    "d3-selection": "^2.0.0",
+    "d3-shape": "^3.2.0",
+    "glsl-geo-projection": "^1.0.1",
+    "mapbox-gl": "^1.13.1",
+    "ndarray": "^1.0.19",
+    "next": "^14.1.4",
+    "polished": "^4.3.1",
+    "react-animate-height": "^3.2.3",
+    "regl": "^2.1.0",
+    "theme-ui": "^0.16.2",
+    "uuid": "^8.3.2",
+    "xhr-request": "^1.1.0",
+    "zarr-js": "^3.3.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.4",
+    "babel-jest": "^27.3.1",
+    "jest": "^27.3.1",
+    "microbundle": "^0.13.0",
+    "prettier": "^2.2.1",
+    "rimraf": "3.0.2"
+  }
+}
