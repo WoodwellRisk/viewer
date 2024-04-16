@@ -150,7 +150,7 @@ const Layers = ({ getters, setters }) => {
                 }}
                 values={riskThemes}
                 setValues={setRiskThemes}
-                // colors={defaultRiskColors}
+                colors={defaultRiskColors}
                 multiSelect={false}
                 onClick={handleRiskChange}
               />

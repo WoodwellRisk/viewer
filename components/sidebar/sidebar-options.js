@@ -106,7 +106,8 @@ const riskDescriptions = {
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
       This layer shows the return period of Category 3+ tropical cyclones, calculated by generating thousands of years of simulated storm tracks using the open-source STORM model.
-      Using this simulated data, we can make estimates of tropical cyclone probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions.
+      Using this simulated data, we can make estimates of tropical cyclone probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions. 
+      The boxes outline the regions where the STORM model has been run.
     </Box>
     <Box sx={sx.data_source}>
       For a more detailed discussion on how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risk_tropical-cyclone/" target="_blank">methodology website.</Link>

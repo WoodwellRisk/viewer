@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 
 import SidebarHeader from './sidebar-header'
 import Footer from './footer'
@@ -38,6 +38,28 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
         <Menu visible={showMenu} /> 
 
         <Layers getters={getters} setters={setters} />
+
+        <Box
+          onClick={toggleMethods}
+          sx={{
+            mx: [3, 4, 5, 6],
+            pt: [1],
+            mt: ['12px'],
+            pb: [2],
+            mb: [3],
+            fontSize: [2, 2, 2, 3],
+            width: 'fit-content',
+            fontFamily: 'heading',
+            letterSpacing: 'smallcaps',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            '&:hover': {
+              color: 'secondary',
+            },
+          }}
+        >
+          READ METHODS<Text sx={sx.arrow}>→</Text>
+        </Box>
 
         <Footer />
       </Box>

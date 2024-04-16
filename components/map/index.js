@@ -152,6 +152,15 @@ const Map = ({ getters, setters, mobile }) => {
             regionOptions={{ setData: setRegionData }}
           />
 
+          {(variable.startsWith('tc')) && (
+            <Line
+            color={theme.rawColors.secondary}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/tc_boundaries'}
+            variable={'tc_boundaries'}
+            width={1}
+          />
+          )}
+
           <Ruler />
 
           <RegionControls
