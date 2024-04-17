@@ -39,7 +39,7 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
 
         <Layers getters={getters} setters={setters} />
 
-        <Box
+        {/* <Box
           onClick={toggleMethods}
           sx={{
             mx: [3, 4, 5, 6],
@@ -59,7 +59,7 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
           }}
         >
           READ METHODS<Text sx={sx.arrow}>→</Text>
-        </Box>
+        </Box> */}
 
         <Footer />
       </Box>
