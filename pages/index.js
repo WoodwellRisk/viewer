@@ -21,6 +21,7 @@ function Index() {
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 15 }).slice(0,).reverse() : 
                    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
                    (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() : 
                    useThemedColormap(colormapName)
   const [clim, setClim] = useState([0.0, 0.5])
   const [showRegionPicker, setShowRegionPicker] = useState(false)

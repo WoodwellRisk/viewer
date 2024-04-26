@@ -138,7 +138,7 @@ const Layers = ({ getters, setters }) => {
 
           <Box sx={{ mt: -3 }} className='risk-theme-container'>
             <Box as='h2' variant='styles.h4' className='risk-title'>
-              Risk theme <Info>
+              Climate risk <Info>
                 The purpose of this site is to increase public access to climate risk data while showcasing some of the datasets the Risk group uses to communicate climate risk to the communities and external partners it works with.
               </Info>
             </Box>
@@ -182,6 +182,7 @@ const Layers = ({ getters, setters }) => {
                 colormap={ (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 15 }).slice(1,).reverse() : 
                            (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
                            (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                           (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() : 
                             useThemedColormap(colormapName)}
                 label= { defaultLabels[variable] }
                 units={ defaultUnits[variable] }

@@ -2,9 +2,26 @@
 ![MIT License][]
 
 # Woodwell Risk data viewer
+The purpose of this site is to increase public access to climate risk data while showcasing some of the datasets the Risk group uses to communicate climate risk to the communities and external partners it works with.
 
 ## Data sources
-...
+### Water stress
+- Drought index [[NEX-GDDP-CMIP6]](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+- Annual precipitation [[NEX-GDDP-CMIP6]](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+
+### Wildfires
+- Wildfire danger days [[NEX-GDDP-CMIP6]](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+
+### Temperature
+- Annual  mean temperature [[NEX-GDDP-CMIP6]](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+- Hot days (days over 90°F) [[NEX-GDDP-CMIP6]](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+- Lethal heat [Woodwell]
+- Warm nights (nights over 20°C) [[NEX-GDDP-CMIP6]](https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+
+### Coastal risk
+- Sea level rise depth value [[NASA](https://sealevel.nasa.gov/data_tools/17), [Hammond et al. (2021)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355)]
+- Tropical cyclone return period [[STORM]](https://www.nature.com/articles/s41597-020-0381-2)
+
 
 ## Processing steps
 ### Vector data

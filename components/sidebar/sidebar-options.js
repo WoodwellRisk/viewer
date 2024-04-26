@@ -45,8 +45,8 @@ const riskDescriptions = {
   'Drought': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer corresponds to the probability of extreme drought, which we define as an event with a less than 10% chance of occurring under 1°C of global warming.
-      Hyper-arid regions are masked out of this layer given drought cannot occur under permanently dry conditions.
+      Probability of extreme drought. The likelihood of an event with a 10% or less chance of occurrence in the base period of 1°C of climate warming (2000-2020). 
+      Hyper-arid regions are masked as drought cannot occur under permanently dry conditions. Drought is defined as a temporary negative anomaly in local water balance conditions.
     </Box>
     <Box sx={sx.data_source}>
       This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -66,8 +66,9 @@ const riskDescriptions = {
   'Lethal Heat': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      In very hot or very humid conditions, heat can become lethal to people exposed for extended periods of time.
-      The 'warming level of emergence' is the warming level at which a location begins to see at least 1 day of lethal heat per year.
+      High temperatures and humidity may cause severe health problems therefore our lethal heat metric is derived from relative humidity and temperature. 
+      It describes conditions that may be lethal for a healthy, non-heat-adapted human exposed for extended periods of time. 
+      This data illustrates the warming level at which at least 1 day of at least 6 hours of lethal heat per year begins to occur.
     </Box>
     <Box sx={sx.data_source}>
       To learn more about how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risk_heat/#lethal-heat-" target="_blank">methodology website.</Link>
@@ -76,7 +77,7 @@ const riskDescriptions = {
   'Precipitation': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows average annual precipitation.
+      Average annual precipitation.
     </Box>
     <Box sx={sx.data_source}>
       This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -85,18 +86,18 @@ const riskDescriptions = {
     'Sea Level Rise': 
     <Box className='risk-layer-description' sx={sx.data_description}>
       <Box>
-        This layer shows the future sea level change from the <Link href="https://www.ipcc.ch/assessment-report/ar6/" target="_blank">IPCC AR6</Link> report under the SSP5-8.5 medium confidence scenario. 
-        Future sea level change shown in this layer represents the median model projections from 2020 to 2050, relative to a <Link href="https://podaac.jpl.nasa.gov/announcements/2021-08-09-Sea-level-projections-from-the-IPCC-6th-Assessment-Report" target="_blank">1995-2014 baseline period</Link>.
+        Future sea level change from the <Link href="https://www.ipcc.ch/assessment-report/ar6/" target="_blank">IPCC AR6</Link> report under a medium confidence fossil-fueled development pathway (SSP5-8.5) scenario. 
+        The layer represents the median model projections from 2020 to 2050, relative to a <Link href="https://podaac.jpl.nasa.gov/announcements/2021-08-09-Sea-level-projections-from-the-IPCC-6th-Assessment-Report" target="_blank">1995-2014 baseline period</Link>.
       </Box>
       <Box sx={sx.data_source}>
-        The input data for this layer came from <Link href="https://sealevel.nasa.gov/data_tools/17" target="_blank">NASA Sea Level Change</Link>,
-        though  the vertical land movement data in the sea level change dataset was replaced with data from <Link href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355" target="_blank">Hammond et al. (2021)</Link>.
+        The base data is from <Link href="https://sealevel.nasa.gov/data_tools/17" target="_blank">NASA Sea Level Change</Link>
+        with the vertical land movement data replaced with data from <Link href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355" target="_blank">Hammond et al. (2021)</Link>.
       </Box>
     </Box>,
   'Temperature': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows average annual temperature.
+      Average annual temperature.
     </Box>
     <Box sx={sx.data_source}>
       This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -116,10 +117,7 @@ const riskDescriptions = {
   'Warm Nights': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows the number of days per year regions are likely to see with nightly minimum temperatures over 20°C, relative to 1°C of global warming. 
-      This is what Copernicus calls “tropical nights” on their <Link href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agroclimatic-indicators?tab=overview" target="_blank">Agroclimatic indicators</Link> site. 
-      Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases. 
-      Nighttime temperatures seem to be rising at a faster rate than daytime temperatures, which is especially problematic as warm nights are often coupled with heatwaves.
+      Heat stress. The number of days in a year with nightly minimum temperatures over 20°C. Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
     </Box>
     <Box sx={sx.data_source}>
       This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -128,8 +126,8 @@ const riskDescriptions = {
   'Wildfires': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows wildfire danger days, which we define as days with weather conditions more prone to wildfire than the top 5% of days under 1°C of global warming. 
-      Non-vegetated regions are masked out of this layer given wildfire is unlikely to occur in them.
+      The number of days in a year at or more extreme than the worst 5% of days of fire weather index (FWI) in the base period of 1°C of climate warming (2000-2020). 
+      Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. FWI is based on meteorological variables only.
     </Box>
     <Box sx={sx.data_source}>
       This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -208,7 +206,7 @@ const climRanges = {
   // tc_epy_lt: { min: 0.0, max: 0.7 },
   tc_rp_nt: { min: 0.0, max: 100 },
   tc_rp_lt: { min: 0.0, max: 100 },
-  slr: { min: 0.0, max: 0.5 },
+  slr: { min: -0.5, max: 0.5 },
   wdd_1_5: { min: 0.0, max: 50.0 }, // true max 70 days
   wdd_2_0: { min: 0.0, max: 50.0 }, // true max 70 days
   wn_1_5: { min: 0.0, max: 365.0 },
@@ -231,7 +229,7 @@ const defaultColormaps = {
   // tc_epy_lt: 'fire', // water also looks good
   tc_rp_nt: 'fire', // water also looks good
   tc_rp_lt: 'fire', // water also looks good
-  slr: 'water',
+  slr: 'redteal', // tealgrey, redteal also looks good
   wdd_1_5: 'fire',
   wdd_2_0: 'fire',
   wn_1_5: 'fire',

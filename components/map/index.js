@@ -148,7 +148,8 @@ const Map = ({ getters, setters, mobile }) => {
             // mode={'texture'}
             // there is an issue between zoom levels 5 and 6, https://github.com/carbonplan/maps/issues/19
             // though it could also be coming from ndpyramid: https://github.com/carbonplan/ndpyramid/blob/main/ndpyramid/reproject.py 
-            mode={(variable == 'lethal_heat') || (variable.startsWith('wdd')) ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+            // mode={(variable == 'lethal_heat') || (variable.startsWith('wdd')) ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+            mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
             regionOptions={{ setData: setRegionData }}
           />
 
