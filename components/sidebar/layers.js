@@ -44,12 +44,6 @@ const Layers = ({ getters, setters }) => {
     setShowLakes,
   } = setters
 
-//   pt: ['12px'],
-// pb: ['9px'],
-// height: '56px',
-// pl: [3, 4, 5, 6],
-// pr: [3, 5, 5, 6],
-
   const sx = {
     group: {
       // pt: [0, 4, 4, 4],
@@ -57,10 +51,10 @@ const Layers = ({ getters, setters }) => {
       my: [3],
       pl: [0, 4, 5, 6],
       pr: [0, 5, 5, 6],
-      borderStyle: 'solid',
-      borderColor: 'muted',
-      borderWidth: '0px',
-      borderBottomWidth: [0, '1px', '1px', '1px'],
+      // borderStyle: 'solid',
+      // borderColor: 'muted',
+      // borderWidth: '0px',
+      // borderBottomWidth: [0, '1px', '1px', '1px'],
       width: '100%',
     },
     label: {
@@ -134,9 +128,9 @@ const Layers = ({ getters, setters }) => {
               Woodwell Risk viewer
             </Box>
           </Box> 
-          <SidebarDivider sx={{ my: 4 }} className='divider-1' />  */}
+          <SidebarDivider sx={{ width: '100%', my: 4 }} />  */}
 
-          <Box sx={{ mt: -3 }} className='risk-theme-container'>
+          <Box sx={{ mt: -3}} className='risk-theme-container'>
             <Box as='h2' variant='styles.h4' className='risk-title'>
               Climate risk <Info>
                 The purpose of this site is to increase public access to climate risk data while showcasing some of the datasets the Risk group uses to communicate climate risk to the communities and external partners it works with.
@@ -156,8 +150,10 @@ const Layers = ({ getters, setters }) => {
               />
             </Box>
           </Box>
-          <SidebarDivider sx={{ my: 4 }} className='divider-2'/>
+        </Box>
+        <SidebarDivider sx={{ width: '100%',  my: 4 }} />
 
+        <Box sx={sx.group}>
           <Box className='risk-layer-container' sx={{ mt: 0, mb: 4 }} >
             <Box as='h2' variant='styles.h4' className='risk-layer-title'>
               {riskTitles[risk]} <Info>{riskDescription}</Info>

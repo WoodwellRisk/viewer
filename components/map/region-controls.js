@@ -8,7 +8,7 @@ const AverageDisplay = ({ variable, data: { value } }) => {
   }
 
   let result
-  const filteredData = value[variable].filter((d) => d !== 9.969209968386869e36)// && d != -32768.00)
+  const filteredData = value[variable].filter((d) => d !== 9.969209968386869e36)
   if (filteredData.length === 0) {
     result = 'no data in region'
   } else {

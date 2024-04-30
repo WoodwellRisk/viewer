@@ -20,6 +20,7 @@
   "author": "jakidxav",
   "license": "MIT",
   "dependencies": {
+    "@carbonplan/charts": "^3.1.1",
     "@carbonplan/colormaps": "^4.0.0",
     "@carbonplan/components": "^12.6.1",
     "@carbonplan/icons": "^2.0.0",
