@@ -55,9 +55,7 @@ const riskDescriptions = {
   'Hot Days': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows the number of days per year regions are likely to see with temperatures over 90°F, relative to 1°C of global warming. 
-      This is slightly different from the “summer days” metric Copernicus details on their <Link href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agroclimatic-indicators?tab=overview" target="_blank">Agroclimatic indicators</Link>{' '} 
-      site, but can be thought of as a measure of heat stress.
+      The number of days in a year with a daily maximum temperature over 90°F.
     </Box>
     <Box sx={sx.data_source}>
       This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -106,11 +104,11 @@ const riskDescriptions = {
   'Tropical Cyclones':
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows the return period of Category 3+ tropical cyclones, calculated by generating thousands of years of simulated storm tracks using the open-source STORM model.
-      Using this simulated data, we can make estimates of tropical cyclone probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions. 
-      The boxes outline the regions where the STORM model has been run.
+      This layer shows the return period of Category 3+ tropical cyclones passing within 100km of a location, calculated by generating thousands of years of simulated storm tracks using the open-source STORM model. 
+      Resulting simulations include track locations and intensity, which can be used to make estimates of tropical cyclone approach probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions. 
     </Box>
     <Box sx={sx.data_source}>
+      The data presented here was generated using scripts from our Coastal Risk Framework. 
       For a more detailed discussion on how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risk_tropical-cyclone/" target="_blank">methodology website.</Link>
     </Box>
   </Box>,

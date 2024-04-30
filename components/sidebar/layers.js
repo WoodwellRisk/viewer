@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Box, Text } from 'theme-ui'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
-import { Badge, Colorbar, Filter, Slider, useScrollbarClass } from '@carbonplan/components'
+import { Badge, Colorbar, Filter, Link, Slider, useScrollbarClass } from '@carbonplan/components'
 import { SidebarDivider } from '@carbonplan/layouts'
 
 import Info from './info'
@@ -139,7 +139,8 @@ const Layers = ({ getters, setters }) => {
           <Box sx={{ mt: -3 }} className='risk-theme-container'>
             <Box as='h2' variant='styles.h4' className='risk-title'>
               Climate risk <Info>
-                The purpose of this site is to increase public access to climate risk data while showcasing some of the datasets the Risk group uses to communicate climate risk to the communities and external partners it works with.
+                A number of layers on this map were created by aggregating climate model output not by year, but by warming level. 
+                To learn more about this approach, please see our <Link href="https://woodwellrisk.github.io/tools_warming-levels/#evaluating-warming-level-calculations" target="_blank">methodology website</Link>.
               </Info>
             </Box>
             <Box className='risk-theme-layers'>
