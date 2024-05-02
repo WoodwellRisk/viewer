@@ -31,6 +31,7 @@
     "@theme-ui/color": "^0.16.2",
     "@theme-ui/match-media": "^0.16.2",
     "@turf/turf": "^6.5.0",
+    "d3": "^7.9.0",
     "d3-array": "^2.12.1",
     "d3-axis": "^2.1.0",
     "d3-geo": "^2.0.2",

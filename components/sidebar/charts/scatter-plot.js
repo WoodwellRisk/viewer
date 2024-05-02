@@ -1,5 +1,5 @@
 import { Box, Text } from 'theme-ui'
-import { Axis, AxisLabel, Bar, Chart, Grid, Line, Plot, Scatter, Ticks, TickLabels } from '@carbonplan/charts'
+import { Axis, AxisLabel, Chart, Grid, Plot, Scatter, Ticks, TickLabels } from '@carbonplan/charts'
 import { SidebarDivider } from '@carbonplan/layouts'
 import { rgb } from 'polished'
 
@@ -17,7 +17,7 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
     }
 
     if (!value || !value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
-        return 'loading...'
+        return
     }
 
     // console.log(value);
@@ -48,7 +48,7 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
     let maxData = Math.max.apply(Math, graphData).toFixed(2)
 
     // https://stackoverflow.com/questions/22015684/zip-arrays-in-javascript
-    const zip = (x, y) =>  Array.from(Array(x.length), (_, i) => [x[i], y[i]]);
+    const zip = (x, y) => Array.from(Array(x.length), (_, i) => [x[i], y[i]]);
     // let plotCoordinates = zip(graphLon, graphLat);
     let plotCoordinates = zip(graphData, graphLat);
     // console.log(plotCoordinates)
@@ -63,43 +63,21 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
     let maxValue = Math.max.apply(Math, clim)
     // console.log(minValue, maxValue)
 
-    console.log("Attempt at mapping values to colors")
-    console.log(plotCoordinates.map((arr) => arr[0]).map((value) => {
-        // value
-        // https://stackoverflow.com/questions/49922460/scale-a-numpy-array-with-from-0-1-0-2-to-0-255
-        let color = Math.round(((value - minValue) * (1 / (maxValue - minValue) * 255)))
-        // console.log(value, color)
-        return rgb(...colormap[color]);
-    }))
+    // Currently, this is not working because there are values that are not in the colormap for variables
+    // where I created a "truncated" colormap. So the call to rgb(colormap[color]) finds a value not in the colormap.
+    // I could solve this by screening for values above and below the colormap values.
+    // console.log("Attempt at mapping values to colors")
+    // console.log(plotCoordinates.map((arr) => arr[0]).map((value) => {
+    //     // value
+    //     // https://stackoverflow.com/questions/49922460/scale-a-numpy-array-with-from-0-1-0-2-to-0-255
+    //     let color = Math.round(((value - minValue) * (1 / (maxValue - minValue) * 255)))
+    //     // console.log(value, color)
+    //     return rgb(...colormap[color]);
+    // }))
 
 
     return (
         <>
-
-            {/* {showRegionPicker && (
-                <>
-                    <Box sx={{ ...sx.chart }} className='chart-container'>
-                        <Chart x={[minLon, maxLon]} y={[minLat, maxLat]} padding={{ left: 50, top: 0 }} >
-                            <Grid vertical horizontal />
-                            <Ticks left bottom />
-                            <TickLabels left bottom />
-                            <AxisLabel left >Latitude</AxisLabel>
-                            <AxisLabel bottom>Longitude</AxisLabel>
-                            <Plot>
-                                {graphData.length > 0 && (<Scatter
-                                    size={10}
-                                    alpha={0.5}
-                                    // x={(d) => d.x}
-                                    // y={(d) => d.y}
-                                    data={plotCoordinates}
-                                />)}
-                            </Plot>
-                        </Chart>
-                    </Box>
-                    <SidebarDivider sx={{ width: '100%', my: 4 }} />
-                </>
-            )} */}
-
             {showRegionPicker && (
                 <>
                     <Box sx={{ ...sx.chart }} className='chart-container'>
