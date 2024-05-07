@@ -52,7 +52,8 @@ const Info = ({ children }) => {
           id='icon'
           sx={{
             strokeWidth: '1.4px',
-            stroke: expanded ? 'text' : 'muted',
+            // stroke: expanded ? 'text' : 'muted',
+            stroke: 'text',
             transform: 'translate(0px, 5px)',
             transition: '0.1s',
           }}
