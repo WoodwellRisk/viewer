@@ -76,7 +76,7 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
         <Layers getters={getters} setters={setters} />
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
-        <ScatterPlot variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} />
+        {/* <ScatterPlot variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} /> */}
         <BarChart variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} />
 
         {/* <Box
