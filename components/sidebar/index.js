@@ -5,7 +5,8 @@ import { SidebarDivider } from '@carbonplan/layouts'
 import SidebarHeader from './sidebar-header'
 import Menu from './menu'
 import Layers from './layers'
-import ScatterPlot from './charts/scatter-plot'
+// import ScatterPlot from './charts/scatter-plot'
+import SummaryStats from './summary-stats'
 import BarChart from './charts/bar-chart'
 import Footer from './footer'
 
@@ -77,7 +78,8 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
         {/* <ScatterPlot variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} /> */}
-        <BarChart variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} />
+        <SummaryStats variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
+        <BarChart variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
 
         {/* <Box
           onClick={toggleMethods}

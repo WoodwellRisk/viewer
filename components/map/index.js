@@ -164,14 +164,7 @@ const Map = ({ getters, setters, mobile }) => {
           )}
 
           <Ruler />
-
-          <RegionControls
-            variable={variable}
-            regionData={regionData}
-            showRegionPicker={showRegionPicker}
-            setShowRegionPicker={setShowRegionPicker}
-          />
-
+          <RegionControls showRegionPicker={showRegionPicker} setShowRegionPicker={setShowRegionPicker} />
           <Overlays getters={getters} setters={setters} />
 
       </MapContainer>
