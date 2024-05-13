@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Flex } from 'theme-ui'
 import Sidebar from './sidebar'
-import Map from './map'
+import Map from './map/'
 import Methods from './methods'
 import Loading from './loading'
 
