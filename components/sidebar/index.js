@@ -1,12 +1,49 @@
 import { useState } from 'react'
 import { Box, Text } from 'theme-ui'
+import { SidebarDivider } from '@carbonplan/layouts'
 
 import SidebarHeader from './sidebar-header'
-import Footer from './footer'
 import Menu from './menu'
 import Layers from './layers'
+// import ScatterPlot from './charts/scatter-plot'
+import SummaryStats from './summary-stats'
+import BarChart from './charts/bar-chart'
+import Footer from './footer'
 
 const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
+  const {
+    display, 
+    opacity,
+    risk,
+    variable,
+    clim,
+    colormapName,
+    colormap,
+    regionData,
+    showRegionPicker,
+    showOceanMask,
+    showCountriesOutline,
+    showStatesOutline,
+    showLandOutline,
+    showLakes,
+  } = getters
+
+  const {
+    setDisplay,
+    setOpacity,
+    setRisk,
+    setVariable,
+    setClim,
+    setColormapName,
+    setRegionData,
+    setShowRegionPicker,
+    setShowOceanMask,
+    setShowCountriesOutline,
+    setShowStatesOutline,
+    setShowLandOutline,
+    setShowLakes,
+  } = setters
+  
   const sx = {
     'sidebar-container': {
       maxWidth: [
@@ -25,7 +62,7 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
       zIndex: 900,
       backgroundColor: 'background',
       display: ['none', 'flex', 'flex'],
-    },
+    }
   }
 
   const [showMenu, setShowMenu] = useState(false)
@@ -38,6 +75,11 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
         <Menu visible={showMenu} /> 
 
         <Layers getters={getters} setters={setters} />
+        <SidebarDivider sx={{ width: '100%', my: 4 }} />
+
+        {/* <ScatterPlot variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} /> */}
+        <SummaryStats variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
+        <BarChart variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
 
         {/* <Box
           onClick={toggleMethods}

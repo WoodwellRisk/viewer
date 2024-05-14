@@ -125,7 +125,8 @@ const Map = ({ getters, setters, mobile }) => {
           {showRegionPicker && (
             <RegionPicker
               color={theme.colors.primary}
-              backgroundColor="transparent"
+              // backgroundColor="transparent"
+              backgroundColor={theme.colors.background}
               fontFamily={theme.fonts.mono}
               fontSize={'14px'}
               minRadius={1}
@@ -163,14 +164,7 @@ const Map = ({ getters, setters, mobile }) => {
           )}
 
           <Ruler />
-
-          <RegionControls
-            variable={variable}
-            regionData={regionData}
-            showRegionPicker={showRegionPicker}
-            setShowRegionPicker={setShowRegionPicker}
-          />
-
+          <RegionControls showRegionPicker={showRegionPicker} setShowRegionPicker={setShowRegionPicker} />
           <Overlays getters={getters} setters={setters} />
 
       </MapContainer>

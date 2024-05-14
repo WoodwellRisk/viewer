@@ -193,7 +193,7 @@ const climRanges = {
   hot_days_1_5: { min: 0.0, max: 365.0 },
   hot_days_2_0: { min: 0.0, max: 365.0 },
   lethal_heat: { min: 1.0, max: 4.0 },
-  precip: { min: 0, max: 232.4 },
+  // precip: { min: 0, max: 232.4 },
   precip_1_5: { min: 0, max: 4000 },
   precip_2_0: { min: 0, max: 4000 },
   precip_3_0: { min: 0, max: 4000 },
