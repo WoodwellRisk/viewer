@@ -7,9 +7,6 @@ import RegionControls from './region-controls'
 import Ruler from './ruler'
 import Overlays from './overlays'
 
-mapboxgl.accessToken = ''
-const bucket = 'https://carbonplan-maps.s3.us-west-2.amazonaws.com/'
-
 const Map = ({ getters, setters, mobile }) => {
   const container = useRef(null)
   const [map, setMap] = useState(null)
@@ -141,7 +138,6 @@ const Map = ({ getters, setters, mobile }) => {
             source={
               `https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`
             }
-            // source = {variable != 'prec' ? `https://storage.googleapis.com/carbonplan-maps/v2/demo/2d/${variable}` : `https://storage.googleapis.com/carbonplan-share/maps-demo/2d/${variable}-regrid` }
             variable={variable}
             clim={clim}
             colormap={colormap}
