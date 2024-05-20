@@ -17,6 +17,7 @@ const Map = ({ getters, setters, mobile }) => {
     opacity,
     risk,
     variable,
+    band,
     clim,
     colormapName,
     colormap,
@@ -34,6 +35,7 @@ const Map = ({ getters, setters, mobile }) => {
     setOpacity,
     setRisk,
     setVariable,
+    setBand,
     setClim,
     setColormapName,
     setRegionData,
@@ -58,7 +60,7 @@ const Map = ({ getters, setters, mobile }) => {
   return (
     <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
       <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} >
-      {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
+      {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
             <Fill
               color={theme.rawColors.background}
               // color={ '#000058' }
@@ -67,7 +69,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-          {variable == 'slr' && (
+          {variable == 'slr_3d' && (
             <Fill
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
@@ -75,7 +77,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-          {showStatesOutline && variable != 'slr' && (
+          {showStatesOutline && variable != 'slr_3d' && (
             <Line
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
@@ -84,7 +86,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-          {showCountriesOutline && variable != 'slr' && (
+          {showCountriesOutline && variable != 'slr_3d' && (
             <Line
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
@@ -93,7 +95,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-        {showLakes && variable != 'slr' && (
+        {showLakes && variable != 'slr_3d' && (
             <Fill
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
@@ -101,7 +103,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-        {showLakes && variable != 'slr' && (
+        {showLakes && variable != 'slr_3d' && (
             <Line
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
@@ -141,6 +143,7 @@ const Map = ({ getters, setters, mobile }) => {
             variable={variable}
             clim={clim}
             colormap={colormap}
+            selector={{ band }}
             // colormap={(variable == 'lethal_heat') ? colormap : colormap}
             // mode={'texture'}
             // there is an issue between zoom levels 5 and 6, https://github.com/carbonplan/maps/issues/19

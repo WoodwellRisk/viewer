@@ -16,6 +16,7 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
     opacity,
     risk,
     variable,
+    band,
     clim,
     colormapName,
     colormap,
@@ -33,6 +34,7 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
     setOpacity,
     setRisk,
     setVariable,
+    setBand,
     setClim,
     setColormapName,
     setRegionData,
@@ -78,8 +80,8 @@ const Sidebar = ({ getters, setters, showMethods, toggleMethods }) => {
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
         {/* <ScatterPlot variable={variable} regionData={regionData} colormap={colormap} clim={clim} showRegionPicker={showRegionPicker} /> */}
-        <SummaryStats variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
-        <BarChart variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
+        {/* <SummaryStats variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} /> */}
+        {/* <BarChart variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} /> */}
 
         {/* <Box
           onClick={toggleMethods}

@@ -16,6 +16,7 @@ const Layers = ({ getters, setters }) => {
     opacity,
     risk,
     variable,
+    band,
     clim,
     colormapName,
     colormap,
@@ -33,6 +34,7 @@ const Layers = ({ getters, setters }) => {
     setOpacity,
     setRisk,
     setVariable,
+    setBand,
     setClim,
     setColormapName,
     setRegionData,
@@ -69,7 +71,7 @@ const Layers = ({ getters, setters }) => {
   const [riskThemes, setRiskThemes] = useState({
     'Drought': true, 
     'Hot Days': false, 
-    'Lethal Heat': false,
+    // 'Lethal Heat': false,
     'Precipitation': false, 
     'Sea Level Rise': false,
     'Temperature': false,
@@ -89,47 +91,36 @@ const Layers = ({ getters, setters }) => {
 
     if(risks.includes(event.target.innerHTML)) {
       let risk = event.target.innerHTML;
+      let values = riskLayers[risk].values
+      let variable = riskLayers[risk].variable
+      let band = parseFloat(Object.keys(values)[0])
+      // console.log("Risk", risk)
+      // console.log("Variable", variable)
+      // console.log("Values", values)
+      // console.log("Band", band)
       setRisk(risk)
       setRiskDescription(riskDescriptions[risk])
-      setValues(riskLayers[risk].values)
-      // after changing the risk in the dropdown menu, we also need to
-      // make sure that there is a default variable for the map to display
-      // https://stackoverflow.com/questions/3298477/get-the-first-key-name-of-a-javascript-object
-      let variable = Object.keys(riskLayers[risk].values)[0]
+      setValues(values)
+      setBand(band)
       setVariable(variable)
       setClim([climRanges[variable].min, climRanges[variable].max])
       setColormapName(defaultColormaps[variable])
     }
   })
 
-  const handleVariableChange = useCallback((event) => {
-      // there is a bug in the regionpicker
-      // it does not accept risk / variable changes while it is open
-      if(showRegionPicker) {
-        setShowRegionPicker(false);
-      }
-
+  const handleBandChange = useCallback((event) => {
       let keys = Object.keys(riskLayers[risk].values);
       let label = event.target.innerHTML;
       // https://stackoverflow.com/questions/23013573/swap-key-with-value-in-object
-      let variable = Object.fromEntries(Object.entries(riskLayers[risk].labels).map(([k, v]) => [v, k]))[label]
-      if(label !='Difference' && keys.includes(variable)) {
-        setVariable(variable)
-        setClim([climRanges[variable].min, climRanges[variable].max])
-        setColormapName(defaultColormaps[variable])
+      let band = Object.fromEntries(Object.entries(riskLayers[risk].labels).map(([k, v]) => [v, k]))[label]
+      if(keys.includes(band)) {
+        setBand(parseFloat(band));
       }
   })
 
   return (
     <>
       <Box sx={sx.group}>
-      {/* <Box sx={{ mt: -4}} className='logo-container'>
-             <Box as='h1' variant='styles.h4' className='org-name' sx={{mt: 0, my: 'auto', }}>
-              Woodwell Risk viewer
-            </Box>
-          </Box> 
-          <SidebarDivider sx={{ width: '100%', my: 4 }} />  */}
-
           <Box sx={{ mt: -3}} className='risk-theme-container'>
             <Box as='h2' variant='styles.h4' className='risk-title'>
               Climate risk <Info>
@@ -167,7 +158,7 @@ const Layers = ({ getters, setters }) => {
                 colors={riskLayers[risk].colors}
                 labels={riskLayers[risk].labels}
                 multiSelect={false}
-                onClick={handleVariableChange}
+                onClick={handleBandChange}
             />
             </Box>
             
@@ -179,7 +170,7 @@ const Layers = ({ getters, setters }) => {
                 colormap={ (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 15 }).slice(1,).reverse() : 
                            (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
                            (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
-                           (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                           (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() : 
                             useThemedColormap(colormapName)}
                 label= { defaultLabels[variable] }
                 units={ defaultUnits[variable] }
@@ -194,7 +185,7 @@ const Layers = ({ getters, setters }) => {
               <Slider
                 min={climRanges[variable].min}
                 max={climRanges[variable].max}
-                step={(variable == 'lethal_heat') ? 0.25 : ((variable == 'slr') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
+                step={(variable == 'lethal_heat') ? 0.25 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
                 sx={{ width: '150px', display: 'inline-block', ml: 2,}}
                 value={clim[0]}
                 onChange={(e) =>
@@ -211,7 +202,7 @@ const Layers = ({ getters, setters }) => {
                 }}
               >
                 {
-                  (variable == 'slr') && (clim[0].toFixed(2) == climRanges[variable].min) ? '<'+clim[0].toFixed(2) : clim[0].toFixed(2)
+                  (variable == 'slr_3d') && (clim[0].toFixed(2) == climRanges[variable].min) ? '<'+clim[0].toFixed(2) : clim[0].toFixed(2)
                 }
               </Badge>
             </Box>
@@ -221,7 +212,7 @@ const Layers = ({ getters, setters }) => {
                 <Slider
                   min={climRanges[variable].min}
                   max={climRanges[variable].max}
-                  step={(variable == 'lethal_heat') ? 0.25 : ((variable == 'slr') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
+                  step={(variable == 'lethal_heat') ? 0.25 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
                   sx={{ width: '150px', display: 'inline-block', ml: 2,}}
                   value={clim[1]}
                   onChange={(e) => {
