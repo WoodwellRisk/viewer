@@ -146,10 +146,11 @@ const riskLayers = {
     labels: { '1.5': '1.5C', '2.0': '2.0C', },
   },
   'Lethal Heat': {
-    variable: 'lethal_heat',
-    values: { 'lethal_heat': true, },
-    colors: { 'lethal_heat': 'red', },
-    labels: { 'lethal_heat': 'Warming level of emergence', },
+    variable: 'lethal_heat_3d',
+    values: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
+    // values: { 'lethal_heat': true, },
+    // colors: { 'lethal_heat': 'red', },
+    labels: { 'lethal_heat_3d': 'Warming level of emergence', },
   },
   'Precipitation': {
     variable: 'precip',
@@ -193,7 +194,7 @@ const riskLayers = {
 const climRanges = {
   drought: { min: 0.0, max: 0.5 },
   hot_days: { min: 0.0, max: 365.0 },
-  lethal_heat: { min: 1.0, max: 4.0 },
+  lethal_heat_3d: { min: 1.0, max: 4.0 },
   precip: { min: 0, max: 4000 },
   tavg: { min: -30, max: 30 },
   tc_rp: { min: 0.0, max: 100 },
@@ -205,7 +206,7 @@ const climRanges = {
 const defaultColormaps = {
   drought: 'warm',
   hot_days: 'fire',
-  lethal_heat: 'fire',
+  lethal_heat_3d: 'fire',
   precip: 'water',
   tavg: 'redteal',
   tc_rp: 'fire', // water also looks good
@@ -217,7 +218,7 @@ const defaultColormaps = {
 const defaultLabels = {
   drought: 'Probability of extreme drought',
   hot_days: 'Number of days per year',
-  lethal_heat: '°C',
+  lethal_heat_3d: '°C',
   precip: 'Precipitation',
   tavg: 'Temperature',
   tc_rp: 'Return period of Category 3+ storm',
@@ -229,6 +230,7 @@ const defaultLabels = {
 const defaultUnits = {
   drought: '',
   hot_days: '',
+  lethal_heat_3d: '',
   precip: '(mm)',
   tavg: '(°C)',
   tc_rp: '(years)',

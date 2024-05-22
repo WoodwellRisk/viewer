@@ -19,7 +19,7 @@ function Index() {
   const [variable, setVariable] = useState('drought')
   const [band, setBand] = useState(1.5)
   const [colormapName, setColormapName] = useState('warm')
-  const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 15 }).slice(0,).reverse() : 
+  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() : 
                    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
                    (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
                    (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() : 
