@@ -53,16 +53,10 @@ const AverageDisplay = ({ variable, data: { value } }) => {
             mx: 'auto',
             pl: [0, 4, 5, 6],
             pr: [0, 1, 1, 1,],
-        //   display: ['none', 'none', 'flex', 'flex'],
-        //   alignItems: 'center',
-        //   position: 'absolute',
-        //   color: 'primary',
-        //   left: [13],
-        //   bottom: [17, 17, 15, 15],
         }}
       > 
         {showRegionPicker && (
-          <AverageDisplay data={ regionData } variable={ variable } /> // month={month} />
+          <AverageDisplay data={ regionData } variable={ variable } />
         )}
       </Box>
     )

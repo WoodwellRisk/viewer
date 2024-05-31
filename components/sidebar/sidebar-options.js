@@ -148,8 +148,6 @@ const riskLayers = {
   'Lethal Heat': {
     variable: 'lethal_heat_3d',
     values: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
-    // values: { 'lethal_heat': true, },
-    // colors: { 'lethal_heat': 'red', },
     labels: { 'lethal_heat_3d': 'Warming level of emergence', },
   },
   'Precipitation': {

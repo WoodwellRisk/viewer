@@ -93,20 +93,18 @@ const Layers = ({ getters, setters }) => {
       let risk = event.target.innerHTML;
       let values = riskLayers[risk].values
       let variable = riskLayers[risk].variable
+      let band
       if (variable != 'lethal_heat_3d') {
-        let band = parseFloat(Object.keys(values)[0])
+        band = parseFloat(Object.keys(values)[0])
       } else {
-        let band = values[0]
+        band = values[values.length - 1]
       }
-      // console.log("Risk", risk)
-      // console.log("Variable", variable)
-      // console.log("Values", values)
-      // console.log("Band", band)
+
       setRisk(risk)
       setRiskDescription(riskDescriptions[risk])
       setValues(values)
-      setBand(band)
       setVariable(variable)
+      setBand(band)
       setClim([climRanges[variable].min, climRanges[variable].max])
       setColormapName(defaultColormaps[variable])
     }
@@ -118,6 +116,7 @@ const Layers = ({ getters, setters }) => {
       let label = event.target.innerHTML;
       // https://stackoverflow.com/questions/23013573/swap-key-with-value-in-object
       let band = Object.fromEntries(Object.entries(riskLayers[risk].labels).map(([k, v]) => [v, k]))[label]
+
       if(keys.includes(band)) {
         setBand(parseFloat(band));
       }
@@ -169,37 +168,14 @@ const Layers = ({ getters, setters }) => {
                 />
               )}
               {variable == 'lethal_heat_3d' && (
-                <>
-                  <Tag color='red' value={true} sx={
-                    {mr:[2], mb:[2], 
-                    borderColor:'red',
-                    width: 'max-content',
-                  }}>
-                    Warming level of emergence
-                  </Tag>
-                  <Slider
-                    min={1.0}
-                    max={4.0}
-                    step={0.5}
-                    sx={{ width: '175px', display: 'inline-block' }}
-                    value={band}
-                    onChange={(e) => setBand(parseFloat(e.target.value))}
-                  />
-                  <Badge
-                    sx={{
-                      bg: 'primary',
-                      color: 'background',
-                      display: 'inline-block',
-                      position: 'relative',
-                      left: [3],
-                      top: [1],
-                    }}
-                  >
-                    { band.toFixed(1) }
-                  </Badge>
-                </>
+                                <Tag color='red' value={true} sx={
+                                  {mr:[2], mb:[2], 
+                                  borderColor:'red',
+                                  width: 'max-content',
+                                }}>
+                                  Warming level of emergence
+                                </Tag>
               )}
-
             </Box>
             
             <Box sx={{...sx.label, }}>
@@ -221,31 +197,32 @@ const Layers = ({ getters, setters }) => {
               />
             </Box>
 
-            {(variable != 'lethal_heat_3d' && !variable.startsWith('tc')) && (<Box sx={sx.label}>Min
-              <Slider
-                min={climRanges[variable].min}
-                max={climRanges[variable].max}
-                step={(variable == 'lethal_heat_3d') ? 0.5 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
-                sx={{ width: '150px', display: 'inline-block', ml: 2,}}
-                value={clim[0]}
-                onChange={(e) =>
-                  setClim((prev) => [parseFloat(e.target.value), prev[1]])
-                }
-              />
-              <Badge
-                sx={{
-                  bg: 'primary',
-                  color: 'background',
-                  display: 'inline-block',
-                  position: 'relative',
-                  left: [3],
-                }}
-              >
-                {
-                  (variable == 'slr_3d') && (clim[0].toFixed(2) == climRanges[variable].min) ? '<'+clim[0].toFixed(2) : clim[0].toFixed(2)
-                }
-              </Badge>
-            </Box>
+            {(variable != 'lethal_heat_3d' && !variable.startsWith('tc')) && (
+              <Box sx={sx.label}>Min
+                <Slider
+                  min={climRanges[variable].min}
+                  max={climRanges[variable].max}
+                  step={(variable == 'lethal_heat_3d') ? 0.5 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
+                  sx={{ width: '150px', display: 'inline-block', ml: 2,}}
+                  value={clim[0]}
+                  onChange={(e) =>
+                    setClim((prev) => [parseFloat(e.target.value), prev[1]])
+                  }
+                />
+                <Badge
+                  sx={{
+                    bg: 'primary',
+                    color: 'background',
+                    display: 'inline-block',
+                    position: 'relative',
+                    left: [3],
+                  }}
+                >
+                  {
+                    (variable == 'slr_3d') && (clim[0].toFixed(2) == climRanges[variable].min) ? '<'+clim[0].toFixed(2) : clim[0].toFixed(2)
+                  }
+                </Badge>
+              </Box>
             )}
 
               {(variable != 'lethal_heat_3d') && (
@@ -273,6 +250,31 @@ const Layers = ({ getters, setters }) => {
                       ((risk == 'Drought' || risk == 'Sea Level Rise' || risk == 'Precipitation' || risk == 'Wildfires' || risk == "Tropical Cyclones") && 
                       (clim[1].toFixed(2) == climRanges[variable].max)) ? '>'+clim[1].toFixed(2) : clim[1].toFixed(2)
                     }
+                  </Badge>
+                </Box>
+              )}
+
+            {variable == 'lethal_heat_3d' && (
+              <Box sx={{...sx.label}}> 
+                  <Slider
+                    min={1.0}
+                    max={4.0}
+                    step={0.5}
+                    sx={{ width: '175px', display: 'inline-block' }}
+                    value={band}
+                    onChange={(e) => setBand(parseFloat(e.target.value))}
+                  />
+                  <Badge
+                    sx={{
+                      bg: 'primary',
+                      color: 'background',
+                      display: 'inline-block',
+                      position: 'relative',
+                      left: [3],
+                      top: [1],
+                    }}
+                  >
+                    { band.toFixed(1) }
                   </Badge>
                 </Box>
               )}
