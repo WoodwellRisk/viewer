@@ -16,12 +16,13 @@ function Index() {
   const [display, setDisplay] = useState(true)
   const [opacity, setOpacity] = useState(1)
   const [risk, setRisk] = useState('Drought')
-  const [variable, setVariable] = useState('drought_1_5')
+  const [variable, setVariable] = useState('drought')
+  const [band, setBand] = useState(1.5)
   const [colormapName, setColormapName] = useState('warm')
-  const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 15 }).slice(0,).reverse() : 
+  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() : 
                    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
                    (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
-                   (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() : 
                    useThemedColormap(colormapName)
   const [clim, setClim] = useState([0.0, 0.5])
   const [showRegionPicker, setShowRegionPicker] = useState(false)
@@ -37,6 +38,7 @@ function Index() {
     opacity,
     risk,
     variable,
+    band,
     clim,
     colormapName,
     colormap,
@@ -54,6 +56,7 @@ function Index() {
     setOpacity,
     setRisk,
     setVariable,
+    setBand,
     setClim,
     setColormapName,
     setRegionData,
@@ -83,7 +86,7 @@ function Index() {
         </Layout> 
       )}
       {!isWide && (
-        <Box sx={{ display: ['initial', 'none', 'none', 'none'] }}>
+        <Box sx={{ display: ['initial', 'none', 'none', 'none'], overflow: "hidden",}}>
           <Layout
             description={
               'Woodwell Climate Research Center risk data'

@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 import { SidebarDivider } from '@carbonplan/layouts'
 import { climRanges } from '../sidebar-options'
 
-const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
+const BarChart = ({ variable, regionData, showRegionPicker }) => {
 
     const sx = {
         chart: {
@@ -21,12 +21,12 @@ const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
     const max = climRanges[variable].max
     const variableRange = [min, max]
 
-    if (!value || !value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+    if (!regionData.value || !regionData.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
         return
     }
 
-    let lat = value.coordinates.lat;
-    let lon = value.coordinates.lon;
+    let lat = regionData.value.coordinates.lat;
+    let lon = regionData.value.coordinates.lon;
     let graphData = []
     let graphLat = []
     let graphLon = []
@@ -35,7 +35,7 @@ const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
     // i solved this by setting values above and below the colormap values to the min / max of climRanges.
     // https://stackoverflow.com/questions/22311544/get-indices-indexes-of-all-occurrences-of-an-element-in-an-array
-    value[variable].forEach(function (element, idx) {
+    regionData.value[variable].forEach(function (element, idx) {
         if (element !== 9.969209968386869e36) {
             if (element > max) {
                 graphData.push(max);
@@ -54,18 +54,18 @@ const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
     // bin the data
     const nBins = 10;
     const range = max - min;
-    const binWidth = (variable.startsWith("hot_days")) || (variable.startsWith("wn")) ? 30 : range / nBins;
+    const binWidth = (variable == "hot_days") || (variable == "warm_nights") ? 30 : range / nBins;
 
     // the sea level rise, temperature and lethal heat bins need to be shifted
     // "out of the box", the binning method works for variables with range [0, value]
     // the sea level rise and temperature data layers go from [-value, value]
     // the lethal heat data only goes from [1, 4]
     let binEdges = Array(nBins + 1).fill(0).map((_, i) => Number((i * binWidth).toFixed(2)))
-    if (variable == 'slr') {
+    if (variable == 'slr_3d') {
         binEdges = binEdges.map((d) => Number((d - 0.5).toFixed(1)))
-    } else if (variable == 'lethal_heat') {
+    } else if (variable == 'lethal_heat_3d') {
         binEdges = binEdges.map((d) => Number((d + 1.0).toFixed(1)))
-    } else if (variable.startsWith('tavg')) {
+    } else if (variable == 'tavg') {
         binEdges = binEdges.map((d) => d - 30)
     }
 
@@ -92,8 +92,8 @@ const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
     // https://stackoverflow.com/questions/22015684/zip-arrays-in-javascript
     const zip = (x, y) => Array.from(Array(x.length), (_, i) => [x[i], y[i]]);
     let plotData = zip(binEdges, percentages);
-    const xMin = (variable.startsWith("tavg")) ? -35 : min - binWidth;
-    const xMax = (variable.startsWith("tavg")) ? 35 : max + binWidth;
+    const xMin = (variable == "tavg") ? -35 : min - binWidth;
+    const xMax = (variable == "tavg") ? 35 : max + binWidth;
 
     return (
         <>

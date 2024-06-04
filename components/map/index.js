@@ -7,9 +7,6 @@ import RegionControls from './region-controls'
 import Ruler from './ruler'
 import Overlays from './overlays'
 
-mapboxgl.accessToken = ''
-const bucket = 'https://carbonplan-maps.s3.us-west-2.amazonaws.com/'
-
 const Map = ({ getters, setters, mobile }) => {
   const container = useRef(null)
   const [map, setMap] = useState(null)
@@ -20,6 +17,7 @@ const Map = ({ getters, setters, mobile }) => {
     opacity,
     risk,
     variable,
+    band,
     clim,
     colormapName,
     colormap,
@@ -37,6 +35,7 @@ const Map = ({ getters, setters, mobile }) => {
     setOpacity,
     setRisk,
     setVariable,
+    setBand,
     setClim,
     setColormapName,
     setRegionData,
@@ -59,18 +58,18 @@ const Map = ({ getters, setters, mobile }) => {
   }
 
   return (
+    // <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
     <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
       <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} >
-      {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
+      {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
             <Fill
               color={theme.rawColors.background}
-              // color={ '#000058' }
               source={'https://storage.googleapis.com/risk-maps/vector_layers/ocean'}
               variable={'ocean'}
             />
           )}
 
-          {variable == 'slr' && (
+          {variable == 'slr_3d' && (
             <Fill
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
@@ -78,7 +77,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-          {showStatesOutline && variable != 'slr' && (
+          {showStatesOutline && variable != 'slr_3d' && (
             <Line
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
@@ -87,7 +86,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-          {showCountriesOutline && variable != 'slr' && (
+          {showCountriesOutline && variable != 'slr_3d' && (
             <Line
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
@@ -96,7 +95,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-        {showLakes && variable != 'slr' && (
+        {showLakes && variable != 'slr_3d' && (
             <Fill
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
@@ -104,7 +103,7 @@ const Map = ({ getters, setters, mobile }) => {
             />
           )}
 
-        {showLakes && variable != 'slr' && (
+        {showLakes && variable != 'slr_3d' && (
             <Line
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
@@ -130,7 +129,7 @@ const Map = ({ getters, setters, mobile }) => {
               fontFamily={theme.fonts.mono}
               fontSize={'14px'}
               minRadius={1}
-              maxRadius={800}
+              maxRadius={1500}
             />
           )}
 
@@ -141,16 +140,16 @@ const Map = ({ getters, setters, mobile }) => {
             source={
               `https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`
             }
-            // source = {variable != 'prec' ? `https://storage.googleapis.com/carbonplan-maps/v2/demo/2d/${variable}` : `https://storage.googleapis.com/carbonplan-share/maps-demo/2d/${variable}-regrid` }
             variable={variable}
             clim={clim}
             colormap={colormap}
+            selector={{ band }}
             // colormap={(variable == 'lethal_heat') ? colormap : colormap}
             // mode={'texture'}
             // there is an issue between zoom levels 5 and 6, https://github.com/carbonplan/maps/issues/19
             // though it could also be coming from ndpyramid: https://github.com/carbonplan/ndpyramid/blob/main/ndpyramid/reproject.py 
             // mode={(variable == 'lethal_heat') || (variable.startsWith('wdd')) ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
-            mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+            mode={(variable == 'lethal_heat_3d') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
             regionOptions={{ setData: setRegionData }}
           />
 
@@ -163,7 +162,7 @@ const Map = ({ getters, setters, mobile }) => {
           />
           )}
 
-          <Ruler />
+          {!mobile && (<Ruler />)}
           <RegionControls showRegionPicker={showRegionPicker} setShowRegionPicker={setShowRegionPicker} />
           <Overlays getters={getters} setters={setters} />
 

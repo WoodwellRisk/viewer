@@ -1,8 +1,7 @@
 import { Box, Text } from 'theme-ui'
-import { alpha } from '@theme-ui/color'
 import Content from './content.js'
 
-function Methods({ showMethods, toggleMethods }) {
+function About({ showAbout, toggleAbout, mobile }) {
   return (
     <Box
       sx={{
@@ -11,7 +10,7 @@ function Methods({ showMethods, toggleMethods }) {
         zIndex: 200,
         borderStyle: 'solid',
         borderWidth: 0,
-        borderRightWidth: showMethods ? 1 : 0,
+        borderRightWidth: showAbout ? 1 : 0,
         borderColor: 'muted',
         height: '100%',
         left: [
@@ -28,7 +27,7 @@ function Methods({ showMethods, toggleMethods }) {
           'calc(5 * 100vw / 12 - 20px)',
         ],
         transition: 'transform 0.2s',
-        transform: showMethods ? 'translateX(0px)' : 'translateX(-100%)',
+        transform: showAbout ? 'translateX(0px)' : 'translateX(-100%)',
         overflowY: 'scroll',
         display: ['none', 'initial', 'initial'],
       }}
@@ -41,8 +40,9 @@ function Methods({ showMethods, toggleMethods }) {
           mb: [4],
         }}
       >
+      {!mobile && (
         <Box
-          onClick={toggleMethods}
+          onClick={toggleAbout}
           sx={{
             cursor: 'pointer',
             '&:hover > #arrow': {
@@ -79,6 +79,8 @@ function Methods({ showMethods, toggleMethods }) {
             Back
           </Box>
         </Box>
+        )}
+
         <Box
           sx={{
             position: 'relative',
@@ -92,4 +94,4 @@ function Methods({ showMethods, toggleMethods }) {
   )
 }
 
-export default Methods
+export default About

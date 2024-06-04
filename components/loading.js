@@ -15,7 +15,6 @@ const Loading = ({ mobile = false }) => {
     <Box
       sx={{
         width: '100%',
-        // height: mobile ? 'calc(100vh - 120px)' : '100%',
         height: '100%',
         fontFamily: 'mono',
         bg: 'background',

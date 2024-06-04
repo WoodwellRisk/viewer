@@ -1,16 +1,56 @@
 import { useState } from 'react'
-import { Box, Flex, Grid } from 'theme-ui'
+import { Box, Flex, Grid, Text } from 'theme-ui'
 import { alpha } from '@theme-ui/color'
 import { Left } from '@carbonplan/icons'
 import { Button, Tray, FadeIn } from '@carbonplan/components'
 import Map from './map'
 import Layers from './sidebar/layers'
-import MethodsContent from './methods/content'
+import About from './sidebar/about'
+import Content from './sidebar/about/content'
 import Loading from './loading'
 
 function Mobile({ getters, setters, expanded }) {
+  const {
+    display, 
+    opacity,
+    risk,
+    variable,
+    band,
+    clim,
+    colormapName,
+    colormap,
+    regionData,
+    showRegionPicker,
+    showOceanMask,
+    showCountriesOutline,
+    showStatesOutline,
+    showLandOutline,
+    showLakes,
+  } = getters
+
+  const {
+    setDisplay,
+    setOpacity,
+    setRisk,
+    setVariable,
+    setBand,
+    setClim,
+    setColormapName,
+    setRegionData,
+    setShowRegionPicker,
+    setShowOceanMask,
+    setShowCountriesOutline,
+    setShowStatesOutline,
+    setShowLandOutline,
+    setShowLakes,
+  } = setters
+
   const [section, setSection] = useState('map')
-  const toggleMethods = () => setShowMethods(!showMethods)
+  const [showAbout, setShowAbout] = useState(true)
+  const toggleAbout = () => setShowAbout(!showAbout)
+  if (showRegionPicker) {
+    setShowRegionPicker(!showRegionPicker)
+  }
 
   return (
     <>
@@ -41,25 +81,29 @@ function Mobile({ getters, setters, expanded }) {
         <Layers getters={getters} setters={setters} />
       </Tray>
 
-      {section === 'methods' && (
-        <FadeIn>
-          <Box sx={{ mt: [3] }} />
-          <Button
-            size='xs'
-            inverted
-            prefix={<Left />}
-            onClick={() => setSection('map')}
-            sx={{ mt: [1], cursor: 'pointer' }}
-          >
-            Back
-          </Button>
+      {section === 'about' && (
+        <>
+          <FadeIn>
+            <Box sx={{ mt: [3], }} className='spacer' />
+            <Button
+              size='xs'
+              inverted
+              prefix={<Left />}
+              onClick={() => setSection('map')}
+              sx={{ mt: [1], cursor: 'pointer' }}
+            >
+              Back
+            </Button>
 
-          <MethodsContent />
-          <Box sx={{ height: '72px' }} />
-        </FadeIn>
+            <Box sx={{height:'100%'}}>
+              <Content />
+            </Box>
+          </FadeIn>
+        </>
       )}
 
-      {/* <Box
+      {/* This section defines the boxes at the bottom of the mobile view. */}
+      <Box
         sx={{
           position: 'fixed',
           bottom: 0,
@@ -95,21 +139,22 @@ function Mobile({ getters, setters, expanded }) {
           >
             Map
           </Flex>
-          
+
           <Flex
-            onClick={() => setSection('methods')}
+            onClick={() => setSection('about')}
             sx={{
               justifyContent: 'center',
               alignItems: 'center',
               height: '64px',
+              // height: '100%',
               cursor: 'pointer',
-              bg: section === 'methods' ? alpha('muted', 0.5) : 'background',
+              bg: section === 'about' ? alpha('muted', 0.5) : 'background',
             }}
           >
-            Methods
+            About
           </Flex>
         </Grid>
-      </Box> */}
+      </Box>
     </>
   )
 }
