@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Box, Text } from 'theme-ui'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Tag, Slider } from '@carbonplan/components'
@@ -85,9 +85,9 @@ const Layers = ({ getters, setters }) => {
   const handleRiskChange = useCallback((event) => {
     // there is a bug in the regionpicker
     // it does not accept risk / variable changes while it is open
-    if(showRegionPicker) {
-      setShowRegionPicker(false);
-    }
+    // if(showRegionPicker) {
+    //   setShowRegionPicker(false);
+    // }
 
     if(risks.includes(event.target.innerHTML)) {
       let risk = event.target.innerHTML;
@@ -219,7 +219,7 @@ const Layers = ({ getters, setters }) => {
                   }}
                 >
                   {
-                    (variable == 'slr_3d') && (clim[0].toFixed(2) == climRanges[variable].min) ? '<'+clim[0].toFixed(2) : clim[0].toFixed(2)
+                    (variable == 'slr_3d') && (clim[0].toFixed(2) == climRanges[variable].min) ? '< '+clim[0].toFixed(2) : clim[0].toFixed(2)
                   }
                 </Badge>
               </Box>
@@ -231,7 +231,7 @@ const Layers = ({ getters, setters }) => {
                     min={climRanges[variable].min}
                     max={climRanges[variable].max}
                     step={(variable == 'lethal_heat_3d') ? 0.5 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
-                    sx={{ width: '150px', display: 'inline-block', ml: 2,}}
+                    sx={{ width: '130px', display: 'inline-block', ml: 2,}}
                     value={clim[1]}
                     onChange={(e) => {
                       setClim((prev) => [prev[0], parseFloat(e.target.value)])

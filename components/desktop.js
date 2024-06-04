@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { Flex } from 'theme-ui'
 import Sidebar from './sidebar'
 import Map from './map'
-import Methods from './methods'
+import About from './sidebar/about'
 import Loading from './loading'
 
 function Desktop({ getters, setters }) {
-  const [showMethods, setShowMethods] = useState(false)
-  const toggleMethods = () => setShowMethods(!showMethods)
+  const [showAbout, setShowAbout] = useState(false)
+  const toggleAbout = () => setShowAbout(!showAbout)
 
   return (
     <Flex
@@ -22,9 +22,9 @@ function Desktop({ getters, setters }) {
         margin: 'auto',
       }}
     >
-      <Sidebar getters={getters} setters={setters} showMethods={showMethods} toggleMethods={toggleMethods} />
+      <Sidebar getters={getters} setters={setters} showAbout={showAbout} toggleAbout={toggleAbout} />
 
-      <Methods showMethods={showMethods} toggleMethods={toggleMethods} />
+      <About showAbout={showAbout} toggleAbout={toggleAbout} mobile={false}/>
 
       <Map getters={getters} setters={setters} mobile={false} />
       

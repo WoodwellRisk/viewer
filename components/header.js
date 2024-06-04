@@ -30,7 +30,7 @@ const sx = {
 const links = [
   { url: 'https://www.woodwellclimate.org/research-area/risk/', display: 'About' },
   { url: 'https://woodwellrisk.github.io/', display: 'Research' },
-  { url: 'https://github.com/WoodwellRisk', display: 'Data' },
+  { url: 'https://github.com/WoodwellRisk', display: 'Code' },
 ]
 
 const Nav = ({ link, nav, first, setExpanded }) => {

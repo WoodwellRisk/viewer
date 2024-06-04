@@ -86,7 +86,7 @@ function Index() {
         </Layout> 
       )}
       {!isWide && (
-        <Box sx={{ display: ['initial', 'none', 'none', 'none'] }}>
+        <Box sx={{ display: ['initial', 'none', 'none', 'none'], overflow: "hidden",}}>
           <Layout
             description={
               'Woodwell Climate Research Center risk data'

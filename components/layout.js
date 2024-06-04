@@ -168,7 +168,6 @@ const Layout = ({
           </Box>
         )}
 
-        {/* {metadata && <Metadata mode={metadata} />} */}
       </Flex>
     </>
   )

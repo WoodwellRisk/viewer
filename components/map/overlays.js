@@ -1,6 +1,5 @@
 import { Box, Flex } from 'theme-ui'
-import { useCallback } from 'react'
-import { Slider, Badge, Toggle, Select, Link } from '@carbonplan/components'
+import { Toggle } from '@carbonplan/components'
 
 const sx = {
     label: {

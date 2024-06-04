@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 import { SidebarDivider } from '@carbonplan/layouts'
 import { climRanges } from '../sidebar-options'
 
-const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
+const BarChart = ({ variable, regionData, showRegionPicker }) => {
 
     const sx = {
         chart: {
@@ -21,12 +21,12 @@ const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
     const max = climRanges[variable].max
     const variableRange = [min, max]
 
-    if (!value || !value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+    if (!regionData.value || !regionData.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
         return
     }
 
-    let lat = value.coordinates.lat;
-    let lon = value.coordinates.lon;
+    let lat = regionData.value.coordinates.lat;
+    let lon = regionData.value.coordinates.lon;
     let graphData = []
     let graphLat = []
     let graphLon = []
@@ -35,7 +35,7 @@ const BarChart = ({ variable, regionData: { value }, showRegionPicker }) => {
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
     // i solved this by setting values above and below the colormap values to the min / max of climRanges.
     // https://stackoverflow.com/questions/22311544/get-indices-indexes-of-all-occurrences-of-an-element-in-an-array
-    value[variable].forEach(function (element, idx) {
+    regionData.value[variable].forEach(function (element, idx) {
         if (element !== 9.969209968386869e36) {
             if (element > max) {
                 graphData.push(max);

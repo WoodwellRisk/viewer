@@ -58,12 +58,12 @@ const Map = ({ getters, setters, mobile }) => {
   }
 
   return (
+    // <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
     <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
       <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} >
       {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
             <Fill
               color={theme.rawColors.background}
-              // color={ '#000058' }
               source={'https://storage.googleapis.com/risk-maps/vector_layers/ocean'}
               variable={'ocean'}
             />
@@ -129,7 +129,7 @@ const Map = ({ getters, setters, mobile }) => {
               fontFamily={theme.fonts.mono}
               fontSize={'14px'}
               minRadius={1}
-              maxRadius={800}
+              maxRadius={1500}
             />
           )}
 
@@ -162,7 +162,7 @@ const Map = ({ getters, setters, mobile }) => {
           />
           )}
 
-          <Ruler />
+          {!mobile && (<Ruler />)}
           <RegionControls showRegionPicker={showRegionPicker} setShowRegionPicker={setShowRegionPicker} />
           <Overlays getters={getters} setters={setters} />
 

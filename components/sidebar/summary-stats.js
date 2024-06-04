@@ -1,12 +1,26 @@
+import { useCallback, useEffect } from 'react'
 import { Box } from 'theme-ui'
 
-const AverageDisplay = ({ variable, data: { value } }) => {
-    if (!value || !value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
-      return ''
+const AverageDisplay = ({ variable, data }) => {
+
+    if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+      // this is an attempt to catch the error: ncaught (in promise) TypeError: _this2.tiles[key] is undefined
+      // that you get when you switch variables with the RegionPicker open
+      //   useEffect(() => {
+      //     console.log('Caught null value...')
+      //     // Use setTimeout to update the message after 500 milliseconds (0.5 seconds)
+      //     setTimeout(() => {
+      //       console.log("Waiting...")
+      //   }, 5000);
+      // })
+      //   if (!data.value || !data.value[variable]) {
+      //     return
+      // }
+      return
     }
   
     let result
-    const filteredData = value[variable].filter((d) => d !== 9.969209968386869e36)
+    const filteredData = data.value[variable].filter((d) => d !== 9.969209968386869e36)
     if (filteredData.length === 0) {
       result = 'no data in region'
     } else {
@@ -37,6 +51,7 @@ const AverageDisplay = ({ variable, data: { value } }) => {
           fontFamily: 'mono',
           letterSpacing: 'mono',
           textTransform: 'uppercase',
+
         }}
       >
         {result}
@@ -45,7 +60,7 @@ const AverageDisplay = ({ variable, data: { value } }) => {
   }
   
   const SummaryStats = ({variable, regionData, showRegionPicker}) => {
-  
+
     return (
       <Box
         sx={{
@@ -55,7 +70,7 @@ const AverageDisplay = ({ variable, data: { value } }) => {
             pr: [0, 1, 1, 1,],
         }}
       > 
-        {showRegionPicker && (
+        {showRegionPicker && regionData?.value && (
           <AverageDisplay data={ regionData } variable={ variable } />
         )}
       </Box>
