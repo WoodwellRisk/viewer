@@ -8,7 +8,6 @@ const GlobeDemo = ({showGraticule}) => {
   const [opacity, setOpacity] = useState(0.2)
 
   useEffect(() => {
-    // console.log(showGraticule) 
     showGraticule == false ? setOpacity(0.0) : setOpacity(0.2)
   }, [showGraticule])
   
@@ -16,11 +15,11 @@ const GlobeDemo = ({showGraticule}) => {
     <>
       <Minimap projection={equirectangular}>
         <Path
-          stroke={'white'}
+          stroke={theme.colors.primary}
           source={'https://cdn.jsdelivr.net/npm/world-atlas@2/land-50m.json'}
           feature={'land'}
         />
-        <Graticule stroke={'white'} opacity={opacity} />
+        <Graticule stroke={theme.colors.primary} opacity={opacity} />
       </Minimap>
 
 

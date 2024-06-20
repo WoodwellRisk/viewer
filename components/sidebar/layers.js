@@ -83,11 +83,6 @@ const Layers = ({ getters, setters }) => {
   const [values, setValues] = useState(riskLayers[risk].values)
 
   const handleRiskChange = useCallback((event) => {
-    // there is a bug in the regionpicker
-    // it does not accept risk / variable changes while it is open
-    // if(showRegionPicker) {
-    //   setShowRegionPicker(false);
-    // }
 
     if(risks.includes(event.target.innerHTML)) {
       let risk = event.target.innerHTML;

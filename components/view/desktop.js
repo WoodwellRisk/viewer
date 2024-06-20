@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Flex } from 'theme-ui'
-import Sidebar from './sidebar'
-import Map from './map'
-import About from './sidebar/about'
+import Sidebar from '../sidebar'
+import About from '../sidebar/about'
+import Map from '../map'
 import Loading from './loading'
 
 function Desktop({ getters, setters }) {

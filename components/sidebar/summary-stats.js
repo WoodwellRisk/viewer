@@ -1,21 +1,8 @@
-import { useCallback, useEffect } from 'react'
 import { Box } from 'theme-ui'
 
 const AverageDisplay = ({ variable, data }) => {
 
     if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
-      // this is an attempt to catch the error: ncaught (in promise) TypeError: _this2.tiles[key] is undefined
-      // that you get when you switch variables with the RegionPicker open
-      //   useEffect(() => {
-      //     console.log('Caught null value...')
-      //     // Use setTimeout to update the message after 500 milliseconds (0.5 seconds)
-      //     setTimeout(() => {
-      //       console.log("Waiting...")
-      //   }, 5000);
-      // })
-      //   if (!data.value || !data.value[variable]) {
-      //     return
-      // }
       return
     }
   

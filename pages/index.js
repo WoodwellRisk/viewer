@@ -3,9 +3,9 @@ import { useThemeUI, Box } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
 import { useThemedColormap } from '@carbonplan/colormaps'
 
-import Layout from '../components/layout'
-import Desktop from '../components/desktop'
-import Mobile from '../components/mobile'
+import Layout from '../components/view/layout'
+import Desktop from '../components/view/desktop'
+import Mobile from '../components/view/mobile'
 
 function Index() {
   const isWide = useBreakpointIndex() > 0
