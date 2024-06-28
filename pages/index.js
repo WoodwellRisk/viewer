@@ -33,6 +33,10 @@ function Index() {
   const [showLakes, setShowLakes] = useState(false)
   const [showLandOutline, setShowLandOutline] = useState(true)
 
+  const description = 'Woodwell Climate Research Center risk data'
+  const title = 'Woodwell Risk data viewer'
+  const logoURL = 'https://storage.googleapis.com/risk-maps/media/woodwell-risk.png'
+
   const getters = {
     display, 
     opacity,
@@ -72,10 +76,8 @@ function Index() {
     <>
       {isWide && (
         <Layout
-          description={
-            'Woodwell Climate Research Center risk data'
-          }
-          title='Woodwell Risk data viewer'
+          description={description}
+          title={title}
           header={false}
           dimmer={false}
           footer={false}
@@ -88,11 +90,9 @@ function Index() {
       {!isWide && (
         <Box sx={{ display: ['initial', 'none', 'none', 'none'], overflow: "hidden",}}>
           <Layout
-            description={
-              'Woodwell Climate Research Center risk data'
-            }
-            title='Woodwell Risk data viewer'
-            card='https://storage.googleapis.com/risk-maps/media/woodwell-risk.png'
+            description={description}
+            title={title}
+            card={logoURL}
             header={true}
             dimmer={true}
             metadata={false}
