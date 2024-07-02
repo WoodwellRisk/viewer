@@ -12,9 +12,6 @@ import {
 
 const Layers = ({ getters, setters }) => {
   const {
-    display, 
-    opacity,
-    risk,
     variable,
     band,
     clim,
@@ -22,28 +19,15 @@ const Layers = ({ getters, setters }) => {
     colormap,
     regionData,
     showRegionPicker,
-    showOceanMask,
-    showCountriesOutline,
-    showStatesOutline,
-    showLandOutline,
-    showLakes,
   } = getters
 
   const {
-    setDisplay,
-    setOpacity,
-    setRisk,
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-    setShowOceanMask,
-    setShowCountriesOutline,
-    setShowStatesOutline,
-    setShowLandOutline,
-    setShowLakes,
   } = setters
 
   const sx = {
@@ -68,6 +52,7 @@ const Layers = ({ getters, setters }) => {
     },
   }
 
+  const [risk, setRisk] = useState('Drought')
   const [riskThemes, setRiskThemes] = useState({
     'Drought': true, 
     'Hot Days': false, 
@@ -83,7 +68,6 @@ const Layers = ({ getters, setters }) => {
   const [values, setValues] = useState(riskLayers[risk].values)
 
   const handleRiskChange = useCallback((event) => {
-
     if(risks.includes(event.target.innerHTML)) {
       let risk = event.target.innerHTML;
       let values = riskLayers[risk].values

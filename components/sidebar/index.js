@@ -11,9 +11,6 @@ import Footer from './footer'
 
 const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
   const {
-    display, 
-    opacity,
-    risk,
     variable,
     band,
     clim,
@@ -21,28 +18,15 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
     colormap,
     regionData,
     showRegionPicker,
-    showOceanMask,
-    showCountriesOutline,
-    showStatesOutline,
-    showLandOutline,
-    showLakes,
   } = getters
 
   const {
-    setDisplay,
-    setOpacity,
-    setRisk,
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-    setShowOceanMask,
-    setShowCountriesOutline,
-    setShowStatesOutline,
-    setShowLandOutline,
-    setShowLakes,
   } = setters
   
   const sx = {

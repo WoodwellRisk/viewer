@@ -12,10 +12,15 @@ const Map = ({ getters, setters, mobile }) => {
   const [map, setMap] = useState(null)
   const { theme } = useThemeUI()
 
+  const [display, setDisplay] = useState(true)
+  const [opacity, setOpacity] = useState(1)
+  const [showOceanMask, setShowOceanMask] = useState(true)
+  const [showCountriesOutline, setShowCountriesOutline] = useState(false)
+  const [showStatesOutline, setShowStatesOutline] = useState(false)
+  const [showLakes, setShowLakes] = useState(false)
+  const [showLandOutline, setShowLandOutline] = useState(true)
+
   const {
-    display, 
-    opacity,
-    risk,
     variable,
     band,
     clim,
@@ -23,28 +28,15 @@ const Map = ({ getters, setters, mobile }) => {
     colormap,
     regionData,
     showRegionPicker,
-    showOceanMask,
-    showCountriesOutline,
-    showStatesOutline,
-    showLandOutline,
-    showLakes,
   } = getters
 
   const {
-    setDisplay,
-    setOpacity,
-    setRisk,
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-    setShowOceanMask,
-    setShowCountriesOutline,
-    setShowStatesOutline,
-    setShowLandOutline,
-    setShowLakes,
   } = setters
 
   const sx = {
@@ -58,7 +50,6 @@ const Map = ({ getters, setters, mobile }) => {
   }
 
   return (
-    // <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
     <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
       <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} >
       {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
@@ -144,11 +135,6 @@ const Map = ({ getters, setters, mobile }) => {
             clim={clim}
             colormap={colormap}
             selector={{ band }}
-            // colormap={(variable == 'lethal_heat') ? colormap : colormap}
-            // mode={'texture'}
-            // there is an issue between zoom levels 5 and 6, https://github.com/carbonplan/maps/issues/19
-            // though it could also be coming from ndpyramid: https://github.com/carbonplan/ndpyramid/blob/main/ndpyramid/reproject.py 
-            // mode={(variable == 'lethal_heat') || (variable.startsWith('wdd')) ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
             mode={(variable == 'lethal_heat_3d') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
             regionOptions={{ setData: setRegionData }}
           />
@@ -164,7 +150,10 @@ const Map = ({ getters, setters, mobile }) => {
 
           {!mobile && (<Ruler />)}
           <RegionControls showRegionPicker={showRegionPicker} setShowRegionPicker={setShowRegionPicker} />
-          <Overlays getters={getters} setters={setters} />
+          <Overlays 
+            getters={{showStatesOutline, showCountriesOutline}} 
+            setters={{setShowStatesOutline, setShowCountriesOutline}}
+          />
 
       </MapContainer>
 

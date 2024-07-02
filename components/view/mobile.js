@@ -11,9 +11,6 @@ import Loading from './loading'
 
 function Mobile({ getters, setters, expanded }) {
   const {
-    display, 
-    opacity,
-    risk,
     variable,
     band,
     clim,
@@ -21,28 +18,15 @@ function Mobile({ getters, setters, expanded }) {
     colormap,
     regionData,
     showRegionPicker,
-    showOceanMask,
-    showCountriesOutline,
-    showStatesOutline,
-    showLandOutline,
-    showLakes,
   } = getters
 
   const {
-    setDisplay,
-    setOpacity,
-    setRisk,
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-    setShowOceanMask,
-    setShowCountriesOutline,
-    setShowStatesOutline,
-    setShowLandOutline,
-    setShowLakes,
   } = setters
 
   const [section, setSection] = useState('map')

@@ -10,12 +10,8 @@ import Mobile from '../components/view/mobile'
 function Index() {
   const isWide = useBreakpointIndex() > 0
   const [expanded, setExpanded] = useState(false)
-
   const { theme } = useThemeUI()
 
-  const [display, setDisplay] = useState(true)
-  const [opacity, setOpacity] = useState(1)
-  const [risk, setRisk] = useState('Drought')
   const [variable, setVariable] = useState('drought')
   const [band, setBand] = useState(1.5)
   const [colormapName, setColormapName] = useState('warm')
@@ -27,20 +23,13 @@ function Index() {
   const [clim, setClim] = useState([0.0, 0.5])
   const [showRegionPicker, setShowRegionPicker] = useState(false)
   const [regionData, setRegionData] = useState({ loading: true })
-  const [showOceanMask, setShowOceanMask] = useState(true)
-  const [showCountriesOutline, setShowCountriesOutline] = useState(false)
-  const [showStatesOutline, setShowStatesOutline] = useState(false)
-  const [showLakes, setShowLakes] = useState(false)
-  const [showLandOutline, setShowLandOutline] = useState(true)
+
 
   const description = 'Woodwell Climate Research Center risk data'
   const title = 'Woodwell Risk data viewer'
   const logoURL = 'https://storage.googleapis.com/risk-maps/media/woodwell-risk.png'
 
   const getters = {
-    display, 
-    opacity,
-    risk,
     variable,
     band,
     clim,
@@ -48,28 +37,15 @@ function Index() {
     colormap,
     regionData,
     showRegionPicker,
-    showOceanMask,
-    showCountriesOutline,
-    showStatesOutline,
-    showLandOutline,
-    showLakes,
   };
 
   const setters = {
-    setDisplay, 
-    setOpacity,
-    setRisk,
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-    setShowOceanMask,
-    setShowCountriesOutline,
-    setShowStatesOutline,
-    setShowLandOutline,
-    setShowLakes,
   };
   
   return (

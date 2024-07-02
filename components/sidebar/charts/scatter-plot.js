@@ -20,10 +20,8 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
         return
     }
 
-    // console.log(value);
     let lat = value.coordinates.lat;
     let lon = value.coordinates.lon;
-    // console.log(lat, lon);
     let graphData = []
     let graphLat = []
     let graphLon = []
@@ -36,9 +34,6 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
             graphLon.push(lon[idx]);
         }
     });
-    // console.log(graphData);
-    // console.log(graphLat);
-    // console.log(graphLon);
 
     let minLat = Math.min.apply(Math, lat).toFixed(2)
     let maxLat = Math.max.apply(Math, lat).toFixed(2)
@@ -49,19 +44,10 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
 
     // https://stackoverflow.com/questions/22015684/zip-arrays-in-javascript
     const zip = (x, y) => Array.from(Array(x.length), (_, i) => [x[i], y[i]]);
-    // let plotCoordinates = zip(graphLon, graphLat);
     let plotCoordinates = zip(graphData, graphLat);
-    // console.log(plotCoordinates)
-    // console.log(plotCoordinates.map((arr) => arr[0]))
 
-    // console.log("Colormap")
-    // console.log(colormap)
-    // console.log()
-
-    // let clim = [0, 0.5]
     let minValue = Math.min.apply(Math, clim)
     let maxValue = Math.max.apply(Math, clim)
-    // console.log(minValue, maxValue)
 
     // Currently, this is not working because there are values that are not in the colormap for variables
     // where I created a "truncated" colormap. So the call to rgb(colormap[color]) finds a value not in the colormap.
@@ -90,9 +76,6 @@ const ScatterPlot = ({ variable, colormap, clim, regionData: { value }, showRegi
                             <Plot>
                                 {graphData.length > 0 && (<Scatter
                                     size={10}
-                                    // opacity={0.5}
-                                    // x={(d) => d.x}
-                                    // y={(d) => d.y}
                                     data={plotCoordinates}
                                     // color={ plotCoordinates.map((arr) => arr[0]).map((value) => rgb(...colormap[ Math.round(((value - minValue) * (1 / (maxValue - minValue) * 255))) ])) }
                                     // color={"yellow"}
