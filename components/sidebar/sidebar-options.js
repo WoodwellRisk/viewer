@@ -68,7 +68,7 @@ const riskDescriptions = {
       This data illustrates the warming level at which at least 1 day of at least 6 hours of lethal heat per year begins to occur.
     </Box>
     <Box sx={sx.data_source}>
-      To learn more about how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risk_heat/#lethal-heat-" target="_blank">methodology website.</Link>
+      To learn more about how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risks/heat/#lethal-heat-" target="_blank">methodology website.</Link>
     </Box>
   </Box>,
   'Precipitation': 
@@ -103,12 +103,12 @@ const riskDescriptions = {
   'Tropical Cyclones':
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      This layer shows the return period of Category 3+ tropical cyclones passing within 100km of a location, calculated by generating thousands of years of simulated storm tracks using the open-source STORM model. 
-      Resulting simulations include track locations and intensity, which can be used to make estimates of tropical cyclone approach probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions. 
+      Return period of Category 3+ tropical cyclones. The layer is based on generating thousands of years of simulated storm tracks within 100km of each location. 
+      The resulting simulations include track locations and intensity, which can be used to make estimates of tropical cyclone approach probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions.
     </Box>
     <Box sx={sx.data_source}>
-      The data presented here was generated using scripts from our Coastal Risk Framework. 
-      For a more detailed discussion on how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risk_tropical-cyclone/" target="_blank">methodology website.</Link>
+     The data presented here was generated using the open-source STORM model and our Coastal Risk Framework. 
+     For a more detailed discussion on how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risks/tropical-cyclones/" target="_blank">methodology website.</Link>
     </Box>
   </Box>,
   'Warm Nights': 
@@ -123,7 +123,7 @@ const riskDescriptions = {
   'Wildfires': 
   <Box className='risk-layer-description' sx={sx.data_description}>
     <Box>
-      The number of days in a year at or more extreme than the worst 5% of days of fire weather index (FWI) in the base period of 1°C of climate warming (2000-2020). 
+      Wildfire danger days. The number of days in a year at or more extreme than the worst 5% of days of fire weather index (FWI) in the base period of 1°C of climate warming (2000-2020). 
       Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. FWI is based on meteorological variables only.
     </Box>
     <Box sx={sx.data_source}>

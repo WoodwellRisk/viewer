@@ -34,7 +34,7 @@ const Content = () => {
           <Text sx={{ fontSize: 2 }}>
             You will find an <Text sx={{ bg: 'muted' }}>Info</Text> icon next to each variable's name. There, you will find
             additional information about what the variable is showing, how the data layer was created, and links to any additional
-            information if there are any. Clicking on the <Text sx={{ bg: 'muted' }}>Info</Text> icon reveals hidden dropdown text. You can try this with
+            information if there is any. Clicking on the <Text sx={{ bg: 'muted' }}>Info</Text> icon reveals hidden dropdown text. You can try this with
             the icon to the right.
             <InfoDemo>This is hidden dropdown text.</InfoDemo>
           </Text>
