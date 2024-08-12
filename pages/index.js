@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useThemeUI, Box } from 'theme-ui'
+import { useEffect, useState } from 'react'
+import { useColorMode, useThemeUI, Box } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
 import { useThemedColormap } from '@carbonplan/colormaps'
 
@@ -11,7 +11,7 @@ function Index() {
   const isWide = useBreakpointIndex() > 0
   const [expanded, setExpanded] = useState(false)
   const { theme } = useThemeUI()
-
+  const [colorMode, setColorMode] = useColorMode()
   const [variable, setVariable] = useState('drought')
   const [band, setBand] = useState(1.5)
   const [colormapName, setColormapName] = useState('warm')
@@ -47,6 +47,10 @@ function Index() {
     setRegionData,
     setShowRegionPicker,
   };
+
+  useEffect(() => {
+    setColorMode('light')
+  }, [])
   
   return (
     <>

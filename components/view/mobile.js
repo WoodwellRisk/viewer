@@ -5,7 +5,6 @@ import { Left } from '@carbonplan/icons'
 import { Button, Tray, FadeIn } from '@carbonplan/components'
 import Map from '../map'
 import Layers from '../sidebar/layers'
-import About from '../sidebar/about'
 import Content from '../sidebar/about/content'
 import Loading from './loading'
 
