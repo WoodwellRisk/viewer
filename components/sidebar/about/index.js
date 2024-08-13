@@ -5,7 +5,6 @@ function About({ showAbout, toggleAbout, mobile }) {
   return (
     <Box
       sx={{
-        left: 0,
         position: 'absolute',
         zIndex: 200,
         borderStyle: 'solid',
@@ -15,9 +14,12 @@ function About({ showAbout, toggleAbout, mobile }) {
         height: '100%',
         left: [
           0,
-          'calc(3 * 100vw / 8 + 18px)',
-          'calc(3 * 100vw / 12 + 24px)',
-          'calc(3 * 100vw / 12 + 36px)',
+          '320px',
+          '350px',
+          '400px',
+          // 'calc(3 * 100vw / 8 + 18px)',
+          // 'calc(3 * 100vw / 12 + 24px)',
+          // 'calc(3 * 100vw / 12 + 36px)',
         ],
         backgroundColor: 'background',
         width: [
@@ -34,7 +36,8 @@ function About({ showAbout, toggleAbout, mobile }) {
     >
       <Box
         sx={{
-          px: [3, 5, 5, 6],
+          pl: [5, 5, 5, 6],
+          pr: [0, 1, 5, 6],
           opacity: 1,
           pt: ['12px'],
           mb: [4],

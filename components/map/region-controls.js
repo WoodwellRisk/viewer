@@ -8,12 +8,12 @@ const RegionControls = ({ showRegionPicker, setShowRegionPicker, }) => {
   return (
     <Box
       sx={{
-        display: ['none', 'none', 'flex', 'flex'],
+        display: ['none', 'flex', 'flex', 'flex'],
         alignItems: 'center',
         position: 'absolute',
         color: 'primary',
         left: [13],
-        bottom: [17, 17, 15, 15],
+        bottom: [15],
       }}
     >
       

@@ -33,9 +33,12 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
     'sidebar-container': {
       maxWidth: [
         0,
-        'calc(3 * 100vw / 8 + 18px)',
-        'calc(3 * 100vw / 12 + 24px)',
-        'calc(3 * 100vw / 12 + 36px)',
+        '350px',
+        '350px',
+        '400px',
+        // 'calc(3 * 100vw / 8 + 18px)',
+        // 'calc(3 * 100vw / 12 + 24px)',
+        // 'calc(3 * 100vw / 12 + 36px)',
       ],
       height: '100%',
       flexBasis: '100%',
