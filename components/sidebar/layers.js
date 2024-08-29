@@ -19,6 +19,8 @@ const Layers = ({ getters, setters }) => {
     colormap,
     regionData,
     showRegionPicker,
+    showCountriesOutline,
+    showStatesOutline
   } = getters
 
   const {
@@ -28,6 +30,8 @@ const Layers = ({ getters, setters }) => {
     setColormapName,
     setRegionData,
     setShowRegionPicker,
+    setShowCountriesOutline,
+    setShowStatesOutline
   } = setters
 
   const sx = {

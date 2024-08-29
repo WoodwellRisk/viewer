@@ -5,6 +5,8 @@ import { SidebarDivider } from '@carbonplan/layouts'
 import SidebarHeader from './sidebar-header'
 import Menu from './menu'
 import Layers from './layers'
+import ExpandingSection from './expanding-section'
+import Overlays from './overlays'
 import SummaryStats from './summary-stats'
 import BarChart from './charts/bar-chart'
 import Footer from './footer'
@@ -18,6 +20,8 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
     colormap,
     regionData,
     showRegionPicker,
+    showCountriesOutline,
+    showStatesOutline
   } = getters
 
   const {
@@ -27,6 +31,8 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
     setColormapName,
     setRegionData,
     setShowRegionPicker,
+    setShowCountriesOutline,
+    setShowStatesOutline
   } = setters
   
   const sx = {
@@ -77,6 +83,8 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
   }
 
   const [showMenu, setShowMenu] = useState(false)
+  const [sliding, setSliding] = useState(false)
+  const [showOverlays, setShowOverlays] = useState(false)
 
   return (
     <Box sx={sx['sidebar-container']}>
@@ -93,8 +101,33 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
         <Layers getters={getters} setters={setters} />
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
-        <SummaryStats variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
-        <BarChart variable={variable} regionData={regionData} showRegionPicker={showRegionPicker} />
+        <ExpandingSection label='Overlays' expanded={showOverlays} setExpanded={setShowOverlays}>
+          <Overlays
+              getters={{ showStatesOutline, showCountriesOutline }}
+              setters={{ setShowStatesOutline, setShowCountriesOutline }}
+            />
+        </ExpandingSection>
+        <SidebarDivider sx={{ width: '100%', my: 4 }} />
+
+
+        <ExpandingSection 
+          label='Charts' 
+          expanded={showRegionPicker} 
+          setExpanded={setShowRegionPicker}
+        >
+          {showRegionPicker && (
+            <Box sx={{ ...sx.stats }}>
+              <SummaryStats
+                variable={variable}
+                regionData={regionData}
+                showRegionPicker={showRegionPicker}
+                colormap={colormap}
+                sliding={sliding}
+              />
+            </Box>
+          )}
+        </ExpandingSection>
+        <SidebarDivider sx={{ width: '100%', mt: 4 }} /> 
 
         <Footer />
       </Box>
