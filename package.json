@@ -44,7 +44,7 @@
     "glsl-geo-projection": "^1.0.1",
     "mapbox-gl": "^1.13.1",
     "ndarray": "^1.0.19",
-    "next": "^14.1.4",
+    "next": "^14.2.10",
     "polished": "^4.3.1",
     "react-animate-height": "^3.2.3",
     "regl": "^2.1.0",
