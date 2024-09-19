@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Box, Flex, Grid, Text } from 'theme-ui'
+import { Box, Flex, Grid } from 'theme-ui'
 import { alpha } from '@theme-ui/color'
+import { useThemedColormap } from '@carbonplan/colormaps'
 import { Left } from '@carbonplan/icons'
 import { Button, Tray, FadeIn } from '@carbonplan/components'
 import Map from '../map'
@@ -8,8 +9,38 @@ import Layers from '../sidebar/layers'
 import Content from '../sidebar/about/content'
 import Loading from './loading'
 
-function Mobile({ getters, setters, expanded }) {
-  const {
+function Mobile({ expanded }) {
+  const [section, setSection] = useState('map')
+  const [showAbout, setShowAbout] = useState(true)
+
+  const [variable, setVariable] = useState('drought')
+  // const [variable, setVariable] = useState(null)
+  // useEffect(() => {
+  //   (() => {
+  //     setVariable(localStorage.getItem("variable") ? localStorage.getItem("variable") : 'drought')
+  //   })()
+  // }, [])
+
+  // const [variable, setVariable] = useState(() => {
+  //   if(typeof window !== 'undefined') {
+  //     return localStorage.getItem("variable")
+  //   } else {
+  //   return 'drought'
+  // }
+  // });
+  
+  const [band, setBand] = useState(1.5)
+  const [colormapName, setColormapName] = useState('warm')
+  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() : 
+                   (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   useThemedColormap(colormapName)
+  const [clim, setClim] = useState([0.0, 0.5])
+  const [showRegionPicker, setShowRegionPicker] = useState(false)
+  const [regionData, setRegionData] = useState({ loading: true })
+
+  const getters = {
     variable,
     band,
     clim,
@@ -17,23 +48,16 @@ function Mobile({ getters, setters, expanded }) {
     colormap,
     regionData,
     showRegionPicker,
-  } = getters
+  };
 
-  const {
+  const setters = {
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-  } = setters
-
-  const [section, setSection] = useState('map')
-  const [showAbout, setShowAbout] = useState(true)
-  const toggleAbout = () => setShowAbout(!showAbout)
-  if (showRegionPicker) {
-    setShowRegionPicker(!showRegionPicker)
-  }
+  };
 
   return (
     <>

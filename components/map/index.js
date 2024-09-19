@@ -1,12 +1,12 @@
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useThemeUI, Box } from 'theme-ui'
-import mapboxgl from 'mapbox-gl'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
 import RegionControls from './region-controls'
 import Ruler from './ruler'
 import Overlays from './overlays'
+import Router from './router'
 
 const Map = ({ getters, setters, mobile }) => {
   const container = useRef(null)
@@ -50,23 +50,9 @@ const Map = ({ getters, setters, mobile }) => {
     },
   }
 
-  const router = useRouter()
-  // console.log(router);
-  console.log(router.query);
-  console.log(router.route);
-  console.log(router.asPath);
-  const { pathname, asPath } = router;
-
-  // router.replace(pathname + variable, null, {
-  //   scroll: false,
-  //   shallow: true,
-  // })
-  // router.push(`${variable}`)
-  // router.replace("")
-
   return (
     <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
-      <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} key={router.asPath} >
+      <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} >
       {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
             <Fill
               color={theme.rawColors.background}
@@ -169,6 +155,8 @@ const Map = ({ getters, setters, mobile }) => {
             getters={{showStatesOutline, showCountriesOutline}} 
             setters={{setShowStatesOutline, setShowCountriesOutline}}
           />
+
+        <Router variable={variable} setVariable={setVariable} />
 
       </MapContainer>
 

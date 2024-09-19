@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Text } from 'theme-ui'
-import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
+import { Box } from 'theme-ui'
+import { useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Tag, Slider } from '@carbonplan/components'
 import { SidebarDivider } from '@carbonplan/layouts'
 
