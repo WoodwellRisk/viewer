@@ -18,6 +18,7 @@ function Desktop() {
   //   })()
   // }, [])
 
+  // const [variable, setVariable] = useState('drought')
   const [variable, setVariable] = useState(() => {
     if(typeof window !== 'undefined') {
       return localStorage.getItem("variable")

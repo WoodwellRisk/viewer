@@ -14,6 +14,14 @@ function Mobile({ expanded }) {
   const [showAbout, setShowAbout] = useState(true)
 
   const [variable, setVariable] = useState('drought')
+  // const [variable, setVariable] = useState(() => {
+  //   if(typeof window !== 'undefined') {
+  //     return localStorage.getItem("variable")
+  //   } else {
+  //   return 'drought'
+  // }
+  // });
+
   // const [variable, setVariable] = useState(null)
   // useEffect(() => {
   //   (() => {
