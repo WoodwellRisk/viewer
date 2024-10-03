@@ -32,19 +32,20 @@ function Menu({ visible }) {
         pointerEvents: visible ? 'all' : 'none',
         position: 'fixed',
         width: visible
-          ? [
-              0,
-              'calc(3 * 100vw / 8 + 18px - 1px)',
-              'calc(3 * 100vw / 12 + 24px - 1px)',
-              'calc(3 * 100vw / 12 + 35px)',
-            ]
-          : [
-              0,
-              'calc(2 * 100vw / 8 + 18px)',
-              'calc(2 * 100vw / 12 + 24px)',
-              'calc(2 * 100vw / 12 + 35px)',
-            ],
+        ? [
+            0,
+              '350px',
+              '350px',
+              '400px',
+          ]
+        : [
+            0,
+          ],
         height: '100%',
+        borderStyle: 'solid',
+        borderWidth: '0px',
+        borderRightWidth: '1px',
+        borderColor: 'muted',
         backgroundColor: 'background',
         zIndex: 1000,
         pr: [3, 5, 5, 6],

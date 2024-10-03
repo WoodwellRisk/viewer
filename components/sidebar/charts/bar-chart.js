@@ -111,7 +111,7 @@ const BarChart = ({ variable, regionData, showRegionPicker }) => {
                             </Plot>
                         </Chart>
                     </Box>
-                    <SidebarDivider sx={{ width: '100%', my: 4 }} />
+                    <SidebarDivider sx={{ width: '100%', mt: 4 }} />
                 </>
             )}
         </>
