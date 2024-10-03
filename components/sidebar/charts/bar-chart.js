@@ -1,17 +1,15 @@
 import { Box } from 'theme-ui'
-import { AxisLabel, Bar, Chart, Grid, Plot, Ticks, TickLabels } from '@carbonplan/charts'
-import * as d3 from 'd3'
-import { SidebarDivider } from '@carbonplan/layouts'
+import { AxisLabel, Chart, Grid, Plot, Ticks, TickLabels } from '@carbonplan/charts'
+import Bar from './bar'
 import { climRanges } from '../sidebar-options'
+import * as d3 from 'd3'
 
-const BarChart = ({ variable, regionData, showRegionPicker }) => {
+const BarChart = ({ data, variable, colormap }) => {
 
     const sx = {
         chart: {
             mt: [4],
             mx: 'auto',
-            pl: [0, 4, 5, 6],
-            pr: [0, 1, 1, 1,],
             width: '100%',
             height: '200px',
         }
@@ -21,12 +19,12 @@ const BarChart = ({ variable, regionData, showRegionPicker }) => {
     const max = climRanges[variable].max
     const variableRange = [min, max]
 
-    if (!regionData.value || !regionData.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+    if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
         return
     }
 
-    let lat = regionData.value.coordinates.lat;
-    let lon = regionData.value.coordinates.lon;
+    let lat = data.value.coordinates.lat;
+    let lon = data.value.coordinates.lon;
     let graphData = []
     let graphLat = []
     let graphLon = []
@@ -35,7 +33,7 @@ const BarChart = ({ variable, regionData, showRegionPicker }) => {
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
     // i solved this by setting values above and below the colormap values to the min / max of climRanges.
     // https://stackoverflow.com/questions/22311544/get-indices-indexes-of-all-occurrences-of-an-element-in-an-array
-    regionData.value[variable].forEach(function (element, idx) {
+    data.value[variable].forEach(function (element, idx) {
         if (element !== 9.969209968386869e36) {
             if (element > max) {
                 graphData.push(max);
@@ -69,11 +67,6 @@ const BarChart = ({ variable, regionData, showRegionPicker }) => {
         binEdges = binEdges.map((d) => d - 30)
     }
 
-    // const xTicks = Array(nBins + 1).fill(min).map((value, i) => value + Number((i * binWidth).toFixed(2)))
-    // console.log(xTicks)
-    // const binEdges = Array.from({length: (nBins + 1) }, (_, i) => i + min);
-    // console.log("xTicks: ", xTicks)
-
     const bin = d3.bin().domain(variableRange).thresholds(binEdges)
     const bins = bin(graphData)
 
@@ -97,23 +90,21 @@ const BarChart = ({ variable, regionData, showRegionPicker }) => {
 
     return (
         <>
-            {showRegionPicker && (
-                <>
-                    <Box sx={{ ...sx.chart }} className='chart-container'>
-                        <Chart x={[xMin, xMax]} y={[0, 100]} padding={{ left: 50, top: 0 }} >
-                            <Grid vertical horizontal />
-                            <Ticks left bottom />
-                            <TickLabels left bottom />
-                            <AxisLabel left >Percent</AxisLabel>
-                            <AxisLabel bottom>Bins</AxisLabel>
-                            <Plot>
-                                <Bar data={plotData} />
-                            </Plot>
-                        </Chart>
-                    </Box>
-                    <SidebarDivider sx={{ width: '100%', mt: 4 }} />
-                </>
-            )}
+            <Box sx={{ ...sx.chart }} className='chart-container'>
+                <Chart x={[xMin, xMax]} y={[0, 100]} padding={{ left: 50, top: 0 }} >
+                    <Grid vertical horizontal />
+                    <Ticks left bottom />
+                    <TickLabels left bottom />
+                    <AxisLabel left >Percent</AxisLabel>
+                    <AxisLabel bottom>Bins</AxisLabel>
+                    <Plot>
+                        <Bar 
+                            data={plotData} 
+                            strokeWidth={0.5}
+                        />
+                    </Plot>
+                </Chart>
+            </Box>
         </>
     )
 }

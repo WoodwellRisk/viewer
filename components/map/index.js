@@ -1,24 +1,23 @@
 import { useState, useRef } from 'react'
 import { useThemeUI, Box } from 'theme-ui'
-import mapboxgl from 'mapbox-gl'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
-import RegionControls from './region-controls'
 import Ruler from './ruler'
-import Overlays from './overlays'
 
 const Map = ({ getters, setters, mobile }) => {
   const container = useRef(null)
   const [map, setMap] = useState(null)
+  const [zoom, setZoom] = useState(1)
+
   const { theme } = useThemeUI()
 
   const [display, setDisplay] = useState(true)
   const [opacity, setOpacity] = useState(1)
   const [showOceanMask, setShowOceanMask] = useState(true)
-  const [showCountriesOutline, setShowCountriesOutline] = useState(false)
-  const [showStatesOutline, setShowStatesOutline] = useState(false)
   const [showLakes, setShowLakes] = useState(false)
   const [showLandOutline, setShowLandOutline] = useState(true)
+
+  const [showSearch, setShowSearch] = useState(false)
 
   const {
     variable,
@@ -28,6 +27,8 @@ const Map = ({ getters, setters, mobile }) => {
     colormap,
     regionData,
     showRegionPicker,
+    showCountriesOutline,
+    showStatesOutline
   } = getters
 
   const {
@@ -37,6 +38,8 @@ const Map = ({ getters, setters, mobile }) => {
     setColormapName,
     setRegionData,
     setShowRegionPicker,
+    setShowCountriesOutline,
+    setShowStatesOutline
   } = setters
 
   const sx = {
@@ -49,9 +52,11 @@ const Map = ({ getters, setters, mobile }) => {
     },
   }
 
+  const glyphs = "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf"
+
   return (
     <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
-      <MapContainer zoom={1} maxZoom={8} center={[-40, 40]} >
+      <MapContainer zoom={zoom} center={[-40, 40]} glyphs={glyphs} >
       {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
             <Fill
               color={theme.rawColors.background}
@@ -115,7 +120,6 @@ const Map = ({ getters, setters, mobile }) => {
           {showRegionPicker && (
             <RegionPicker
               color={theme.colors.primary}
-              // backgroundColor="transparent"
               backgroundColor={theme.colors.background}
               fontFamily={theme.fonts.mono}
               fontSize={'14px'}
@@ -149,11 +153,6 @@ const Map = ({ getters, setters, mobile }) => {
           )}
 
           {!mobile && (<Ruler />)}
-          <RegionControls showRegionPicker={showRegionPicker} setShowRegionPicker={setShowRegionPicker} />
-          <Overlays 
-            getters={{showStatesOutline, showCountriesOutline}} 
-            setters={{setShowStatesOutline, setShowCountriesOutline}}
-          />
 
       </MapContainer>
 

@@ -1,15 +1,39 @@
 import { useState } from 'react'
-import { Box, Flex, Grid, Text } from 'theme-ui'
+import { Box, Flex, Grid, Text, useThemeUI } from 'theme-ui'
 import { alpha } from '@theme-ui/color'
 import { Left } from '@carbonplan/icons'
 import { Button, Tray, FadeIn } from '@carbonplan/components'
+import { useThemedColormap } from '@carbonplan/colormaps'
 import Map from '../map'
 import Layers from '../sidebar/layers'
 import Content from '../sidebar/about/content'
 import Loading from './loading'
 
-function Mobile({ getters, setters, expanded }) {
-  const {
+function Mobile({ expanded }) {
+  const { theme } = useThemeUI()
+
+  const [variable, setVariable] = useState('drought')
+  const [band, setBand] = useState(1.5)
+  const [colormapName, setColormapName] = useState('warm')
+  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() : 
+                   (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() : 
+                   useThemedColormap(colormapName)
+  const [clim, setClim] = useState([0.0, 0.5])
+  const [showRegionPicker, setShowRegionPicker] = useState(false)
+  const [regionData, setRegionData] = useState({ loading: true })
+  const [showCountriesOutline, setShowCountriesOutline] = useState(false)
+  const [showStatesOutline, setShowStatesOutline] = useState(false)
+
+  const [showAbout, setShowAbout] = useState(false)
+  const toggleAbout = () => setShowAbout(!showAbout)
+  const [section, setSection] = useState('map')
+  if (showRegionPicker) {
+    setShowRegionPicker(!showRegionPicker)
+  }
+
+  const getters = {
     variable,
     band,
     clim,
@@ -17,23 +41,20 @@ function Mobile({ getters, setters, expanded }) {
     colormap,
     regionData,
     showRegionPicker,
-  } = getters
+    showCountriesOutline,
+    showStatesOutline
+  };
 
-  const {
+  const setters = {
     setVariable,
     setBand,
     setClim,
     setColormapName,
     setRegionData,
     setShowRegionPicker,
-  } = setters
-
-  const [section, setSection] = useState('map')
-  const [showAbout, setShowAbout] = useState(true)
-  const toggleAbout = () => setShowAbout(!showAbout)
-  if (showRegionPicker) {
-    setShowRegionPicker(!showRegionPicker)
-  }
+    setShowCountriesOutline,
+    setShowStatesOutline
+  };
 
   return (
     <>

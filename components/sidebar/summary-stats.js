@@ -1,6 +1,9 @@
 import { Box } from 'theme-ui'
+import { useMemo } from 'react'
+import * as d3 from 'd3'
+import BarChart from './charts/bar-chart'
 
-const AverageDisplay = ({ variable, data }) => {
+const StatsDisplay = ({ data, variable, colormap, sliding }) => {
 
     if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
       return
@@ -31,34 +34,28 @@ const AverageDisplay = ({ variable, data }) => {
     }
   
     return (
-      <Box
-        sx={{
-          ml: [2],
-          mt: ['-1px'],
-          fontFamily: 'mono',
-          letterSpacing: 'mono',
-          textTransform: 'uppercase',
+      <>
+        <Box
+          sx={{
+            fontFamily: 'mono',
+            letterSpacing: 'mono',
+            textTransform: 'uppercase',
+          }}
+        >
+          {result}
+        </Box>
 
-        }}
-      >
-        {result}
-      </Box>
+        <BarChart data={data} variable={variable} colormap={colormap} />
+      </>
     )
   }
   
-  const SummaryStats = ({variable, regionData, showRegionPicker}) => {
+  const SummaryStats = ({variable, regionData, showRegionPicker, colormap, sliding}) => {
 
     return (
-      <Box
-        sx={{
-            mt: [4],
-            mx: 'auto',
-            pl: [0, 4, 5, 6],
-            pr: [0, 1, 1, 1,],
-        }}
-      > 
+      <Box> 
         {showRegionPicker && regionData?.value && (
-          <AverageDisplay data={ regionData } variable={ variable } />
+          <StatsDisplay data={ regionData } variable={ variable } colormap={colormap} sliding={sliding} />
         )}
       </Box>
     )
