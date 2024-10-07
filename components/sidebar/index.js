@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Box, Text } from 'theme-ui'
 import { SidebarDivider } from '@carbonplan/layouts'
 
@@ -7,33 +6,20 @@ import Menu from './menu'
 import Layers from './layers'
 import ExpandingSection from './expanding-section'
 import Overlays from './overlays'
-import SummaryStats from './summary-stats'
-import BarChart from './charts/bar-chart'
+import Charts from './charts/index'
 import Footer from './footer'
 
-const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
-  const {
-    variable,
-    band,
-    clim,
-    colormapName,
-    colormap,
-    regionData,
-    showRegionPicker,
-    showCountriesOutline,
-    showStatesOutline
-  } = getters
+import useStore from '../store/index'
 
-  const {
-    setVariable,
-    setBand,
-    setClim,
-    setColormapName,
-    setRegionData,
-    setShowRegionPicker,
-    setShowCountriesOutline,
-    setShowStatesOutline
-  } = setters
+const Sidebar = () => {
+  const showRegionPicker = useStore((state) => state.showRegionPicker)
+  const setShowRegionPicker = useStore((state) => state.setShowRegionPicker)
+  const showAbout = useStore((state) => state.showAbout)
+  const setShowAbout = useStore((state) => state.setShowAbout)
+  const showMenu = useStore((state) => state.showMenu)
+  const setShowMenu = useStore((state) => state.setShowMenu)
+  const showOverlays = useStore((state) => state.showOverlays)
+  const setShowOverlays = useStore((state) => state.setShowOverlays)
   
   const sx = {
     'sidebar-container': {
@@ -42,9 +28,6 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
         '350px',
         '350px',
         '400px',
-        // 'calc(3 * 100vw / 8 + 18px)',
-        // 'calc(3 * 100vw / 12 + 24px)',
-        // 'calc(3 * 100vw / 12 + 36px)',
       ],
       height: '100%',
       flexBasis: '100%',
@@ -71,7 +54,7 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
         color: 'secondary',
       },
     },
-    arrow: {
+    'arrow': {
       display: 'inline-block',
       fontSize: [4],
       ml: [2],
@@ -80,11 +63,13 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
       transition: 'transform 0.2s',
       transform: showAbout ? 'scaleX(-1)' : 'scaleX(1)',
     },
+    'charts': {
+      mb: [5],
+      mx: 'auto',
+      width: '100%',
+      height: '225px',
+    },
   }
-
-  const [showMenu, setShowMenu] = useState(false)
-  const [sliding, setSliding] = useState(false)
-  const [showOverlays, setShowOverlays] = useState(false)
 
   return (
     <Box sx={sx['sidebar-container']}>
@@ -93,38 +78,25 @@ const Sidebar = ({ getters, setters, showAbout, toggleAbout }) => {
       <Box id='sidebar' sx={{ position: 'relative', flex: 1, overflowY: 'scroll', }} >
         <Menu visible={showMenu} /> 
 
-        <Box onClick={toggleAbout} sx={sx['expand-section']} >
+        <Box onClick={() => setShowAbout(!showAbout)} sx={sx['expand-section']} >
           ABOUT THIS SITE <Text sx={sx.arrow}>→</Text>
         </Box>
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
-        <Layers getters={getters} setters={setters} />
+        <Layers />
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
-        <ExpandingSection 
-          label='Charts' 
-          expanded={showRegionPicker} 
-          setExpanded={setShowRegionPicker}
-        >
+        <ExpandingSection label='Charts' expanded={showRegionPicker} setExpanded={setShowRegionPicker}>
           {showRegionPicker && (
-            <Box sx={{ ...sx.stats }}>
-              <SummaryStats
-                variable={variable}
-                regionData={regionData}
-                showRegionPicker={showRegionPicker}
-                colormap={colormap}
-                sliding={sliding}
-              />
+            <Box sx={{ ...sx.charts }}>
+              <Charts />
             </Box>
           )}
         </ExpandingSection>
         <SidebarDivider sx={{ width: '100%', my: 4 }} /> 
 
         <ExpandingSection label='Overlays' expanded={showOverlays} setExpanded={setShowOverlays}>
-          <Overlays
-              getters={{ showStatesOutline, showCountriesOutline }}
-              setters={{ setShowStatesOutline, setShowCountriesOutline }}
-            />
+          <Overlays />
         </ExpandingSection>
         <SidebarDivider sx={{ width: '100%', mt: 4 }} />
 
