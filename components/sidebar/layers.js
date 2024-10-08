@@ -164,7 +164,7 @@ const Layers = () => {
             />
           </Box>
 
-          {/* {(variable != 'lethal_heat_3d' && !variable.startsWith('tc')) && (
+          {(variable != 'lethal_heat_3d' && !variable.startsWith('tc')) && (
             <Box sx={sx.label}>Min
               <Slider
                 min={climRanges[variable].min}
@@ -172,8 +172,13 @@ const Layers = () => {
                 step={(variable == 'lethal_heat_3d') ? 0.5 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
                 sx={{ width: '150px', display: 'inline-block', ml: 2, }}
                 value={clim[0]}
-                onChange={(e) => 
-                  setClim((prev) => [parseFloat(e.target.value), prev[1]])
+                onChange={(e) => {
+                  if(parseFloat(e.target.value) < clim[1]) {
+                    setClim([parseFloat(e.target.value), clim[1]])
+                  } else {
+                    setClim([clim[1], clim[1]])
+                  }
+                }
                 }
               />
               <Badge
@@ -193,16 +198,19 @@ const Layers = () => {
           )}
 
           {(variable != 'lethal_heat_3d') && (
-            <Box sx={{ ...sx.label }}>Max
+            <Box sx={ sx.label }>Max
               <Slider
                 min={climRanges[variable].min}
                 max={climRanges[variable].max}
                 step={(variable == 'lethal_heat_3d') ? 0.5 : ((variable == 'slr_3d') || (variable.startsWith('drought'))) ? 0.01 : 0.1}
-                sx={{ width: '130px', display: 'inline-block', ml: 2, }}
+                sx={{ width: '150px', display: 'inline-block', ml: 2, }}
                 value={clim[1]}
                 onChange={(e) => {
-                  // console.log(e.target.value)
-                  setClim((prev) => [prev[0], parseFloat(e.target.value)])
+                  if(parseFloat(e.target.value) > clim[0]) {
+                    setClim([clim[0], parseFloat(e.target.value)])
+                  } else {
+                    setClim([clim[0], clim[0]])
+                  }
                 }}
               />
               <Badge
@@ -220,7 +228,7 @@ const Layers = () => {
                 }
               </Badge>
             </Box>
-          )} */}
+          )}
 
           {variable == 'lethal_heat_3d' && (
             <Box sx={{ ...sx.label }}>

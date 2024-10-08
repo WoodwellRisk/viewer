@@ -23,10 +23,6 @@ const useStore = create((set, get) => ({
 
     clim: [0.0, 0.5],
     setClim: (clim) => set({ clim }),
-    // setClim: (value) =>
-    //     set((prev) => ({
-    //         clims: [value, ...prev[1]],
-    //     })),
 
     opacity: 1,
     setOpacity: (opacity) => set({ opacity }),
