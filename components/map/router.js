@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useMapbox } from '@carbonplan/maps'
 
@@ -9,8 +9,10 @@ const Router = () => {
     const router = useRouter()
     const setZoom = useStore((state) => state.setZoom)
     const setCenter = useStore((state) => state.setCenter)
-    const [zoomToBox, setZoomToBox] = useState(null)
-    const [zoomInitialized, setZoomInitialized] = useState(false)
+    const zoomToBox = useStore((state) => state.zoomToBox)
+    const setZoomToBox = useStore((state) => state.setZoomToBox)
+    const zoomInitialized = useStore((state) => state.zoomInitialized)
+    const setZoomInitialized = useStore((state) => state.setZoomInitialized)
 
     {/* 
     * The following three methods are modified from their original source:

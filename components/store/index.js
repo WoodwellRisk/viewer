@@ -1,10 +1,15 @@
 import { create } from 'zustand'
-import { useThemedColormap } from '@carbonplan/colormaps'
 
-const useStore = create((set, get) => ({
+const useStore = create((set) => ({
     // map container state
     zoom: 1,
     setZoom: (zoom) => set({ zoom }),
+
+    zoomToBox: null,
+    setZoomToBox: (zoomToBox) => set({ zoomToBox }),
+
+    zoomInitialized: false,
+    setZoomInitialized: (zoomInitialized) => set({ zoomInitialized }),
 
     center: [-40, 40],
     setCenter: (center) => set({ center }),
