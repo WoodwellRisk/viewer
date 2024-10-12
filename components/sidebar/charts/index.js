@@ -5,7 +5,6 @@ import BarChart from './bar-chart'
 import useStore from '../../store/index'
 
 const StatsDisplay = ({ data, variable, colormap }) => {
-  // const sliding = useStore((state) => state.sliding)
 
   if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
     return
@@ -54,7 +53,7 @@ const StatsDisplay = ({ data, variable, colormap }) => {
 
 const Charts = () => {
   const variable = useStore((state) => state.variable)
-  const colormapName = useStore((state) => state.colormapName)
+  const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
       (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :

@@ -1,31 +1,45 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Tag, Slider } from '@carbonplan/components'
 import { SidebarDivider } from '@carbonplan/layouts'
 
 import Info from './info'
-import {
-  risks, riskTitles, defaultRiskColors, riskDescriptions,
-  riskLayers, climRanges, defaultColormaps, defaultLabels, defaultUnits,
-} from './sidebar-options'
 import useStore from '../store/index'
 
 const Layers = () => {
+  const variables = useStore((state) => state.variables)
   const variable = useStore((state) => state.variable)
   const setVariable = useStore((state) => state.setVariable)
   const band = useStore((state) => state.band)
   const setBand = useStore((state) => state.setBand)
-  const clim = useStore((state) => state.clim)
-  const setClim = useStore((state) => state.setClim)
-
-  const colormapName = useStore((state) => state.colormapName)
-  const setColormapName = useStore((state) => state.setColormapName)
+  const clim = useStore((state) => state.clim)()
+  // const setClim = useStore((state) => state.setClim)
+  // const climRanges = useStore((state) => state.climRanges)
+  const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
       (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
         (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() :
           useThemedColormap(colormapName)
+
+  // state variables for risk themes
+  const riskTitle = useStore((state) => state.riskTitle)()
+  const riskThemes = useStore((state) => state.riskThemes)
+  const setRiskThemes = useStore((state) => state.setRiskThemes)
+  const riskThemeLabels = useStore((state) => state.riskThemeLabels)
+  const riskThemeLookup = useStore((state) => state.riskThemeLookup)
+  const riskThemeColors = useStore((state) => state.riskThemeColors)
+
+  // state variables for specific risks
+  const riskDescription = useStore((state) => state.riskDescription)()
+  const riskLayers = useStore((state) => state.riskLayers)
+  const riskBands = useStore((state) => state.riskBands)
+  const setRiskBands = useStore((state) => state.setRiskBands)
+  const riskColors = useStore((state) => state.riskColors)()
+  const riskLabels = useStore((state) => state.riskLabels)()
+  const colormapLabel = useStore((state) => state.colormapLabel)()
+  const colormapUnits = useStore((state) => state.colormapUnits)()
 
   const sx = {
     group: {
@@ -43,50 +57,29 @@ const Layers = () => {
     },
   }
 
-  const [risk, setRisk] = useState('Drought')
-  const [riskThemes, setRiskThemes] = useState({
-    'Drought': true,
-    'Hot Days': false,
-    'Lethal Heat': false,
-    'Precipitation': false,
-    'Sea Level Rise': false,
-    'Temperature': false,
-    'Tropical Cyclones': false,
-    'Warm Nights': false,
-    'Wildfires': false,
-  })
-  const [riskDescription, setRiskDescription] = useState(riskDescriptions[risk])
-  const [values, setValues] = useState(riskLayers[risk].values)
-
   const handleRiskChange = useCallback((event) => {
-    if (risks.includes(event.target.innerHTML)) {
-      let risk = event.target.innerHTML;
-      let values = riskLayers[risk].values
-      let variable = riskLayers[risk].variable
+    let risk = riskThemeLookup[event.target.innerHTML];
+    if (variables.includes(risk)) {
+      let bands = riskLayers[risk].bands
       let band
-      if (variable != 'lethal_heat_3d') {
-        band = parseFloat(Object.keys(values)[0])
+      if (risk != 'lethal_heat_3d') {
+        band = parseFloat(Object.keys(bands)[0])
       } else {
-        band = values[values.length - 1]
+        band = bands[bands.length - 1]
       }
 
-      setRisk(risk)
-      setRiskDescription(riskDescriptions[risk])
-      setValues(values)
-      setVariable(variable)
+      setVariable(risk)
+      setRiskBands(bands)
       setBand(band)
-      setClim([climRanges[variable].min, climRanges[variable].max])
-      setColormapName(defaultColormaps[variable])
     }
   })
 
   const handleBandChange = useCallback((event) => {
     if (variable != 'lethal_heat_3d') {
-      let keys = Object.keys(riskLayers[risk].values);
+      let keys = Object.keys(riskLayers[variable].bands);
       let label = event.target.innerHTML;
       // https://stackoverflow.com/questions/23013573/swap-key-with-value-in-object
-      let band = Object.fromEntries(Object.entries(riskLayers[risk].labels).map(([k, v]) => [v, k]))[label]
-
+      let band = Object.fromEntries(Object.entries(riskLayers[variable].labels).map(([k, v]) => [v, k]))[label]
       if (keys.includes(band)) {
         setBand(parseFloat(band));
       }
@@ -110,8 +103,9 @@ const Layers = () => {
                 mb: [2],
               }}
               values={riskThemes}
+              labels={riskThemeLabels}
               setValues={setRiskThemes}
-              colors={defaultRiskColors}
+              colors={riskThemeColors}
               multiSelect={false}
               onClick={handleRiskChange}
             />
@@ -123,16 +117,17 @@ const Layers = () => {
       <Box sx={sx.group}>
         <Box className='risk-layer-container' sx={{ mt: 0, mb: 4 }} >
           <Box as='h2' variant='styles.h4' className='risk-layer-title'>
-            {riskTitles[risk]} <Info>{riskDescription}</Info>
+            {riskTitle}
+            <Info>{riskDescription}</Info>
           </Box>
 
           <Box className='risk-layers'>
             {variable != 'lethal_heat_3d' && (
               <Filter
-                values={values}
-                setValues={setValues}
-                colors={riskLayers[risk].colors}
-                labels={riskLayers[risk].labels}
+                values={riskBands}
+                setValues={setRiskBands}
+                colors={riskColors}
+                labels={riskLabels}
                 multiSelect={false}
                 onClick={handleBandChange}
               />
@@ -155,16 +150,15 @@ const Layers = () => {
               sxClim={{ fontSize: [1, 1, 1, 2], pt: [1] }}
               width='100%'
               colormap={colormap}
-              label={defaultLabels[variable]}
-              units={defaultUnits[variable]}
-              clim={[clim[0].toFixed(2), clim[1].toFixed(2)]}
-              horizontal
+              label={colormapLabel}
+              units={colormapUnits}
+              clim={[clim[0].toFixed(2), clim[1].toFixed(2)]}              horizontal
               bottom
               discrete // only applies for lethal heat layer, does not affect other layers
             />
           </Box>
 
-          {(variable != 'lethal_heat_3d' && !variable.startsWith('tc')) && (
+          {/* {(variable != 'lethal_heat_3d' && !variable.startsWith('tc')) && (
             <Box sx={sx.label}>Min
               <Slider
                 min={climRanges[variable].min}
@@ -173,7 +167,7 @@ const Layers = () => {
                 sx={{ width: '150px', display: 'inline-block', ml: 2, }}
                 value={clim[0]}
                 onChange={(e) => {
-                  if(parseFloat(e.target.value) < clim[1]) {
+                  if (parseFloat(e.target.value) < clim[1]) {
                     setClim([parseFloat(e.target.value), clim[1]])
                   } else {
                     setClim([clim[1], clim[1]])
@@ -198,7 +192,7 @@ const Layers = () => {
           )}
 
           {(variable != 'lethal_heat_3d') && (
-            <Box sx={ sx.label }>Max
+            <Box sx={sx.label}>Max
               <Slider
                 min={climRanges[variable].min}
                 max={climRanges[variable].max}
@@ -206,7 +200,7 @@ const Layers = () => {
                 sx={{ width: '150px', display: 'inline-block', ml: 2, }}
                 value={clim[1]}
                 onChange={(e) => {
-                  if(parseFloat(e.target.value) > clim[0]) {
+                  if (parseFloat(e.target.value) > clim[0]) {
                     setClim([clim[0], parseFloat(e.target.value)])
                   } else {
                     setClim([clim[0], clim[0]])
@@ -223,12 +217,12 @@ const Layers = () => {
                 }}
               >
                 {
-                  ((risk == 'Drought' || risk == 'Sea Level Rise' || risk == 'Precipitation' || risk == 'Wildfires' || risk == "Tropical Cyclones") &&
+                  ((variable == 'drought' || variable == 'slr_3d' || variable == 'precip' || variable == 'wdd' || variable == "tc_rcp") &&
                     (clim[1].toFixed(2) == climRanges[variable].max)) ? '>' + clim[1].toFixed(2) : clim[1].toFixed(2)
                 }
               </Badge>
             </Box>
-          )}
+          )} */}
 
           {variable == 'lethal_heat_3d' && (
             <Box sx={{ ...sx.label }}>
@@ -250,7 +244,7 @@ const Layers = () => {
                   top: [1],
                 }}
               >
-                {band.toFixed(1)}
+                {parseFloat(band).toFixed(1)}
               </Badge>
             </Box>
           )}

@@ -1,10 +1,12 @@
 import { Box } from 'theme-ui'
 import { AxisLabel, Chart, Grid, Plot, Ticks, TickLabels } from '@carbonplan/charts'
 import Bar from './bar'
-import { climRanges } from '../sidebar-options'
+
+import useStore from '../../store/index'
 import * as d3 from 'd3'
 
 const BarChart = ({ data, variable, colormap }) => {
+    const climRanges = useStore((state) => state.climRanges)
 
     const sx = {
         chart: {

@@ -18,8 +18,8 @@ const Map = ({ mobile }) => {
 
   const variable = useStore((state) => state.variable)
   const band = useStore((state) => state.band)
-  const clim = useStore((state) => state.clim)
-  const colormapName = useStore((state) => state.colormapName)
+  const clim = useStore((state) => state.clim)()
+  const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
       (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
