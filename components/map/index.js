@@ -4,7 +4,12 @@ import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
 import Ruler from './ruler'
+import Search from './search/index'
+import Point from './point'
+import LineMinZoom from './line-min-zoom'
+import FillMinZoom from './fill-min-zoom'
 import Router from './router'
+
 
 import useStore from '../store/index'
 
@@ -36,6 +41,11 @@ const Map = ({ mobile }) => {
   const showLakes = useStore((state) => state.showLakes)
   const showCountriesOutline = useStore((state) => state.showCountriesOutline)
   const showStatesOutline = useStore((state) => state.showStatesOutline)
+
+  const [lookup, setLookup] = useState(null)
+  const [showSearch, setShowSearch] = useState(false)
+  const [showFilter, setShowFilter] = useState(true)
+  const [showTemp, setShowTemp] = useState(false)
 
   return (
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
@@ -100,6 +110,103 @@ const Map = ({ mobile }) => {
           />
         )}
 
+        <LineMinZoom
+          id={'countries'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/search/countries'}
+          variable={'countries'}
+          minZoom={2}
+          width={1.5}
+          label={true}
+          labelText={'name'}
+        />
+
+        <LineMinZoom
+          id={'regions'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/search/regions'}
+          variable={'regions'}
+          minZoom={2}
+          width={1.5}
+          label={true}
+          labelText={'name'}
+        />
+
+        <LineMinZoom
+          id={'states'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/search/states'}
+          variable={'states'}
+          minZoom={4}
+          width={1.5}
+          label={true}
+          labelText={'name'}
+        />
+
+                {/* <LineMinZoom
+          id={'counties'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/search/counties'}
+          variable={'counties'}
+          minZoom={6}
+          width={1.5}
+          label={true}
+          labelText={'name'}
+        /> */}
+
+        {/* <Box sx={{
+            width: '300px',
+            height: '300px',
+            border: '2px solid red',
+            position: 'absolute', 
+            top: 40, 
+            right: 5,
+            animationDelay: '0s',
+            animationDuration: '0.5s',
+            animationIterationCount: 4,
+            animationName: fade.toString(),
+            // animationTimingFunction: 'linear',
+            animationFillMode: 'forwards',
+        }}>
+        </Box> */}
+
+        {/* {showTemp && (
+          <TempLayer
+            id={'temp-layer'}
+            variable={'states'}
+            color={'red'}
+            width={5}
+            opacity={0}
+          />
+        )} */}
+
+        <Point
+          id={'cities'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/search/cities'}
+          variable={'cities'}
+          label={true}
+          labelText={'name'}
+          minZoom={6}
+        />
+
+        {showFilter && lookup == 'counties' && (
+          <FilterLayer
+            key={place}
+            id={'counties'}
+            source={filterSource + lookup}
+            variable={lookup}
+            minZoom={4}
+            opacity={0}
+            color={theme.rawColors.primary}
+            label={true}
+            labelText={'name'}
+            filter={null}
+            type={'line'}
+            place={place}
+          />
+        )}
+
         {showRegionPicker && (
           <RegionPicker
             color={theme.colors.primary}
@@ -136,6 +243,10 @@ const Map = ({ mobile }) => {
         )}
 
         {!mobile && (<Ruler />)}
+
+        {!mobile && (
+          <Search showSearch={showSearch} setShowSearch={setShowSearch} />
+        )}
 
         <Router />
 
