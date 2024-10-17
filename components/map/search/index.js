@@ -1,11 +1,30 @@
 // Adapted from Carbonplan's <Input /> component:
 // https://github.com/carbonplan/components/blob/main/src/input.js
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { Box, IconButton } from 'theme-ui'
 import { XCircle } from '@carbonplan/icons'
 import SearchUI from './search-ui'
 
-const Search = ({ showSearch, setShowSearch }) => {
+import useStore from '../../store/index'
+
+const Search = () => {
+  const showSearch = useStore((state) => state.showSearch)
+  const setShowSearch = useStore((state) => state.setShowSearch)
+  const setSearchText = useStore((state) => state.setSearchText)
+  const setResults = useStore((state) => state.setResults)
+  const setLookup = useStore((state) => state.setLookup)
+  const setCoordinates = useStore((state) => state.setCoordinates)
+  const setBbox = useStore((state) => state.setBbox)
+
+  useEffect(() => {
+    if(showSearch == false) {
+      setCoordinates(null)
+      setBbox(null)
+      setLookup(null)
+      setSearchText("")
+      setResults([])
+    }
+  }, [showSearch])
 
   return (
     <>
@@ -20,7 +39,8 @@ const Search = ({ showSearch, setShowSearch }) => {
       >
         <IconButton
           aria-label='search map'
-          onClick={() => setShowSearch(!showSearch)}
+          onClick={() => {setShowSearch(!showSearch)}
+        }
           sx={{ stroke: 'primary', cursor: 'pointer', width: 34, height: 34 }}
         >
           {!showSearch && (

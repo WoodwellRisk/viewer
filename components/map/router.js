@@ -99,12 +99,12 @@ const Router = () => {
         router.push(`${pathname}?${url.searchParams}`)
     }, [variable])
 
-    useEffect(() => {
-        console.log(band)
-        // const url = new URL(window.location)
-        // url.searchParams.set('band', parseFloat(band).toFixed(1))
-        // router.push(`${pathname}?${url.searchParams}`)
-    }, [band])
+    // useEffect(() => {
+    //     console.log(band)
+    //     // const url = new URL(window.location)
+    //     // url.searchParams.set('band', parseFloat(band).toFixed(1))
+    //     // router.push(`${pathname}?${url.searchParams}`)
+    // }, [band])
 
     useEffect(() => {
         map.on('moveend', () => {

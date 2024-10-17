@@ -1,17 +1,24 @@
-import { Badge, Box, Button, Input, Text, useThemeUI } from 'theme-ui'
-import { useEffect, useState } from 'react'
+import { Badge, Box, Input, Text, useThemeUI } from 'theme-ui'
+import { useEffect } from 'react'
 
-const SearchBoxCoords = (props) => {
-  const {setCoordinates} = props
+import useStore from '../../store/index'
 
+const SearchBoxCoords = () => {
   const { theme } = useThemeUI()
 
-  const [latitudeInput, setLatitudeInput] = useState('')
-  const [longitudeInput, setLongitudeInput] = useState('')
-  const [latitude, setLatitude] = useState('')
-  const [longitude, setLongitude] = useState('')
-  const [validLatitude, setValidLatitude] = useState(true)
-  const [validLongitude, setValidLongitude] = useState(true)
+  const setCoordinates = useStore((state) => state.setCoordinates)
+  const latitudeInput = useStore((state) => state.latitudeInput)
+  const setLatitudeInput = useStore((state) => state.setLatitudeInput)
+  const longitudeInput = useStore((state) => state.setLongitudeInput)
+  const setLongitudeInput = useStore((state) => state.setLatitudeInput)
+  const latitude = useStore((state) => state.latitude)
+  const setLatitude = useStore((state) => state.setLatitude)
+  const longitude = useStore((state) => state.longitude)
+  const setLongitude = useStore((state) => state.setLongitude)
+  const validLatitude = useStore((state) => state.validLatitude)
+  const setValidLatitude = useStore((state) => state.setValidLatitude)
+  const validLongitude = useStore((state) => state.validLongitude)
+  const setValidLongitude = useStore((state) => state.setValidLongitude)
 
   const sx = {
     'search-by-latlon-container': {

@@ -82,7 +82,7 @@ const useStore = create((set, get) => ({
     showOceanMask: true,
     setShowOceanMask: (showOceanMask) => set({ showOceanMask }),
 
-    showLakes: false,
+    showLakes: true,
     setShowLakes: (showLakes) => set({ showLakes }),
 
     showLandOutline: true,
@@ -91,8 +91,12 @@ const useStore = create((set, get) => ({
     showCountriesOutline: false,
     setShowCountriesOutline: (showCountriesOutline) => set({ showCountriesOutline }),
 
+    showRegionsOutline: false,
+    setShowRegionsOutline: (showRegionsOutline) => set({ showRegionsOutline }),
+
     showStatesOutline: false,
     setShowStatesOutline: (showStatesOutline) => set({ showStatesOutline }),
+    showStatesZoom: 2.5, 
 
     sliding: false,
     setSliding: (sliding) => set({ sliding }),
@@ -361,8 +365,53 @@ const useStore = create((set, get) => ({
     colormapUnits: () => {
         const {defaultUnits, variable} = get()
         return defaultUnits[variable]
-
     },
+
+    // search options
+    showSearch: false,
+    setShowSearch: (showSearch) => set({ showSearch }),
+
+    showFilter: true,
+    setShowFilter: (showFilter) => set({ showFilter }),
+
+    results: [],
+    setResults: (results) => set({ results }),
+
+    searchText: '',
+    setSearchText: (searchText) => set({ searchText }),
+
+    coordinates: null,
+    setCoordinates: (coordinates) => set({ coordinates }),
+
+    bbox: null,
+    setBbox: (bbox) => set({ bbox }),
+
+    searchBy: 'place',
+    setSearchBy: (searchBy) => set({ searchBy }),
+
+    place: null,
+    setPlace: (place) => set({ place }),
+
+    lookup: null,
+    setLookup: (lookup) => set({ lookup }),
+
+    latitudeInput: '',
+    setLatitudeInput: (latitudeInput) => set({ latitudeInput }),
+
+    longitudeInput: '',
+    setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
+
+    latitude: '',
+    setLatitude: (latitude) => set({ latitude }),
+
+    longitude: '',
+    setLongitude: (longitude) => set({ longitude }),
+
+    validLatitude: true,
+    setValidLatitude: (validLatitude) => set({ validLatitude }),
+
+    validLongitude: true,
+    setValidLongitude: (validLongitude) => set({ validLongitude }),
 
 }))
 

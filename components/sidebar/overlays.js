@@ -1,11 +1,17 @@
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, Text, useThemeUI } from 'theme-ui'
 import { Toggle } from '@carbonplan/components'
 
 import useStore from '../store/index'
 
 const Overlays = () => {
+    const { theme } = useThemeUI()
+
+    const zoom = useStore((state) => state.zoom)
+    const showStatesZoom = useStore((state) => state.showStatesZoom)
     const showCountriesOutline = useStore((state) => state.showCountriesOutline)
     const setShowCountriesOutline = useStore((state) => state.setShowCountriesOutline)
+    const showRegionsOutline = useStore((state) => state.showRegionsOutline)
+    const setShowRegionsOutline = useStore((state) => state.setShowRegionsOutline)
     const showStatesOutline = useStore((state) => state.showStatesOutline)
     const setShowStatesOutline = useStore((state) => state.setShowStatesOutline)
 
@@ -14,7 +20,10 @@ const Overlays = () => {
             mb: [0],
             mx: 'auto',
             width: '100%',
-            height: '75px',
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            minHeight: '100px', // set at ~1/5 the container height
         },
         'label': {
             fontFamily: 'mono',
@@ -26,7 +35,16 @@ const Overlays = () => {
         },
         'toggle': {
             mt: '8px',
-        }
+        },
+        'warning-box': {
+            display: 'block',
+            border: '2px solid',
+            borderColor: 'red',
+            borderRadius: '5px',
+            my: [1],
+            p: [1],
+            bg: theme.colors.background,
+          }
     }
 
     return (
@@ -41,6 +59,15 @@ const Overlays = () => {
                     />
             </Flex>
 
+            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                    <Box sx={sx.label }>Regions</Box>
+                    <Toggle
+                        sx={sx['toggle']}
+                        value={showRegionsOutline}
+                        onClick={() => setShowRegionsOutline(!showRegionsOutline)}
+                    />
+            </Flex>
+
             <Flex sx={{ justifyContent: 'space-between' }}>
                 <Box sx={sx.label}>States</Box>
                 <Toggle
@@ -49,6 +76,11 @@ const Overlays = () => {
                     onClick={() => setShowStatesOutline(!showStatesOutline)}
                 />
             </Flex>
+            {zoom < showStatesZoom && showStatesOutline && (
+                    <Box sx={sx['warning-box']}>
+                        <Text sx={{ color: 'red', fontSize: [1] }}>Zoom in further to see the states layer.</Text>
+                    </Box>
+                )}
         </Box>
     )
 }

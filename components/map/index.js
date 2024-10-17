@@ -6,10 +6,8 @@ import { Dimmer } from '@carbonplan/components'
 import Ruler from './ruler'
 import Search from './search/index'
 import Point from './point'
-import LineMinZoom from './line-min-zoom'
-import FillMinZoom from './fill-min-zoom'
+import FilterLayer from './filter-layer'
 import Router from './router'
-
 
 import useStore from '../store/index'
 
@@ -40,12 +38,15 @@ const Map = ({ mobile }) => {
   const showOceanMask = useStore((state) => state.showOceanMask)
   const showLakes = useStore((state) => state.showLakes)
   const showCountriesOutline = useStore((state) => state.showCountriesOutline)
+  const showRegionsOutline = useStore((state) => state.showRegionsOutline)
   const showStatesOutline = useStore((state) => state.showStatesOutline)
+  const showStatesZoom = useStore((state) => state.showStatesZoom)
 
-  const [lookup, setLookup] = useState(null)
-  const [showSearch, setShowSearch] = useState(false)
-  const [showFilter, setShowFilter] = useState(true)
-  const [showTemp, setShowTemp] = useState(false)
+  const lookup = useStore((state) => state.lookup)
+  const place = useStore((state) => state.place)
+  const showSearch = useStore((state) => state.showSearch)
+  const setShowSearch = useStore((state) => state.setShowSearch)
+  const showFilter = useStore((state) => state.showFilter)
 
   return (
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
@@ -59,46 +60,73 @@ const Map = ({ mobile }) => {
         )}
 
         {variable == 'slr_3d' && (
-          <Fill
-            color={theme.rawColors.background}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
-            variable={'land'}
-          />
+          <>
+
+            <Fill
+              color={theme.rawColors.background}
+              source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
+              variable={'land'}
+              zIndex={-1}
+            />
+
+            <Point
+              id={'cities'}
+              color={theme.rawColors.primary}
+              source={'https://storage.googleapis.com/risk-maps/search/cities'}
+              variable={'cities'}
+              label={true}
+              labelText={'name'}
+              minZoom={6}
+            />
+          </>
         )}
 
-        {showStatesOutline && variable != 'slr_3d' && (
+        {variable != 'slr_3d' && showRegionsOutline && (
           <Line
+            id={'regions'}
             color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
-            variable={'states'}
+            source={'https://storage.googleapis.com/risk-maps/search/regions'}
+            variable={'regions'}
             width={1}
           />
         )}
 
-        {showCountriesOutline && variable != 'slr_3d' && (
+        {variable != 'slr_3d' && showCountriesOutline && (
           <Line
+            id={'countries'}
             color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
+            // source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
+            source={'https://storage.googleapis.com/risk-maps/search/countries'}
             variable={'countries'}
-            width={1}
+            width={showStatesOutline && zoom > showStatesZoom ? 1.75 : 1}
           />
         )}
 
-        {showLakes && variable != 'slr_3d' && (
-          <Fill
-            color={theme.rawColors.background}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
-            variable={'lakes'}
-          />
-        )}
-
-        {showLakes && variable != 'slr_3d' && (
+        {variable != 'slr_3d' && showStatesOutline && zoom > showStatesZoom && (
           <Line
-            color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
-            variable={'lakes'}
-            width={1}
+            // color={theme.rawColors.primary}
+            color={'grey'}
+            // source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
+            source={'https://storage.googleapis.com/risk-maps/search/states'}
+            variable={'states'}
+            width={zoom < 4 ? 0.5 : 1}
           />
+        )}
+
+        {showLakes && variable != 'slr_3d' && (
+          <>
+            <Fill
+              color={theme.rawColors.background}
+              source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
+              variable={'lakes'}
+            />
+            <Line
+              color={theme.rawColors.primary}
+              source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
+              variable={'lakes'}
+              width={1}
+            />
+          </>
         )}
 
         {showLandOutline && (
@@ -110,100 +138,28 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        <LineMinZoom
-          id={'countries'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/countries'}
-          variable={'countries'}
-          minZoom={2}
-          width={1.5}
-          label={true}
-          labelText={'name'}
-        />
-
-        <LineMinZoom
-          id={'regions'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/regions'}
-          variable={'regions'}
-          minZoom={2}
-          width={1.5}
-          label={true}
-          labelText={'name'}
-        />
-
-        <LineMinZoom
-          id={'states'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/states'}
-          variable={'states'}
-          minZoom={4}
-          width={1.5}
-          label={true}
-          labelText={'name'}
-        />
-
-                {/* <LineMinZoom
-          id={'counties'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/counties'}
-          variable={'counties'}
-          minZoom={6}
-          width={1.5}
-          label={true}
-          labelText={'name'}
-        /> */}
-
-        {/* <Box sx={{
-            width: '300px',
-            height: '300px',
-            border: '2px solid red',
-            position: 'absolute', 
-            top: 40, 
-            right: 5,
-            animationDelay: '0s',
-            animationDuration: '0.5s',
-            animationIterationCount: 4,
-            animationName: fade.toString(),
-            // animationTimingFunction: 'linear',
-            animationFillMode: 'forwards',
-        }}>
-        </Box> */}
-
-        {/* {showTemp && (
-          <TempLayer
-            id={'temp-layer'}
-            variable={'states'}
-            color={'red'}
-            width={5}
-            opacity={0}
-          />
-        )} */}
-
-        <Point
-          id={'cities'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/cities'}
-          variable={'cities'}
-          label={true}
-          labelText={'name'}
-          minZoom={6}
-        />
-
-        {showFilter && lookup == 'counties' && (
-          <FilterLayer
-            key={place}
-            id={'counties'}
-            source={filterSource + lookup}
-            variable={lookup}
-            minZoom={4}
-            opacity={0}
+        {variable != 'slr_3d' && (
+          <Point
+            id={'cities'}
             color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/search/cities'}
+            variable={'cities'}
             label={true}
             labelText={'name'}
-            filter={null}
-            type={'line'}
+            minZoom={6}
+          />
+        )}
+
+        {showFilter && (lookup != null && lookup != 'cities') && (
+          <FilterLayer
+            key={`filter-layer-${place}`}
+            id={`filter-layer-${lookup}`}
+            source={'https://storage.googleapis.com/risk-maps/search/' + lookup}
+            variable={lookup}
             place={place}
+            opacity={0.0}
+            color={lookup == 'countries' ? theme.rawColors.primary : 'grey'}
+            type={'line'}
           />
         )}
 
@@ -222,9 +178,7 @@ const Map = ({ mobile }) => {
           key={variable}
           display={display}
           opacity={opacity}
-          source={
-            `https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`
-          }
+          source={`https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`}
           variable={variable}
           clim={clim}
           colormap={colormap}
