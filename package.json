@@ -31,39 +31,16 @@
     "@emotion/react": "^11.11.4",
     "@theme-ui/color": "^0.16.2",
     "@theme-ui/match-media": "^0.16.2",
-    "@turf/turf": "^6.5.0",
     "d3": "^7.9.0",
-    "d3-array": "^2.12.1",
-    "d3-axis": "^2.1.0",
-    "d3-color": "^3.1.0",
-    "d3-geo": "^2.0.2",
-    "d3-scale": "^2.2.2",
-    "d3-selection": "^2.0.0",
-    "d3-shape": "^3.2.0",
-    "file-saver": "^2.0.5",
-    "glsl-geo-projection": "^1.0.1",
     "mapbox-gl": "^1.13.1",
-    "ndarray": "^1.0.19",
     "next": "^14.2.10",
     "polished": "^4.3.1",
     "react-animate-height": "^3.2.3",
-    "regl": "^2.1.0",
     "theme-ui": "^0.16.2",
-    "uuid": "^8.3.2",
-    "xhr-request": "^1.1.0",
-    "zarr-js": "^3.3.0"
+    "zustand": "^5.0.0-rc.2"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
-  },
-  "devDependencies": {
-    "@babel/preset-env": "^7.16.4",
-    "babel-jest": "^27.3.1",
-    "jest": "^27.3.1",
-    "microbundle": "^0.13.0",
-    "prettier": "^2.2.1",
-    "rimraf": "3.0.2",
-    "ws": ">=7.5.10"
   }
 }

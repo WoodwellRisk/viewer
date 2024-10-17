@@ -5,23 +5,21 @@ import { Dimmer } from '@carbonplan/components'
 import InfoDemo from './info-demo'
 import GlobeDemo from './globe-demo'
 
-const sx = {
-  'container': {
-    mx: [3, 4, 5, 6],
-    pt: [1],
-    mt: 2,
-    pb: [2],
-    mb: [3],
-    fontSize: [2, 2, 2, 3],
-    // border: '1px solid',
-    // borderColor: 'blue',
-    width: 'fit-content',
-  },
-}
-
 const Content = () => {
   const [showGraticule, setShowGraticule] = useState(false)
   const toggleGraticule = () => setShowGraticule(!showGraticule)
+
+  const sx = {
+    'container': {
+      mx: [3, 4, 5, 6],
+      pt: [1],
+      mt: 2,
+      pb: [2],
+      mb: [3],
+      fontSize: [2, 2, 2, 3],
+      width: 'fit-content',
+    },
+  }
 
   return (
     <>

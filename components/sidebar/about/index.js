@@ -1,7 +1,13 @@
 import { Box, Text } from 'theme-ui'
 import Content from './content.js'
 
-function About({ showAbout, toggleAbout, mobile }) {
+import useStore from '../../store/index'
+
+function About({ mobile }) {
+  const showAbout = useStore((state) => state.showAbout)
+  const setShowAbout = useStore((state) => state.setShowAbout)
+  const toggleAbout = () => setShowAbout(!showAbout)
+
   return (
     <Box
       sx={{
@@ -17,9 +23,6 @@ function About({ showAbout, toggleAbout, mobile }) {
           '320px',
           '350px',
           '400px',
-          // 'calc(3 * 100vw / 8 + 18px)',
-          // 'calc(3 * 100vw / 12 + 24px)',
-          // 'calc(3 * 100vw / 12 + 36px)',
         ],
         backgroundColor: 'background',
         width: [

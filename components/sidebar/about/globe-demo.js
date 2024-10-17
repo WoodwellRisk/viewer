@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Minimap, Path, Graticule } from '@carbonplan/minimaps'
-import { equirectangular, mercator } from '@carbonplan/minimaps/projections'
+import { equirectangular } from '@carbonplan/minimaps/projections'
 import { useThemeUI } from 'theme-ui'
 
-const GlobeDemo = ({showGraticule}) => {
+const GlobeDemo = ({ showGraticule }) => {
   const { theme } = useThemeUI()
   const [opacity, setOpacity] = useState(0.2)
 
   useEffect(() => {
     showGraticule == false ? setOpacity(0.0) : setOpacity(0.2)
   }, [showGraticule])
-  
+
   return (
     <>
       <Minimap projection={equirectangular}>

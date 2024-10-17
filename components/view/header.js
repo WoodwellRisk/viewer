@@ -2,38 +2,39 @@ import React, { useState } from 'react'
 import { Box, Flex, Container, Link } from 'theme-ui'
 import { Column, Menu, Row } from '@carbonplan/components'
 
-const sx = {
-  link: (current, label, first = false) => {
-    return {
-      width: 'auto',
-      color: current === label ? 'secondary' : 'text',
-      fontSize: [5, 5, 5, 6],
-      fontFamily: 'heading',
-      letterSpacing: 'heading',
-      borderStyle: 'solid',
-      borderColor: 'muted',
-      borderWidth: '0px',
-      borderBottomWidth: '1px',
-      borderTopWidth: first ? '1px' : '0px',
-      py: [3, 3, 4, 5],
-      textDecoration: 'none',
-      display: 'block',
-      position: 'relative',
-      transition: 'color 0.15s',
-      '&:hover': {
-        color: 'secondary',
-      },
-    }
-  },
-}
-
 const links = [
   { url: 'https://www.woodwellclimate.org/research-area/risk/', display: 'About' },
   { url: 'https://woodwellrisk.github.io/', display: 'Research' },
   { url: 'https://github.com/WoodwellRisk', display: 'Code' },
 ]
 
-const Nav = ({ link, nav, first, setExpanded }) => {
+const Nav = ({ link, nav, first }) => {
+  
+  const sx = {
+    link: (current, label, first = false) => {
+      return {
+        width: 'auto',
+        color: current === label ? 'secondary' : 'text',
+        fontSize: [5, 5, 5, 6],
+        fontFamily: 'heading',
+        letterSpacing: 'heading',
+        borderStyle: 'solid',
+        borderColor: 'muted',
+        borderWidth: '0px',
+        borderBottomWidth: '1px',
+        borderTopWidth: first ? '1px' : '0px',
+        py: [3, 3, 4, 5],
+        textDecoration: 'none',
+        display: 'block',
+        position: 'relative',
+        transition: 'color 0.15s',
+        '&:hover': {
+          color: 'secondary',
+        },
+      }
+    },
+  }
+
   const { url, display } = link
 
   return (

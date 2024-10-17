@@ -1,223 +1,147 @@
 import { useState, useRef } from 'react'
 import { useThemeUI, Box } from 'theme-ui'
-import mapboxgl from 'mapbox-gl'
+import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
 import Ruler from './ruler'
-import Search from './search/index'
-import Point from './point'
-import LineMinZoom from './line-min-zoom'
-import FillMinZoom from './fill-min-zoom'
+import Router from './router'
 
-const Map = ({ getters, setters, mobile }) => {
+import useStore from '../store/index'
+
+const Map = ({ mobile }) => {
+  const { theme } = useThemeUI()
   const container = useRef(null)
   const [map, setMap] = useState(null)
-  const [zoom, setZoom] = useState(1)
+  const zoom = useStore((state) => state.zoom)
+  const center = useStore((state) => state.center)
+  const glyphs = useStore((state) => state.glyphs)
 
-  const { theme } = useThemeUI()
+  const variable = useStore((state) => state.variable)
+  const band = useStore((state) => state.band)
+  const clim = useStore((state) => state.clim)()
+  const colormapName = useStore((state) => state.colormapName)()
+  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
+    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+      (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+        (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() :
+          useThemedColormap(colormapName)
 
-  const [display, setDisplay] = useState(true)
-  const [opacity, setOpacity] = useState(1)
-  const [showOceanMask, setShowOceanMask] = useState(true)
-  const [showLakes, setShowLakes] = useState(false)
-  const [showLandOutline, setShowLandOutline] = useState(true)
+  const opacity = useStore((state) => state.opacity)
+  const display = useStore((state) => state.display)
+  const setRegionData = useStore((state) => state.setRegionData)
 
-  const [showSearch, setShowSearch] = useState(false)
-
-  const {
-    variable,
-    band,
-    clim,
-    colormapName,
-    colormap,
-    regionData,
-    showRegionPicker,
-    showCountriesOutline,
-    showStatesOutline
-  } = getters
-
-  const {
-    setVariable,
-    setBand,
-    setClim,
-    setColormapName,
-    setRegionData,
-    setShowRegionPicker,
-    setShowCountriesOutline,
-    setShowStatesOutline
-  } = setters
-
-  const sx = {
-    label: {
-      fontFamily: 'mono',
-      letterSpacing: 'mono',
-      textTransform: 'uppercase',
-      fontSize: [1, 1, 1, 2],
-      mt: [3],
-    },
-  }
-
-  const glyphs = "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf"
+  const showRegionPicker = useStore((state) => state.showRegionPicker)
+  const showLandOutline = useStore((state) => state.showLandOutline)
+  const showOceanMask = useStore((state) => state.showOceanMask)
+  const showLakes = useStore((state) => state.showLakes)
+  const showCountriesOutline = useStore((state) => state.showCountriesOutline)
+  const showStatesOutline = useStore((state) => state.showStatesOutline)
 
   return (
-    <Box ref={container} sx={{flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': {outline: 'none', },}} >
-      <MapContainer zoom={zoom} center={[-40, 40]} glyphs={glyphs} >
-      {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
-            <Fill
-              color={theme.rawColors.background}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/ocean'}
-              variable={'ocean'}
-            />
-          )}
-
-          {variable == 'slr_3d' && (
-            <Fill
-              color={theme.rawColors.background}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
-              variable={'land'}
-            />
-          )}
-
-          {showStatesOutline && variable != 'slr_3d' && (
-            <Line
-              color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
-              variable={'states'}
-              width={1}
-            />
-          )}
-
-          {showCountriesOutline && variable != 'slr_3d' && (
-            <Line
-              color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
-              variable={'countries'}
-              width={1}
-            />
-          )}
-
-        {showLakes && variable != 'slr_3d' && (
-            <Fill
-              color={theme.rawColors.background}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
-              variable={'lakes'}
-            />
-          )}
-
-        {showLakes && variable != 'slr_3d' && (
-            <Line
-              color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
-              variable={'lakes'}
-              width={1}
-            />
-          )}
-
-          {showLandOutline && (
-            <Line
-              color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
-              variable={'land'}
-              width={1}
-            />
-          )}
-
-          {showRegionPicker && (
-            <RegionPicker
-              color={theme.colors.primary}
-              // backgroundColor="transparent"
-              backgroundColor={theme.colors.background}
-              fontFamily={theme.fonts.mono}
-              fontSize={'14px'}
-              minRadius={1}
-              maxRadius={1500}
-            />
-          )}
-
-        <LineMinZoom
-          id={'lakes-outline'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/lakes'}
-          variable={'lakes'}
-          minZoom={4}
-          width={1.5}
-          label={true}
-          labelText={'NAME'}
-        />
-
-        <FillMinZoom
-          id={'lakes-fill'}
-          color={theme.rawColors.background}
-          source={'https://storage.googleapis.com/risk-maps/search/lakes'}
-          variable={'lakes'}
-          minZoom={4}
-          width={1.5}
-          label={true}
-          labelText={'NAME'}
-        />
-
-        <LineMinZoom
-          id={'states'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/states'}
-          variable={'states'}
-          minZoom={4}
-          width={1.5}
-          label={true}
-          labelText={'NAME'}
-        />  
-
-        <Point
-          id={'populated-places'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/pop_places'}
-          variable={'pop_places'}
-          label={true}
-          labelText={'NAMEASCII'}
-        />
-
-        <Point
-          id={'airports'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/airports'}
-          variable={'airports'}
-          label={true}
-          labelText={'NAME'}
-        />
-
-          <Raster
-            key={variable}
-            display={display}
-            opacity={opacity}
-            source={
-              `https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`
-            }
-            variable={variable}
-            clim={clim}
-            colormap={colormap}
-            selector={{ band }}
-            mode={(variable == 'lethal_heat_3d') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
-            regionOptions={{ setData: setRegionData }}
+    <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
+      <MapContainer zoom={zoom} center={center} glyphs={glyphs} >
+        {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
+          <Fill
+            color={theme.rawColors.background}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/ocean'}
+            variable={'ocean'}
           />
+        )}
 
-          {(variable.startsWith('tc')) && (
-            <Line
+        {variable == 'slr_3d' && (
+          <Fill
+            color={theme.rawColors.background}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
+            variable={'land'}
+          />
+        )}
+
+        {showStatesOutline && variable != 'slr_3d' && (
+          <Line
+            color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
+            variable={'states'}
+            width={1}
+          />
+        )}
+
+        {showCountriesOutline && variable != 'slr_3d' && (
+          <Line
+            color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
+            variable={'countries'}
+            width={1}
+          />
+        )}
+
+        {showLakes && variable != 'slr_3d' && (
+          <Fill
+            color={theme.rawColors.background}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
+            variable={'lakes'}
+          />
+        )}
+
+        {showLakes && variable != 'slr_3d' && (
+          <Line
+            color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
+            variable={'lakes'}
+            width={1}
+          />
+        )}
+
+        {showLandOutline && (
+          <Line
+            color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
+            variable={'land'}
+            width={1}
+          />
+        )}
+
+        {showRegionPicker && (
+          <RegionPicker
+            color={theme.colors.primary}
+            backgroundColor={theme.colors.background}
+            fontFamily={theme.fonts.mono}
+            fontSize={'14px'}
+            minRadius={1}
+            maxRadius={1500}
+          />
+        )}
+
+        <Raster
+          key={variable}
+          display={display}
+          opacity={opacity}
+          source={
+            `https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`
+          }
+          variable={variable}
+          clim={clim}
+          colormap={colormap}
+          selector={{ band }}
+          mode={(variable == 'lethal_heat_3d') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+          regionOptions={{ setData: setRegionData }}
+        />
+
+        {(variable.startsWith('tc')) && (
+          <Line
             color={theme.rawColors.secondary}
             source={'https://storage.googleapis.com/risk-maps/vector_layers/tc_boundaries'}
             variable={'tc_boundaries'}
             width={1}
           />
-          )}
+        )}
 
-          {!mobile && (<Ruler />)}
+        {!mobile && (<Ruler />)}
 
-          {!mobile && (
-            <Search showSearch={showSearch} setShowSearch={setShowSearch} />
-          )}
+        <Router />
 
       </MapContainer>
 
-      {!mobile && (<Dimmer 
+      {!mobile && (<Dimmer
         sx={{
           display: ['initial', 'initial', 'initial', 'initial'],
           position: 'absolute',

@@ -1,16 +1,16 @@
 import { Box, Flex } from 'theme-ui'
 import { keyframes } from '@emotion/react'
 
-const fade = keyframes({
-  from: {
-    opacity: 1,
-  },
-  to: {
-    opacity: 0,
-  },
-})
-
 const Loading = ({ mobile = false }) => {
+  const fade = keyframes({
+    from: {
+      opacity: 1,
+    },
+    to: {
+      opacity: 0,
+    },
+  })
+  
   return (
     <Box
       sx={{

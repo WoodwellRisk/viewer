@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useThemeUI, Container, Flex, Box } from 'theme-ui'
-import { Dimmer, FadeIn, Footer, Guide, Scrollbar, Settings }  from '@carbonplan/components'
+import { Dimmer, FadeIn, Scrollbar, Settings }  from '@carbonplan/components'
 import Header from './header'
 import Meta from './meta'
 
@@ -13,11 +13,9 @@ const Layout = ({
   status,
   nav,
   settings,
-  footer = true,
   header = true,
   metadata = 'mouse',
   dimmer = 'bottom',
-  guide = true,
   scrollbar = false,
   fade = true,
   container = true,
@@ -91,7 +89,6 @@ const Layout = ({
 
   return (
     <>
-      {guide && <Guide color={guide} />}
       {scrollbar && <Scrollbar />}
       <Meta card={card} description={description} title={title} url={url} />
       
@@ -136,24 +133,6 @@ const Layout = ({
         >
           {content}
         </Box>
-
-        {footer && (
-          <Box
-            as='footer'
-            sx={{
-              width: '100%',
-              borderStyle: 'solid',
-              borderColor: 'muted',
-              borderWidth: '0px',
-              borderTopWidth: '1px',
-              ...hideOnPrint,
-            }}
-          >
-            <Container>
-              <Footer />
-            </Container>
-          </Box>
-        )}
 
         {dimmer === 'bottom' && (
           <Box

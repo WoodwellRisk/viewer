@@ -1,11 +1,12 @@
 import { Box } from 'theme-ui'
 import { AxisLabel, Chart, Grid, Plot, Ticks, TickLabels } from '@carbonplan/charts'
 import Bar from './bar'
-import { SidebarDivider } from '@carbonplan/layouts'
-import { climRanges } from '../sidebar-options'
+
+import useStore from '../../store/index'
 import * as d3 from 'd3'
 
 const BarChart = ({ data, variable, colormap }) => {
+    const climRanges = useStore((state) => state.climRanges)
 
     const sx = {
         chart: {
@@ -67,11 +68,6 @@ const BarChart = ({ data, variable, colormap }) => {
     } else if (variable == 'tavg') {
         binEdges = binEdges.map((d) => d - 30)
     }
-
-    // const xTicks = Array(nBins + 1).fill(min).map((value, i) => value + Number((i * binWidth).toFixed(2)))
-    // console.log(xTicks)
-    // const binEdges = Array.from({length: (nBins + 1) }, (_, i) => i + min);
-    // console.log("xTicks: ", xTicks)
 
     const bin = d3.bin().domain(variableRange).thresholds(binEdges)
     const bins = bin(graphData)

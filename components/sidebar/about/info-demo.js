@@ -4,7 +4,6 @@ import { Box, IconButton, Text } from 'theme-ui'
 import { Info } from '@carbonplan/icons'
 
 const InfoDemo = ({ children }) => {
-
     const [expanded, setExpanded] = useState(false)
     const toggle = (e) => {
         setExpanded(!expanded)
@@ -34,7 +33,7 @@ const InfoDemo = ({ children }) => {
                     height={expanded ? 'auto' : 0}
                     easing={'linear'}
                 >
-                    <Text sx={{color: 'secondary'}}>{children}</Text>
+                    <Text sx={{ color: 'secondary' }}>{children}</Text>
                 </AnimateHeight>
             </Box>
 
