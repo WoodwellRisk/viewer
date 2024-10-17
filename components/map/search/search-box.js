@@ -28,7 +28,7 @@ const SearchBox = (props) => {
         outline: 'none !important',
         bg: theme.colors.primary,
       },
-    }
+    },
   }
 
   return (

@@ -41,7 +41,7 @@ const SearchUI = () => {
   }
 
   const handleSearch = (event) => {
-    const limit = 5;
+    const limit = 10;
     let query = event.target.value
     setSearchText(query)
 

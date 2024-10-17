@@ -18,7 +18,16 @@ const SearchResults = ({
     const [lookup, setLookup] = useState(null)
 
     const sx = {
+        'search-container': {
+            height: '250px',
+            overflow: "hidden",
+            overflowY: 'scroll',
+        },
         'search-results': {
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            minHeight: '50px', // set at ~1/5 the container height
             color: 'primary',
             border: '1px solid',
             borderTop: '0px',
@@ -29,8 +38,6 @@ const SearchResults = ({
             fontFamily: 'body',
             letterSpacing: 'body',
             lineHeight: [1.0],
-            width: '100%',
-            height: '100%',
             p: ['5px'],
             ':first-child': {
                 borderTop: '1px'
@@ -38,7 +45,6 @@ const SearchResults = ({
             ':last-child': {
                 borderRadius: '0px 0px 5px 5px',
                 borderBottom: '1px solid primary',
-                mb: [1]
             },
             ':focus': {
                 borderColor: 'primary',
@@ -52,6 +58,13 @@ const SearchResults = ({
                 borderColor: 'primary',
             },
         },
+        'result-text': {
+            fontSize: [2, 2, 2, 2],
+        },
+        'label-text': {
+            fontStyle: 'italic',
+            fontSize: [1]
+        }
     }
 
     const handleResultClick = ((event) => {
@@ -85,31 +98,31 @@ const SearchResults = ({
             {results.length == 0 ?
                 <Box></Box>
                 :
-                results.map((result, index) => {
-                    return (
-                        <Box key={index} sx={sx['search-results']} >
-                            <Box onClick={handleResultClick}>
-                                <Text>{result[0]}</Text>
-                            </Box>
-                            <Box>
-                                <Text sx={{
-                                    fontStyle: 'italic',
-                                    fontSize: [2, 2, 2, 3],
-
-                                }}>
-                                    {
-                                        result[1] == 'cities' ? 'city' :
-                                            result[1] == 'counties' ? 'county' :
-                                                result[1] == 'states' ? 'state' :
-                                                    result[1] == 'countries' ? 'country' :
-                                                        result[1] == 'regions' ? 'region' :
-                                                            'lake'
-                                    }
-                                </Text>
-                            </Box>
-                        </Box>
-                    )
-                })
+                <Box sx={sx['search-container']}>
+                    {
+                        results.map((result, index) => {
+                            return (
+                                <Box key={index} sx={sx['search-results']} >
+                                    <Box onClick={handleResultClick}>
+                                        <Text sx={sx['result-text']}>{result[0]}</Text>
+                                    </Box>
+                                    <Box>
+                                        <Text sx={sx['label-text']}>
+                                            {
+                                                result[1] == 'cities' ? 'city' :
+                                                    result[1] == 'counties' ? 'county' :
+                                                        result[1] == 'states' ? 'state' :
+                                                            result[1] == 'countries' ? 'country' :
+                                                                result[1] == 'regions' ? 'region' :
+                                                                    'lake'
+                                            }
+                                        </Text>
+                                    </Box>
+                                </Box>
+                            )
+                        })
+                    }
+                </Box>
             }
         </Box>
     )
