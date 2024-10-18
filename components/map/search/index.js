@@ -58,7 +58,7 @@ const Search = () => {
             </svg>
           )}
           {showSearch && (
-            <XCircle sx={{ strokeWidth: 1.75, width: 34, height: 34 }} />
+            <XCircle sx={{ strokeWidth: 1.75, width: 26, height: 26 }} />
           )}
         </IconButton>
 

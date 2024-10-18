@@ -3,10 +3,11 @@ import { useThemeUI, Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
-import Ruler from './ruler'
-import Search from './search/index'
 import Point from './point'
 import FilterLayer from './filter-layer'
+import Search from './search/index'
+import Ruler from './ruler'
+import ZoomReset from './zoom-reset'
 import Router from './router'
 
 import useStore from '../store/index'
@@ -201,6 +202,8 @@ const Map = ({ mobile }) => {
         {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
+
+        {!mobile && (<ZoomReset /> )}
 
         <Router />
 
