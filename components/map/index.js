@@ -3,12 +3,14 @@ import { useThemeUI, Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
+
 import Point from './point'
 import FilterLayer from './filter-layer'
 import Search from './search/index'
-import Ruler from './ruler'
 import ZoomReset from './zoom-reset'
+import Ruler from './ruler'
 import Router from './router'
+
 
 import useStore from '../store/index'
 
@@ -114,6 +116,36 @@ const Map = ({ mobile }) => {
           />
         )}
 
+        {/* <Line
+          id={'regions'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/search/regions'}
+          variable={'regions'}
+          width={1}
+          opacity={variable != 'slr_3d' && showRegionsOutline ? 1 : 0}
+        />
+
+        <Line
+          id={'countries'}
+          color={theme.rawColors.primary}
+          // source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
+          source={'https://storage.googleapis.com/risk-maps/search/countries'}
+          variable={'countries'}
+          width={showStatesOutline && zoom > showStatesZoom ? 1.75 : 1}
+          opacity={variable != 'slr_3d' && showCountriesOutline ? 1 : 0}
+        />
+
+        <Line
+          id={'states'}
+          // color={theme.rawColors.primary}
+          color={'grey'}
+          // source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
+          source={'https://storage.googleapis.com/risk-maps/search/states'}
+          variable={'states'}
+          width={zoom < 4 ? 0.5 : 1}
+          opacity={variable != 'slr_3d' && showStatesOutline && zoom > showStatesZoom ? 1 : 0}
+        /> */}
+
         {showLakes && variable != 'slr_3d' && (
           <>
             <Fill
@@ -154,7 +186,7 @@ const Map = ({ mobile }) => {
         {showFilter && (lookup != null && lookup != 'cities') && (
           <FilterLayer
             key={`filter-layer-${place}`}
-            id={`filter-layer-${lookup}`}
+            id={`filter-layer-${place}`}
             source={'https://storage.googleapis.com/risk-maps/search/' + lookup}
             variable={lookup}
             place={place}
@@ -199,11 +231,11 @@ const Map = ({ mobile }) => {
 
         {!mobile && (<Ruler />)}
 
+        {!mobile && (<ZoomReset />)}
+
         {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
-
-        {!mobile && (<ZoomReset /> )}
 
         <Router />
 

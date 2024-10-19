@@ -18,6 +18,9 @@ const SearchUI = () => {
   const coordinates = useStore((state) => state.coordinates)
   const setCoordinates = useStore((state) => state.setCoordinates)
   const bbox = useStore((state) => state.bbox)
+  const setBbox = useStore((state) => state.setBbox)
+  const setLookup = useStore((state) => state.setLookup)
+  const setResults = useStore((state) => state.setResults)
   const searchBy = useStore((state) => state.searchBy)
   const setSearchBy = useStore((state) => state.setSearchBy)
 
@@ -33,7 +36,11 @@ const SearchUI = () => {
   const handleSearchBy = (event) => {
     if (event.target.value == 'place') {
       setCoordinates(null)
-    } else {
+      setBbox(null)
+      setLookup(null)
+      setSearchText("")
+      setResults([])
+    } else { // else search by coords
       setSearchText("")
     }
     setSearchBy(event.target.value)
