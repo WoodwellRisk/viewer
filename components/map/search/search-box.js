@@ -13,7 +13,6 @@ const SearchBox = () => {
   const results = useStore((state) => state.results)
   const setResults = useStore((state) => state.setResults)
 
-
   const handleSearch = (event) => {
     const limit = 10;
     let query = event.target.value

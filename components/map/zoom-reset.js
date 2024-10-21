@@ -10,6 +10,9 @@ const ZoomReset = () => {
   const { map } = useMapbox()
   const zoom = useStore((state) => state.zoom)
   const center = useStore((state) => state.center)
+  const place = useStore((state) => state.place)
+  const setPlace = useStore((state) => state.setPlace)
+  const setSearchText = useStore((state) => state.setSearchText)
   const resetButton = useRef(null)
 
   const spin = keyframes({
@@ -22,9 +25,17 @@ const ZoomReset = () => {
   })
 
   const handleResetClick = useCallback((event) => {
+      // remove any remaining search layer from map if it exists
+      if(map.getLayer(place)) {
+        map.removeLayer(place)
+      }
+      setSearchText('')
+      setPlace(null)
+
+    // reset map
     resetButton.current = event.target
     resetButton.current.classList.add('spin')
-    if(zoom != 1.0 && center != [-40, 40]) {
+    if (zoom != 1.0 && center != [-40, 40]) {
       map.flyTo({
         center: [-40, 40],
         zoom: 1.0,

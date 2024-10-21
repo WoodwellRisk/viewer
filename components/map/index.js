@@ -107,6 +107,7 @@ const Map = ({ mobile }) => {
 
         {variable != 'slr_3d' && showStatesOutline && zoom > showStatesZoom && (
           <Line
+            id={'states'}
             // color={theme.rawColors.primary}
             color={'grey'}
             // source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
@@ -124,8 +125,9 @@ const Map = ({ mobile }) => {
           width={1}
           opacity={variable != 'slr_3d' && showRegionsOutline ? 1 : 0}
         />
+        */}
 
-        <Line
+        {/* <Line
           id={'countries'}
           color={theme.rawColors.primary}
           // source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
@@ -133,8 +135,8 @@ const Map = ({ mobile }) => {
           variable={'countries'}
           width={showStatesOutline && zoom > showStatesZoom ? 1.75 : 1}
           opacity={variable != 'slr_3d' && showCountriesOutline ? 1 : 0}
-        />
-
+        /> 
+        
         <Line
           id={'states'}
           // color={theme.rawColors.primary}
@@ -183,15 +185,14 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {showFilter && (lookup != null && lookup != 'cities') && (
+        {place!= null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
           <FilterLayer
-            key={`filter-layer-${place}`}
-            id={`filter-layer-${place}`}
+            key={`filter-layer-${place})}`}
+            id={`filter-layer-${Date.now()}`}
             source={'https://storage.googleapis.com/risk-maps/search/' + lookup}
-            variable={lookup}
-            place={place}
             opacity={0.0}
-            color={lookup == 'countries' ? theme.rawColors.primary : 'grey'}
+            // color={theme.rawColors.primary}
+            color={'#860F4F'}
             type={'line'}
           />
         )}

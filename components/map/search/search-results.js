@@ -1,6 +1,5 @@
 // Adapted from Carbonplan's <Input /> component:
 // https://github.com/carbonplan/components/blob/main/src/input.js
-
 import { useEffect } from 'react'
 import { Box, Text, useThemeUI } from 'theme-ui'
 

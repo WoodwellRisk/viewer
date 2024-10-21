@@ -2,12 +2,15 @@
 // https://github.com/carbonplan/components/blob/main/src/input.js
 import React, { forwardRef, useEffect } from 'react'
 import { Box, IconButton } from 'theme-ui'
+import { useMapbox } from '@carbonplan/maps'
 import { XCircle } from '@carbonplan/icons'
 import SearchUI from './search-ui'
 
 import useStore from '../../store/index'
 
 const Search = () => {
+  const { map } = useMapbox()
+
   const showSearch = useStore((state) => state.showSearch)
   const setShowSearch = useStore((state) => state.setShowSearch)
   const setSearchText = useStore((state) => state.setSearchText)
@@ -15,13 +18,22 @@ const Search = () => {
   const setLookup = useStore((state) => state.setLookup)
   const setCoordinates = useStore((state) => state.setCoordinates)
   const setBbox = useStore((state) => state.setBbox)
+  const place = useStore((state) => state.place)
+  const setPlace = useStore((state) => state.setPlace)
+
 
   useEffect(() => {
     if(showSearch == false) {
+       // remove any remaining search layer from map if it exists
+      if(map.getLayer(place)) {
+        map.removeLayer(place)
+      }
+
+      setSearchText("")
+      setPlace(null)
       setCoordinates(null)
       setBbox(null)
       setLookup(null)
-      setSearchText("")
       setResults([])
     }
   }, [showSearch])

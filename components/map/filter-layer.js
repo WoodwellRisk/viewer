@@ -1,37 +1,74 @@
 import { useEffect, useRef } from 'react'
+import { Badge, Box, useThemeUI } from 'theme-ui'
 import { useMapbox } from '@carbonplan/maps'
 import { v4 as uuidv4 } from 'uuid'
+
+import useStore from '../store/index'
 
 const FilterLayer = ({
   id,
   source,
-  variable,
-  place,
   color,
   minZoom = null,
   opacity = 1,
   type,
 }) => {
+  const { theme } = useThemeUI()
   const { map } = useMapbox()
   const removed = useRef(false)
   const sourceIdRef = useRef(null)
   const layerIdRef = useRef(null)
 
+  const place = useStore((state) => state.place)
+  const setPlace = useStore((state) => state.setPlace)
+  const setSearchText = useStore((state) => state.setSearchText)
+  const lookup = useStore((state) => state.lookup)
+
   let opacityProperty = type == 'line' ? 'line-opacity' : 'circle-opacity'
   let width = 2
 
-  // const delay = ms => new Promise(res => setTimeout(res, ms));
+  const sx = {
+    'remove-layer-container': {
+      display: ['initial', 'initial', 'initial', 'initial'],
+      position: 'absolute',
+      color: 'primary',
+      left: [7],
+      bottom: [20, 20, 20, 20],
+    },
+    'remove-layer-button': {
+      color: 'secondary',
+      bg: theme.colors.background,
+      border: '2px solid',
+      borderColor: 'secondary',
+      borderRadius: '5px',
+      transition: 'border 0.15s',
+      fontSize: [3, 3, 3, 4],
+      fontFamily: 'body',
+      letterSpacing: 'body',
+      lineHeight: [1.0],
+      height: ['24px', '24px', '24px', '26px'],
+      textAlign: 'center',
+      pt: ['6px'],
+      pb: ['26px'],
+      mt: [1],
+      '&:hover': {
+        color: 'primary',
+        borderColor: 'primary',
+      },
+    }
+  }
 
   useEffect(() => {
     map.on('remove', () => {
       removed.current = true
+      console.log(map.getStyle().layers)
     })
   }, [])
 
   // https://github.com/mapbox/mapbox-gl-js/issues/1794#issuecomment-588252774
   useEffect(() => {
     map.on('moveend', ({ originalEvent }) => {
-      if (originalEvent) {
+      if (originalEvent) { // if the event is a user generated event
         map.fire('usermoveend');
       } else {
         map.fire('flyend');
@@ -44,95 +81,84 @@ const FilterLayer = ({
   }, [map.getStyle().layers])
 
   useEffect(() => {
-    sourceIdRef.current = id || uuidv4()
-    const { current: sourceId } = sourceIdRef
-    layerIdRef.current = null
-
-    if (!map.getSource(sourceId)) {
-      map.addSource(sourceId, {
-        type: 'vector',
-        tiles: [`${source}/{z}/{x}/{y}.pbf`],
-      })
-      if (minZoom) {
-        map.getSource(sourceId).minzoom = minZoom
+    if(place != null) {
+      sourceIdRef.current = id || uuidv4()
+      const { current: sourceId } = sourceIdRef
+  
+      if (!map.getSource(sourceId)) {
+        map.addSource(sourceId, {
+          type: 'vector',
+          tiles: [`${source}/{z}/{x}/{y}.pbf`],
+        })
+        if (minZoom) {
+          map.getSource(sourceId).minzoom = minZoom
+        }
       }
     }
   }, [id])
 
   useEffect(() => {
-    const { current: sourceId } = sourceIdRef
-    // const layerId = layerIdRef.current || uuidv4()
-    // layerIdRef.current = layerId
-    layerIdRef.current = place || uuidv4()
-    const { current: layerId } = layerIdRef
-
-    if (!map.getLayer(layerId)) {
-      let tempLayer
-      tempLayer = map.addLayer({
-        id: layerId,
-        type: 'line',
-        source: sourceId,
-        'source-layer': variable,
-        layout: {
-          visibility: 'visible',
-        },
-        paint: {
-          'line-blur': 0.4,
-          'line-color': color,
-          'line-opacity': opacity,
-          'line-width': width,
-        },
-        'filter': ['==', 'name', place]
-      })
-
-      // the problem with this code is that we are always hitting the 
-      //return statement before the map.on('flyend') call is finishing
-      // map.on('flyend', () => {
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 0)
-      // }, 0)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 1)
-      // }, 250)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 0)
-      // }, 500)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 1)
-      // }, 750)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 0)
-      // }, 1000)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 1)
-      // }, 1250)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 0)
-      // }, 1500)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 1)
-      // }, 1750)
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 0)
-      // }, 2000)
-      // })
-
-      // setTimeout(function () {
-      //   map.setPaintProperty(layerId, opacityProperty, 1);
-      // }, 0)
+    if(place != null) {
+      const { current: sourceId } = sourceIdRef
+      const layerId = place || uuidv4()
+      layerIdRef.current = layerId
+  
+      if (!map.getLayer(layerId)) {
+        let tempLayer
+        tempLayer = map.addLayer({
+          id: layerId,
+          type: 'line',
+          source: sourceId,
+          'source-layer': lookup,
+          layout: {
+            visibility: 'visible',
+          },
+          paint: {
+            'line-blur': 0.4,
+            'line-color': color,
+            'line-opacity': opacity,
+            'line-width': width,
+          },
+          'filter': ['==', 'name', place]
+        })
+  
+        setTimeout(() => {
+          map.setPaintProperty(layerId, opacityProperty, 1);
+        }, 0)
+  
+        return () => {
+          if (!removed.current) {
+            if (map.getLayer(layerId)) {
+              map.removeLayer(layerId)
+            }
+            if (map.getSource(sourceId)) {
+              map.removeSource(sourceId)
+            }
+          }
+        }
+  
+      }
     }
 
-      return () => {
-        if (!removed.current) {
-          if (map.getLayer(layerId)) {
-            map.removeLayer(layerId)
-          }
-          map.removeSource(sourceId)
-        }
-      }
   }, [])
 
-  return null
+  const handleRemoveLayer = (() => {
+    setSearchText('')
+    setPlace(null)
+})
+
+  // return null
+  return (
+    <Box>
+      {place != null ?
+        <Box sx={sx['remove-layer-container']}>
+          <Badge sx={sx['remove-layer-button']} onClick={handleRemoveLayer}>
+            Remove search layer
+          </Badge>
+        </Box>
+      : null}
+    </Box>
+  )
 }
 
 export default FilterLayer
