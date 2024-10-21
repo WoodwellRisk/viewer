@@ -33,7 +33,7 @@ const Layers = () => {
 
   // state variables for specific risks
   const riskDescription = useStore((state) => state.riskDescription)()
-  const riskLayers = useStore((state) => state.riskLayers)
+  const riskOptions = useStore((state) => state.riskOptions)
   const riskBands = useStore((state) => state.riskBands)
   const setRiskBands = useStore((state) => state.setRiskBands)
   const riskColors = useStore((state) => state.riskColors)()
@@ -60,7 +60,7 @@ const Layers = () => {
   const handleRiskChange = useCallback((event) => {
     let risk = riskThemeLookup[event.target.innerHTML];
     if (variables.includes(risk)) {
-      let bands = riskLayers[risk].bands
+      let bands = riskOptions[risk].bands
       let band
       if (risk != 'lethal_heat_3d') {
         band = parseFloat(Object.keys(bands)[0])
@@ -76,10 +76,10 @@ const Layers = () => {
 
   const handleBandChange = useCallback((event) => {
     if (variable != 'lethal_heat_3d') {
-      let keys = Object.keys(riskLayers[variable].bands);
+      let keys = Object.keys(riskOptions[variable].bands);
       let label = event.target.innerHTML;
       // https://stackoverflow.com/questions/23013573/swap-key-with-value-in-object
-      let band = Object.fromEntries(Object.entries(riskLayers[variable].labels).map(([k, v]) => [v, k]))[label]
+      let band = Object.fromEntries(Object.entries(riskOptions[variable].labels).map(([k, v]) => [v, k]))[label]
       if (keys.includes(band)) {
         setBand(parseFloat(band));
       }

@@ -35,7 +35,8 @@ const ZoomReset = () => {
     // reset map
     resetButton.current = event.target
     resetButton.current.classList.add('spin')
-    if (zoom != 1.0 && center != [-40, 40]) {
+    
+    if (zoom != 1.00 || center[0] != -40 || center[1] != 40) {
       map.flyTo({
         center: [-40, 40],
         zoom: 1.0,

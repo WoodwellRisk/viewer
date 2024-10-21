@@ -11,7 +11,6 @@ import ZoomReset from './zoom-reset'
 import Ruler from './ruler'
 import Router from './router'
 
-
 import useStore from '../store/index'
 
 const Map = ({ mobile }) => {
@@ -117,37 +116,6 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {/* <Line
-          id={'regions'}
-          color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/search/regions'}
-          variable={'regions'}
-          width={1}
-          opacity={variable != 'slr_3d' && showRegionsOutline ? 1 : 0}
-        />
-        */}
-
-        {/* <Line
-          id={'countries'}
-          color={theme.rawColors.primary}
-          // source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
-          source={'https://storage.googleapis.com/risk-maps/search/countries'}
-          variable={'countries'}
-          width={showStatesOutline && zoom > showStatesZoom ? 1.75 : 1}
-          opacity={variable != 'slr_3d' && showCountriesOutline ? 1 : 0}
-        /> 
-        
-        <Line
-          id={'states'}
-          // color={theme.rawColors.primary}
-          color={'grey'}
-          // source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
-          source={'https://storage.googleapis.com/risk-maps/search/states'}
-          variable={'states'}
-          width={zoom < 4 ? 0.5 : 1}
-          opacity={variable != 'slr_3d' && showStatesOutline && zoom > showStatesZoom ? 1 : 0}
-        /> */}
-
         {showLakes && variable != 'slr_3d' && (
           <>
             <Fill
@@ -185,7 +153,7 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {place!= null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
+        {/* {place!= null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
           <FilterLayer
             key={`filter-layer-${place})}`}
             id={`filter-layer-${Date.now()}`}
@@ -195,7 +163,7 @@ const Map = ({ mobile }) => {
             color={'#860F4F'}
             type={'line'}
           />
-        )}
+        )} */}
 
         {showRegionPicker && (
           <RegionPicker
@@ -234,9 +202,9 @@ const Map = ({ mobile }) => {
 
         {!mobile && (<ZoomReset />)}
 
-        {!mobile && (
+        {/* {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
-        )}
+        )} */}
 
         <Router />
 

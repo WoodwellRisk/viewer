@@ -13,7 +13,7 @@ const Router = () => {
     const variable = useStore((state) => state.variable)
     const setVariable = useStore((state) => state.setVariable)
     const setRiskThemes = useStore((state) => state.setRiskThemes)
-    const riskLayers = useStore((state) => state.riskLayers)
+    const riskOptions = useStore((state) => state.riskOptions)
     const band = useStore((state) => state.band)
     const setBand = useStore((state) => state.setBand)
     const zoom = useStore((state) => state.zoom)
@@ -26,7 +26,7 @@ const Router = () => {
         let savedLayer = url.searchParams.get("layer") != null ? url.searchParams.get("layer") : 'drought'
         // let savedBand = url.searchParams.get("band") != null ? url.searchParams.get("band") : '1.5'
         // if (savedLayer != 'lethal_heat_3d') {
-        //     let keys = Object.keys(riskLayers[savedLayer].bands);
+        //     let keys = Object.keys(riskOptions[savedLayer].bands);
         //     console.log(keys)
         //     if (keys.includes(savedBand)) {
         //         ...
@@ -42,10 +42,10 @@ const Router = () => {
 
         setVariable(savedLayer)
         if (savedLayer != 'lethal_heat_3d') {
-            let riskBands = Object.keys(riskLayers[savedLayer].bands)
-            setBand(parseFloat(Object.keys(riskLayers[savedLayer].bands)[0]))
+            let riskBands = Object.keys(riskOptions[savedLayer].bands)
+            setBand(parseFloat(Object.keys(riskOptions[savedLayer].bands)[0]))
           } else {
-            let riskBands = riskLayers[savedLayer].bands
+            let riskBands = riskOptions[savedLayer].bands
             setBand(riskBands[riskBands.length - 1])
           }
         // setBand(savedBand)

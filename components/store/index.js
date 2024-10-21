@@ -129,11 +129,11 @@ const useStore = create((set, get) => ({
 
     riskThemes: {
         drought: true,
-        hot_days: false,
+        // hot_days: false,
         lethal_heat_3d: false,
-        precip: false,
+        // precip: false,
         slr_3d: false,
-        tavg: false,
+        // tavg: false,
         tc_rp: false,
         warm_nights: false,
         wdd: false,
@@ -141,11 +141,11 @@ const useStore = create((set, get) => ({
     setRiskThemes: (riskThemes) => set({ riskThemes }),
     riskThemeLabels: {
         drought: 'Drought',
-        hot_days: 'Hot days',
+        // hot_days: 'Hot days',
         lethal_heat_3d: 'Lethal heat',
-        precip: 'Precipitation',
+        // precip: 'Precipitation',
         slr_3d: 'Sea level rise',
-        tavg: 'Temperature', 
+        // tavg: 'Temperature', 
         tc_rp: 'Tropical cyclones',
         warm_nights: 'Warm nights',
         wdd: 'Widlfires'
@@ -270,7 +270,7 @@ const useStore = create((set, get) => ({
         wdd: 'orange',
     },
 
-    riskLayers: {
+    riskOptions: {
         drought: {
             bands: { '1.5': true, '2.0': false, },
             colors: { '1.5': 'orange', '2.0': 'red', },
@@ -309,7 +309,6 @@ const useStore = create((set, get) => ({
             bands: { '1.5': true, '2.0': false, },
             colors: { '1.5': 'orange', '2.0': 'red', },
             labels: { '1.5': '1.5C', '2.0': '2.0C', },
-
         },
         wdd: {
             bands: { '1.5': true, '2.0': false, },
@@ -319,20 +318,20 @@ const useStore = create((set, get) => ({
     },
 
     // riskBands: () => {
-    //     const {riskLayers, variable} = get()
-    //     return riskLayers[variable].bands
+    //     const {riskOptions, variable} = get()
+    //     return riskOptions[variable].bands
     // },
     riskBands: { '1.5': true, '2.0': false, },
     setRiskBands: (riskBands) => set({ riskBands }),
 
     riskColors: () => {
-        const {riskLayers, variable} = get()
-        return riskLayers[variable].colors
+        const {riskOptions, variable} = get()
+        return riskOptions[variable].colors
     },
 
     riskLabels: () => {
-        const {riskLayers, variable} = get()
-        return riskLayers[variable].labels
+        const {riskOptions, variable} = get()
+        return riskOptions[variable].labels
     },
 
     defaultLabels: {
