@@ -54,11 +54,23 @@ const Map = ({ mobile }) => {
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
       <MapContainer zoom={zoom} center={center} glyphs={glyphs} >
         {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
-          <Fill
-            color={theme.rawColors.background}
-            source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
-            variable={'ocean'}
-          />
+          <>
+            <Fill
+              color={theme.rawColors.background}
+              source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
+              variable={'ocean'}
+            />
+
+            <Point
+              id={'cities'}
+              color={theme.rawColors.primary}
+              source={'https://storage.googleapis.com/risk-maps/vector/cities'}
+              variable={'cities'}
+              label={true}
+              labelText={'name'}
+              minZoom={6}
+            />
+          </>
         )}
 
         {variable == 'slr' && (
@@ -151,7 +163,7 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {/* {place!= null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
+        {place != null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
           <FilterLayer
             key={`filter-layer-${place})}`}
             id={`filter-layer-${Date.now()}`}
@@ -161,7 +173,7 @@ const Map = ({ mobile }) => {
             color={'#860F4F'}
             type={'line'}
           />
-        )} */}
+        )}
 
         {showRegionPicker && (
           <RegionPicker
@@ -199,10 +211,10 @@ const Map = ({ mobile }) => {
         {!mobile && (<Ruler />)}
 
         {!mobile && (<ZoomReset />)}
-{/* 
+
         {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
-        )} */}
+        )}
 
         <Router />
 

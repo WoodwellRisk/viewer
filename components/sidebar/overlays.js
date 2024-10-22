@@ -46,37 +46,27 @@ const Overlays = () => {
             my: [1],
             p: [1],
             bg: theme.colors.background,
-          }
+        }
     }
 
     return (
         <Box sx={sx['overlays-container']}>
-
             <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                    <Box sx={sx.label }>Lakes</Box>
-                    <Toggle
-                        sx={sx['toggle']}
-                        value={showLakes}
-                        onClick={() => setShowLakes(!showLakes)}
-                    />
+                <Box sx={sx.label}>Countries</Box>
+                <Toggle
+                    sx={sx['toggle']}
+                    value={showCountriesOutline}
+                    onClick={() => setShowCountriesOutline(!showCountriesOutline)}
+                />
             </Flex>
 
             <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                    <Box sx={sx.label }>Countries</Box>
-                    <Toggle
-                        sx={sx['toggle']}
-                        value={showCountriesOutline}
-                        onClick={() => setShowCountriesOutline(!showCountriesOutline)}
-                    />
-            </Flex>
-
-            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                    <Box sx={sx.label }>Regions</Box>
-                    <Toggle
-                        sx={sx['toggle']}
-                        value={showRegionsOutline}
-                        onClick={() => setShowRegionsOutline(!showRegionsOutline)}
-                    />
+                <Box sx={sx.label}>Regions</Box>
+                <Toggle
+                    sx={sx['toggle']}
+                    value={showRegionsOutline}
+                    onClick={() => setShowRegionsOutline(!showRegionsOutline)}
+                />
             </Flex>
 
             <Flex sx={{ justifyContent: 'space-between' }}>
@@ -88,10 +78,19 @@ const Overlays = () => {
                 />
             </Flex>
             {zoom < showStatesZoom && showStatesOutline && (
-                    <Box sx={sx['warning-box']}>
-                        <Text sx={{ color: 'red', fontSize: [1] }}>Zoom in further to see the states layer.</Text>
-                    </Box>
-                )}
+                <Box sx={sx['warning-box']}>
+                    <Text sx={{ color: 'red', fontSize: [1] }}>Zoom in further to see the states layer.</Text>
+                </Box>
+            )}
+
+            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                <Box sx={sx.label}>Lakes</Box>
+                <Toggle
+                    sx={sx['toggle']}
+                    value={showLakes}
+                    onClick={() => setShowLakes(!showLakes)}
+                />
+            </Flex>
         </Box>
     )
 }

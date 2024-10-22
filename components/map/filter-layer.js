@@ -61,24 +61,8 @@ const FilterLayer = ({
   useEffect(() => {
     map.on('remove', () => {
       removed.current = true
-      console.log(map.getStyle().layers)
     })
   }, [])
-
-  // https://github.com/mapbox/mapbox-gl-js/issues/1794#issuecomment-588252774
-  useEffect(() => {
-    map.on('moveend', ({ originalEvent }) => {
-      if (originalEvent) { // if the event is a user generated event
-        map.fire('usermoveend');
-      } else {
-        map.fire('flyend');
-      }
-    });
-  }, [])
-
-  useEffect(() => {
-    console.log(map.getStyle().layers)
-  }, [map.getStyle().layers])
 
   useEffect(() => {
     if(place != null) {

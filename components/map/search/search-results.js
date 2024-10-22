@@ -80,7 +80,7 @@ const SearchResults = () => {
 
     useEffect(() => {
         if (place && lookup) {
-            fetch(`https://storage.googleapis.com/risk-maps/search/${lookup}.geojson`)
+            fetch(`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`)
                 .then((response) => response.json())
                 .then((json) => {
                     let filtered = json.features.filter(feature => feature.properties.name == searchText)[0];
