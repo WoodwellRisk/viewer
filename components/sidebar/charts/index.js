@@ -54,10 +54,10 @@ const StatsDisplay = ({ data, variable, colormap }) => {
 const Charts = () => {
   const variable = useStore((state) => state.variable)
   const colormapName = useStore((state) => state.colormapName)()
-  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
+  const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
       (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() :
+        (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
           useThemedColormap(colormapName)
   const regionData = useStore((state) => state.regionData)
   const showRegionPicker = useStore((state) => state.showRegionPicker)

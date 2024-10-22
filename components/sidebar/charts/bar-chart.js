@@ -61,9 +61,9 @@ const BarChart = ({ data, variable, colormap }) => {
     // the sea level rise and temperature data layers go from [-value, value]
     // the lethal heat data only goes from [1, 4]
     let binEdges = Array(nBins + 1).fill(0).map((_, i) => Number((i * binWidth).toFixed(2)))
-    if (variable == 'slr_3d') {
+    if (variable == 'slr') {
         binEdges = binEdges.map((d) => Number((d - 0.5).toFixed(1)))
-    } else if (variable == 'lethal_heat_3d') {
+    } else if (variable == 'lethal_heat') {
         binEdges = binEdges.map((d) => Number((d + 1.0).toFixed(1)))
     } else if (variable == 'tavg') {
         binEdges = binEdges.map((d) => d - 30)

@@ -25,10 +25,10 @@ const Map = ({ mobile }) => {
   const band = useStore((state) => state.band)
   const clim = useStore((state) => state.clim)()
   const colormapName = useStore((state) => state.colormapName)()
-  const colormap = (variable == 'lethal_heat_3d') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
+  const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
       (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable == 'slr_3d') ? useThemedColormap(colormapName).slice(0,).reverse() :
+        (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
           useThemedColormap(colormapName)
 
   const opacity = useStore((state) => state.opacity)
@@ -53,20 +53,20 @@ const Map = ({ mobile }) => {
   return (
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
       <MapContainer zoom={zoom} center={center} glyphs={glyphs} >
-        {showOceanMask && variable != 'slr_3d' && !variable.startsWith('tc') && (
+        {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
           <Fill
             color={theme.rawColors.background}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/ocean'}
+            source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
             variable={'ocean'}
           />
         )}
 
-        {variable == 'slr_3d' && (
+        {variable == 'slr' && (
           <>
 
             <Fill
               color={theme.rawColors.background}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
+              source={'https://storage.googleapis.com/risk-maps/vector/land'}
               variable={'land'}
               zIndex={-1}
             />
@@ -74,7 +74,7 @@ const Map = ({ mobile }) => {
             <Point
               id={'cities'}
               color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/search/cities'}
+              source={'https://storage.googleapis.com/risk-maps/vector/cities'}
               variable={'cities'}
               label={true}
               labelText={'name'}
@@ -83,49 +83,47 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-        {variable != 'slr_3d' && showRegionsOutline && (
+        {variable != 'slr' && showRegionsOutline && (
           <Line
             id={'regions'}
             color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/search/regions'}
+            source={'https://storage.googleapis.com/risk-maps/vector/regions'}
             variable={'regions'}
             width={1}
           />
         )}
 
-        {variable != 'slr_3d' && showCountriesOutline && (
+        {variable != 'slr' && showCountriesOutline && (
           <Line
             id={'countries'}
             color={theme.rawColors.primary}
-            // source={'https://storage.googleapis.com/risk-maps/vector_layers/countries'}
-            source={'https://storage.googleapis.com/risk-maps/search/countries'}
+            source={'https://storage.googleapis.com/risk-maps/vector/countries'}
             variable={'countries'}
             width={showStatesOutline && zoom > showStatesZoom ? 1.75 : 1}
           />
         )}
 
-        {variable != 'slr_3d' && showStatesOutline && zoom > showStatesZoom && (
+        {variable != 'slr' && showStatesOutline && zoom > showStatesZoom && (
           <Line
             id={'states'}
             // color={theme.rawColors.primary}
             color={'grey'}
-            // source={'https://storage.googleapis.com/risk-maps/vector_layers/states'}
-            source={'https://storage.googleapis.com/risk-maps/search/states'}
+            source={'https://storage.googleapis.com/risk-maps/vector/states'}
             variable={'states'}
             width={zoom < 4 ? 0.5 : 1}
           />
         )}
 
-        {showLakes && variable != 'slr_3d' && (
+        {showLakes && variable != 'slr' && (
           <>
             <Fill
               color={theme.rawColors.background}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
+              source={'https://storage.googleapis.com/risk-maps/vector/lakes'}
               variable={'lakes'}
             />
             <Line
               color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector_layers/lakes'}
+              source={'https://storage.googleapis.com/risk-maps/vector/lakes'}
               variable={'lakes'}
               width={1}
             />
@@ -135,17 +133,17 @@ const Map = ({ mobile }) => {
         {showLandOutline && (
           <Line
             color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/land'}
+            source={'https://storage.googleapis.com/risk-maps/vector/land'}
             variable={'land'}
             width={1}
           />
         )}
 
-        {variable != 'slr_3d' && (
+        {variable != 'slr' && (
           <Point
             id={'cities'}
             color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/search/cities'}
+            source={'https://storage.googleapis.com/risk-maps/vector/cities'}
             variable={'cities'}
             label={true}
             labelText={'name'}
@@ -157,7 +155,7 @@ const Map = ({ mobile }) => {
           <FilterLayer
             key={`filter-layer-${place})}`}
             id={`filter-layer-${Date.now()}`}
-            source={'https://storage.googleapis.com/risk-maps/search/' + lookup}
+            source={'https://storage.googleapis.com/risk-maps/vector/' + lookup}
             opacity={0.0}
             // color={theme.rawColors.primary}
             color={'#860F4F'}
@@ -185,14 +183,14 @@ const Map = ({ mobile }) => {
           clim={clim}
           colormap={colormap}
           selector={{ band }}
-          mode={(variable == 'lethal_heat_3d') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+          mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
           regionOptions={{ setData: setRegionData }}
         />
 
         {(variable.startsWith('tc')) && (
           <Line
             color={theme.rawColors.secondary}
-            source={'https://storage.googleapis.com/risk-maps/vector_layers/tc_boundaries'}
+            source={'https://storage.googleapis.com/risk-maps/vector/tc_boundaries'}
             variable={'tc_boundaries'}
             width={1}
           />
@@ -201,8 +199,8 @@ const Map = ({ mobile }) => {
         {!mobile && (<Ruler />)}
 
         {!mobile && (<ZoomReset />)}
-
-        {/* {!mobile && (
+{/* 
+        {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )} */}
 

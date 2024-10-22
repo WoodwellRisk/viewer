@@ -24,8 +24,8 @@ const useStore = create((set, get) => ({
 
     // general / raster state variables
     variables: [
-        'drought', 'hot_days', 'lethal_heat_3d', 'precip',
-        'tavg', 'tc_rp', 'slr_3d', 'wdd', 'warm_nights',
+        'drought', 'hot_days', 'lethal_heat', 'precip',
+        'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
     ],
     variable: 'drought',
     setVariable: (variable) => set({ variable }),
@@ -36,11 +36,11 @@ const useStore = create((set, get) => ({
     defaultColormaps: {
         drought: 'warm',
         hot_days: 'fire',
-        lethal_heat_3d: 'fire',
+        lethal_heat: 'fire',
         precip: 'water',
         tavg: 'redteal',
         tc_rp: 'fire', // water also looks good
-        slr_3d: 'redteal', // tealgrey, redteal also looks good
+        slr: 'redteal', // tealgrey, redteal also looks good
         wdd: 'fire',
         warm_nights: 'fire',
     },
@@ -52,11 +52,11 @@ const useStore = create((set, get) => ({
     climRanges: {
         drought: { min: 0.0, max: 0.5 },
         hot_days: { min: 0.0, max: 365.0 },
-        lethal_heat_3d: { min: 1.0, max: 4.0 },
+        lethal_heat: { min: 1.0, max: 4.0 },
         precip: { min: 0, max: 4000 },
         tavg: { min: -30, max: 30 },
         tc_rp: { min: 0.0, max: 100 },
-        slr_3d: { min: -0.5, max: 0.5 },
+        slr: { min: -0.5, max: 0.5 },
         wdd: { min: 0.0, max: 50.0 }, // true max 70 days
         warm_nights: { min: 0.0, max: 365.0 },
     },
@@ -82,7 +82,7 @@ const useStore = create((set, get) => ({
     showOceanMask: true,
     setShowOceanMask: (showOceanMask) => set({ showOceanMask }),
 
-    showLakes: true,
+    showLakes: false,
     setShowLakes: (showLakes) => set({ showLakes }),
 
     showLandOutline: true,
@@ -114,9 +114,9 @@ const useStore = create((set, get) => ({
     riskTitles: {
         drought: 'Extreme drought',
         hot_days: 'Days over 90°F',
-        lethal_heat_3d: 'Lethal heat',
+        lethal_heat: 'Lethal heat',
         precip: 'Annual precipitation',
-        slr_3d: 'Sea level rise',
+        slr: 'Sea level rise',
         tavg: 'Annual temperature',
         tc_rp: 'Return period',
         warm_nights: 'Nights over 20°C',
@@ -129,11 +129,11 @@ const useStore = create((set, get) => ({
 
     riskThemes: {
         drought: true,
-        // hot_days: false,
-        lethal_heat_3d: false,
-        // precip: false,
-        slr_3d: false,
-        // tavg: false,
+        hot_days: false,
+        lethal_heat: false,
+        precip: false,
+        slr: false,
+        tavg: false,
         tc_rp: false,
         warm_nights: false,
         wdd: false,
@@ -141,11 +141,11 @@ const useStore = create((set, get) => ({
     setRiskThemes: (riskThemes) => set({ riskThemes }),
     riskThemeLabels: {
         drought: 'Drought',
-        // hot_days: 'Hot days',
-        lethal_heat_3d: 'Lethal heat',
-        // precip: 'Precipitation',
-        slr_3d: 'Sea level rise',
-        // tavg: 'Temperature', 
+        hot_days: 'Hot days',
+        lethal_heat: 'Lethal heat',
+        precip: 'Precipitation',
+        slr: 'Sea level rise',
+        tavg: 'Temperature', 
         tc_rp: 'Tropical cyclones',
         warm_nights: 'Warm nights',
         wdd: 'Widlfires'
@@ -153,9 +153,9 @@ const useStore = create((set, get) => ({
     riskThemeLookup: {
         'Drought': 'drought',
         'Hot days': 'hot_days',
-        'Lethal heat': 'lethal_heat_3d',
+        'Lethal heat': 'lethal_heat',
         'Precipitation': 'precip',
-        'Sea level rise': 'slr_3d',
+        'Sea level rise': 'slr',
         'Temperature': 'tavg', 
         'Tropical cyclones': 'tc_rp',
         'Warm nights': 'warm_nights',
@@ -182,7 +182,7 @@ const useStore = create((set, get) => ({
                     This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
-        lethal_heat_3d:
+        lethal_heat:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
                     High temperatures and humidity may cause severe health problems therefore our lethal heat metric is derived from relative humidity and temperature.
@@ -202,7 +202,7 @@ const useStore = create((set, get) => ({
                     This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
-        slr_3d:
+        slr:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
                     Future sea level change from the <Link href="https://www.ipcc.ch/assessment-report/ar6/" target="_blank">IPCC AR6</Link> report under a medium confidence fossil-fueled development pathway (SSP5-8.5) scenario.
@@ -261,9 +261,9 @@ const useStore = create((set, get) => ({
     riskThemeColors: {
         drought: 'red',
         hot_days: 'red',
-        lethal_heat_3d: 'red',
+        lethal_heat: 'red',
         precip: 'blue',
-        slr_3d: 'blue',
+        slr: 'blue',
         tavg: 'red',
         tc_rp: 'gray',
         warm_nights: 'red',
@@ -271,49 +271,37 @@ const useStore = create((set, get) => ({
     },
 
     riskOptions: {
-        drought: {
-            bands: { '1.5': true, '2.0': false, },
-            colors: { '1.5': 'orange', '2.0': 'red', },
-            labels: { '1.5': '1.5C', '2.0': '2.0C' },
+        drought: {            
+            bands: [1.5, 2.0],
         },
         hot_days: {
-            bands: { '1.5': true, '2.0': false, },
-            colors: { '1.5': 'orange', '2.0': 'red', },
-            labels: { '1.5': '1.5C', '2.0': '2.0C', },
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
         },
-        lethal_heat_3d: {
+        lethal_heat: {
             bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
-            labels: { 'lethal_heat_3d': 'Warming level of emergence', },
+            labels: { 'lethal_heat': 'Warming level of emergence', },
         },
         precip: {
-            bands: { '1.5': true, '2.0': false, },
-            colors: { '1.5': 'yellow', '2.0': 'orange', },
-            labels: { '1.5': '1.5C', '2.0': '2.0C', },
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
         },
         tavg: {
-            bands: { '1.5': true, '2.0': false, },
-            colors: { '1.5': 'yellow', '2.0': 'orange', },
-            labels: { '1.5': '1.5C', '2.0': '2.0C', },
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
         },
         tc_rp: {
             bands: { '2017.0': true, '2050.0': false, },
             colors: { '2017.0': 'orange', '2050.0': 'red', },
             labels: { '2017.0': '1980-2017', '2050.0': '2015-2050', },
         },
-        slr_3d: {
+        slr: {
             bands: { '2050.0': true, },
             colors: { '2050.0': 'red', },
-            labels: { '2050.0': 'Depth value', },
+            labels: { '2050.0': 'Depth value by 2050', },
         },
         warm_nights: {
-            bands: { '1.5': true, '2.0': false, },
-            colors: { '1.5': 'orange', '2.0': 'red', },
-            labels: { '1.5': '1.5C', '2.0': '2.0C', },
+            bands: [1.5, 2.0],
         },
         wdd: {
-            bands: { '1.5': true, '2.0': false, },
-            colors: { '1.5': 'orange', '2.0': 'red', },
-            labels: { '1.5': '1.5C', '2.0': '2.0C', },
+            bands: [1.5, 2.0],
         },
     },
 
@@ -321,7 +309,9 @@ const useStore = create((set, get) => ({
     //     const {riskOptions, variable} = get()
     //     return riskOptions[variable].bands
     // },
-    riskBands: { '1.5': true, '2.0': false, },
+    // riskBands: { '1.5': true, '2.0': false, },
+    riskBands: [1.5, 2.0],
+
     setRiskBands: (riskBands) => set({ riskBands }),
 
     riskColors: () => {
@@ -337,11 +327,11 @@ const useStore = create((set, get) => ({
     defaultLabels: {
         drought: 'Probability of extreme drought',
         hot_days: 'Number of days per year',
-        lethal_heat_3d: '°C',
+        lethal_heat: '°C',
         precip: 'Precipitation',
         tavg: 'Temperature',
         tc_rp: 'Return period of Category 3+ storm',
-        slr_3d: 'Sea level rise',
+        slr: 'Sea level rise',
         wdd: 'Number of days per year',
         warm_nights: 'Number of nights per year',
     },
@@ -353,11 +343,11 @@ const useStore = create((set, get) => ({
     defaultUnits: {
         drought: '',
         hot_days: '',
-        lethal_heat_3d: '',
+        lethal_heat: '',
         precip: '(mm)',
         tavg: '(°C)',
         tc_rp: '(years)',
-        slr_3d: '(m)',
+        slr: '(m)',
         wdd: '',
         warm_nights: '',
     },

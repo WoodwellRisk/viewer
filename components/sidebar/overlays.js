@@ -8,6 +8,8 @@ const Overlays = () => {
 
     const zoom = useStore((state) => state.zoom)
     const showStatesZoom = useStore((state) => state.showStatesZoom)
+    const showLakes = useStore((state) => state.showLakes)
+    const setShowLakes = useStore((state) => state.setShowLakes)
     const showCountriesOutline = useStore((state) => state.showCountriesOutline)
     const setShowCountriesOutline = useStore((state) => state.setShowCountriesOutline)
     const showRegionsOutline = useStore((state) => state.showRegionsOutline)
@@ -49,6 +51,15 @@ const Overlays = () => {
 
     return (
         <Box sx={sx['overlays-container']}>
+
+            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                    <Box sx={sx.label }>Lakes</Box>
+                    <Toggle
+                        sx={sx['toggle']}
+                        value={showLakes}
+                        onClick={() => setShowLakes(!showLakes)}
+                    />
+            </Flex>
 
             <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                     <Box sx={sx.label }>Countries</Box>

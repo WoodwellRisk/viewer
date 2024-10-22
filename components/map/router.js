@@ -25,7 +25,7 @@ const Router = () => {
         const url = new URL(window.location)
         let savedLayer = url.searchParams.get("layer") != null ? url.searchParams.get("layer") : 'drought'
         // let savedBand = url.searchParams.get("band") != null ? url.searchParams.get("band") : '1.5'
-        // if (savedLayer != 'lethal_heat_3d') {
+        // if (savedLayer != 'lethal_heat') {
         //     let keys = Object.keys(riskOptions[savedLayer].bands);
         //     console.log(keys)
         //     if (keys.includes(savedBand)) {
@@ -33,7 +33,7 @@ const Router = () => {
         //     } else {
         //         ...
         //     }
-        // } else { // else layer is equal to lethal_heat_3d
+        // } else { // else layer is equal to lethal_heat
         //     ...
         // }
         let savedZoom = url.searchParams.get("zoom") != null ? url.searchParams.get("zoom") : 1
@@ -41,12 +41,17 @@ const Router = () => {
         savedCenter = savedCenter.split(',').map((d) => parseFloat(d))
 
         setVariable(savedLayer)
-        if (savedLayer != 'lethal_heat_3d') {
+        if (savedLayer == 'slr' || savedLayer == 'tc_rp') {
             let riskBands = Object.keys(riskOptions[savedLayer].bands)
-            setBand(parseFloat(Object.keys(riskOptions[savedLayer].bands)[0]))
+            console.log(riskBands)
+            setBand(parseFloat(riskBands[0]))
           } else {
             let riskBands = riskOptions[savedLayer].bands
-            setBand(riskBands[riskBands.length - 1])
+            if (savedLayer == 'lethal_heat') {
+                setBand(riskBands[riskBands.length - 1])
+            } else {
+                setBand(riskBands[0])
+            }
           }
         // setBand(savedBand)
         setZoom(savedZoom)
@@ -55,9 +60,9 @@ const Router = () => {
         setRiskThemes({
             drought: savedLayer == 'drought',
             hot_days: savedLayer == 'hot_days',
-            lethal_heat_3d: savedLayer == 'lethal_heat_3d',
+            lethal_heat: savedLayer == 'lethal_heat',
             precip: savedLayer == 'precip',
-            slr_3d: savedLayer == 'slr_3d',
+            slr: savedLayer == 'slr',
             tavg: savedLayer == 'tavg',
             tc_rp: savedLayer == 'tc_rp',
             warm_nights: savedLayer == 'warm_nights',
