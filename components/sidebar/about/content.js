@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Box, IconButton, Text } from 'theme-ui'
-import { Globe } from '@carbonplan/icons'
+import { Globe, Reset } from '@carbonplan/icons'
 import { Dimmer } from '@carbonplan/components'
 import InfoDemo from './info-demo'
 import GlobeDemo from './globe-demo'
+import ResetDemo from './reset-demo'
+
 
 const Content = () => {
   const [showGraticule, setShowGraticule] = useState(false)
@@ -70,6 +72,16 @@ const Content = () => {
         <Box sx={{ mt: 2, border: '1px solid', borderColor: 'primary', width: '100%', }}>
           <GlobeDemo showGraticule={showGraticule} />
         </Box>
+
+
+        <Box sx={{ mt: 4 }}>
+          <Text>
+            The <Text sx={{ bg: 'muted' }}>Reset</Text> icon <Reset sx={{ strokeWidth: 1, width: 15, height: 15 }} /> resets the map extent to the original zoom and center.
+          </Text>
+        </Box>
+        {/* <Box sx={{ mt: 2, border: '1px solid', borderColor: 'primary', width: '100%', }}>
+          <ResetDemo />
+        </Box> */}
 
         {/* <Box as='h2' variant='styles.h4'>
           <Text sx={{ textDecoration: 'underline' }}>Methods</Text>
