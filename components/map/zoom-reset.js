@@ -36,9 +36,9 @@ const ZoomReset = () => {
     resetButton.current = event.target
     resetButton.current.classList.add('spin')
     
-    if (zoom != 1.00) {
+    if (zoom != 1.00 || center[0] != -40 || center[1] != 40) {
       map.flyTo({
-        center: [center[0], 40],
+        center: [-40, 40],
         zoom: 1.0,
       })
     }
@@ -53,11 +53,12 @@ const ZoomReset = () => {
       aria-label='Reset map extent'
       onClick={handleResetClick}
       onAnimationEnd={handleAnimationEnd}
+      disabled={zoom == 1.00 && center[0] == -40 && center[1] == 40}
       sx={{
         stroke: 'primary', cursor: 'pointer', ml: [2],
         display: ['initial', 'initial', 'initial', 'initial'],
         position: 'absolute',
-        color: 'primary',
+        color: (zoom == 1.00 && center[0] == -40 && center[1] == 40) ? 'muted' : 'primary',
         left: [2],
         bottom: [20, 20, 20, 20],
         '.spin': {

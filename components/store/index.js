@@ -53,7 +53,7 @@ const useStore = create((set, get) => ({
         drought: { min: 0.0, max: 0.5 },
         hot_days: { min: 0.0, max: 365.0 },
         lethal_heat: { min: 1.0, max: 4.0 },
-        precip: { min: 0, max: 4000 },
+        precip: { min: 0, max: 2500 },
         tavg: { min: -30, max: 30 },
         tc_rp: { min: 0.0, max: 100 },
         slr: { min: -0.5, max: 0.5 },
