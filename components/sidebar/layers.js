@@ -164,9 +164,9 @@ const Layers = () => {
 
           {(variable != 'slr' && variable != 'tc_rp') && (
             <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
-              <Box sx={sx.label}>{variable == 'lethal_heat' ? 'Warming level of emergence' : 'Warming level'}</Box>
+              <Box sx={{...sx.label, mb: [1] }}>{variable == 'lethal_heat' ? 'Warming level of emergence' : 'Warming level'}</Box>
               <Slider
-                sx={{ mt: [3], mb: [2] }}
+                sx={{ mt: [3], mb: [2], width: '175px', display: 'inline-block' }}
                 value={band}
                 onChange={(e) => setBand(parseFloat(e.target.value))}
                 onMouseDown={handleMouseDown}
@@ -175,51 +175,18 @@ const Layers = () => {
                 max={variable == 'lethal_heat' ? 4.0 : (variable == 'drought' || variable == 'warm_nights' || variable == 'wdd') ? 2.0 : 3.5}
                 step={0.5}
               />
-
-              <Box
+              <Badge
                 sx={{
-                  textAlign: 'center',
+                  bg: 'primary',
+                  color: 'background',
+                  display: 'inline-block',
+                  position: 'relative',
+                  left: [3],
+                  top: [-1],
                 }}
               >
-                <Box
-                  sx={{
-                    fontFamily: 'mono',
-                    letterSpacing: 'mono',
-                    fontSize: [1],
-                    display: 'inline-block',
-                    float: 'left',
-                  }}
-                >
-                  {variable == 'lethal_heat' ? 1.0 : 1.5}
-                </Box>
-
-                <Box
-                  sx={{
-                    fontFamily: 'mono',
-                    letterSpacing: 'mono',
-                    display: 'inline-block',
-                    ml: 'auto',
-                    mr: 'auto',
-                    color: 'secondary',
-                    transition: '0.2s',
-                    fontSize: [1],
-                  }}
-                >
-                  {band.toFixed(1)}
-                </Box>
-
-                <Box
-                  sx={{
-                    fontFamily: 'mono',
-                    letterSpacing: 'mono',
-                    fontSize: [1],
-                    float: 'right',
-                    display: 'inline-block',
-                  }}
-                >
-                  {variable == 'lethal_heat' ? 4.0 : (variable == 'drought' || variable == 'warm_nights' || variable == 'wdd') ? 2.0 : 3.5}
-                </Box>
-              </Box>
+                {parseFloat(band).toFixed(1)}
+              </Badge>
             </Box>
           )}
 
