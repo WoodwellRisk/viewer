@@ -46,45 +46,46 @@ function About({ mobile }) {
           mb: [4],
         }}
       >
-      {!mobile && (
-        <Box
-          onClick={toggleAbout}
-          sx={{
-            cursor: 'pointer',
-            '&:hover > #arrow': {
-              color: 'primary',
-            },
-            '&:hover > #label': {
-              color: 'primary',
-            },
-          }}
-        >
-          <Text
-            id='arrow'
-            sx={{
-              display: 'inline-block',
-              fontSize: ['20px'],
-              color: 'secondary',
-              top: '1px',
-              mr: [2],
-              position: 'relative',
-              transition: 'color 0.15s',
-            }}
-          >
-            ←
-          </Text>
+        {!mobile && (
           <Box
-            as='span'
-            id='label'
+            onClick={toggleAbout}
             sx={{
-              transition: 'color 0.15s',
-              fontSize: [2, 2, 2, 3],
-              color: 'secondary',
+              cursor: 'pointer',
+              '&:hover > #arrow': {
+                color: 'primary',
+              },
+              '&:hover > #label': {
+                color: 'primary',
+              },
             }}
           >
-            Back
+            <Text
+              id='arrow'
+              sx={{
+                display: 'inline-block',
+                fontSize: ['20px'],
+                color: 'secondary',
+                top: '1px',
+                mr: [2],
+                ml: [4],
+                position: 'relative',
+                transition: 'color 0.15s',
+              }}
+            >
+              ←
+            </Text>
+            <Box
+              as='span'
+              id='label'
+              sx={{
+                transition: 'color 0.15s',
+                fontSize: [2, 2, 2, 3],
+                color: 'secondary',
+              }}
+            >
+              Back
+            </Box>
           </Box>
-        </Box>
         )}
 
         <Box

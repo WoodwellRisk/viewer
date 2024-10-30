@@ -6,7 +6,6 @@ import InfoDemo from './info-demo'
 import GlobeDemo from './globe-demo'
 import ResetDemo from './reset-demo'
 
-
 const Content = () => {
   const [showGraticule, setShowGraticule] = useState(false)
   const toggleGraticule = () => setShowGraticule(!showGraticule)
@@ -46,7 +45,6 @@ const Content = () => {
           </Text>
         </Box>
 
-
         <Box sx={{ mt: 4 }}>
           <Text>
             The <Text sx={{ bg: 'muted' }}>Globe</Text> icon cycles through adding latitude/longitude degrees to the map,
@@ -73,23 +71,19 @@ const Content = () => {
           <GlobeDemo showGraticule={showGraticule} />
         </Box>
 
-
         <Box sx={{ mt: 4 }}>
           <Text>
-            The <Text sx={{ bg: 'muted' }}>Reset</Text> icon <Reset sx={{ strokeWidth: 1, width: 15, height: 15 }} /> resets the map extent to the original zoom and center.
+            The <Text sx={{ bg: 'muted' }}>Reset</Text> icon resets the map extent to the original zoom and center.
+            Test this on the map by panning and zooming, then clicking on the <Reset sx={{ strokeWidth: 1, width: 15, height: 15 }} /> icon.
           </Text>
         </Box>
-        {/* <Box sx={{ mt: 2, border: '1px solid', borderColor: 'primary', width: '100%', }}>
-          <ResetDemo />
-        </Box> */}
-
-        {/* <Box as='h2' variant='styles.h4'>
-          <Text sx={{ textDecoration: 'underline' }}>Methods</Text>
-        </Box>
-        <Box sx={{ mt: -2, }}>
-          <Text>...</Text>
-        </Box> */}
-
+        {/*         
+        {isWide && (
+          <Box sx={{ mt: 2, border: '1px solid', borderColor: 'primary', width: '100%', }}>
+            <ResetDemo isWide={isWide} />
+          </Box>
+        )} 
+        */}
       </Box>
     </>
   )

@@ -1,107 +1,128 @@
-import { useState, useEffect, useRef } from 'react'
-import { Box, useThemeUI } from 'theme-ui'
-import { Line, Map, Raster } from '@carbonplan/maps'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { Box, IconButton, useThemeUI } from 'theme-ui'
+import { keyframes } from '@emotion/react'
 import mapboxgl from 'mapbox-gl'
-import ZoomResetDemo from './zoom-reset-demo'
-import { equirectangular, naturalEarth1 } from '@carbonplan/minimaps/projections'
-import { Minimap, Path, Sphere, Graticule } from '@carbonplan/minimaps'
+import { Reset } from '@carbonplan/icons'
 
 const ResetDemo = () => {
   const { theme } = useThemeUI()
-  const resetDemoContainer = useRef()
   const mapRef = useRef()
+  const demoResetButton = useRef(null)
 
-  const [demoBand, setDemoBand] = useState('3.5')
   const [zoom, setZoom] = useState(0.6)
   const [center, setCenter] = useState([-103.0, 53.0])
 
-  // const [scale, setScale] = useState(2.5)
-  // const [translate, setTranslate] = useState([1.3, 1.2])
+  const spin = keyframes({
+    from: {
+      transform: 'rotate(0turn)'
+    },
+    to: {
+      transform: 'rotate(1turn)'
+    }
+  })
 
-  // useEffect(() => {
-  //   console.log('registering change')
-  // }, [loading])
+  const handleResetClick = useCallback((event) => {
+    // reset map
+    demoResetButton.current = event.target
+    demoResetButton.current.classList.add('spin')
 
-  // https://github.com/carbonplan/ncview-js/blob/199ba7a2f662053f9280a871ba009b536a36424e/components/map-container.js#L6
-  // https://github.com/carbonplan/prototype-maps/blob/6f867bfe6731c5c880f6ebf3ea36c8b3efe2809e/components/titiler/mapbox-map.js#L19
-  // try to start with this link ^^
-  // this issue might be that i need to put mapRef into a <div> component, like:
-  // <Box sx={{ position: 'absolute', top: 0, bottom: 0, width: '100%' }}>
-  //   <div style={{ width: '100%', height: '100%' }} ref={mapRef}></div>
-  // </Box>
-  // you can see that again here: https://github.com/carbonplan/maps/blob/f22c038c1e09b88d98e7005d25184d96dd4229a4/src/mapbox.js#L13
+    if (zoom != 0.6 || center[0] != -103.0 || center[1] != 53.0) {
+      mapRef.current.flyTo({
+        center: [-103.0, 53.0],
+        zoom: 0.6,
+      })
+      setZoom(0.6)
+      setCenter([-103.0, 53.0])
+    }
+  })
+
+  const handleAnimationEnd = useCallback(() => {
+    demoResetButton.current.classList.remove('spin')
+  })
 
   useEffect(() => {
     if (!mapRef.current) return
     const mbMap = new mapboxgl.Map({
       container: mapRef.current,
-      // attributionControl: false,
-      // style: 'mapbox://styles/mapbox/light-v11',
+      center: center,
       zoom: zoom,
-      center: center
+      maxZoom: 4.5
     })
     mapRef.current = mbMap
 
-    mapRef.current.on('load', () => {
+    const demoCountriesSource = ('demoCountriesSource', {
+      'type': 'vector',
+      'tiles': [`https://storage.googleapis.com/risk-maps/vector/land/{z}/{x}/{y}.pbf`],
+    })
 
-      // const zarrSource = {
-      //   type: 'raster',
-      //   url: `${XARRAY_TILER_ENDPOINT}?${querystring.stringify(
-      //     dataset.tilerParams
-      //   )}`,
-      // }
+    mapRef.current.addSource('demoCountriesSource', demoCountriesSource)
 
-      // const zarrLayer = {
-      //   id: zarr_layer_id,
-      //   type: 'raster',
-      //   source: zarr_source_id,
-      //   metadata: {
-      //     layerOrderPosition: 'raster',
-      //   },
-      // }
+    const demoCountriesOutline = {
+      'id': 'demoCountriesOutline',
+      'type': 'line',
+      'source': 'demoCountriesSource',
+      'source-layer': 'land',
+      'layout': { visibility: 'visible' },
+      'paint': {
+        'line-color': theme.rawColors.primary,
+        'line-color': 'black',
+        'line-opacity': 1.0,
+        'line-width': 0.5,
+      },
+    }
 
-      // mapRef.current.addSource(zarr_source_id, zarrSource)
-      // mapRef.current.addLayer(zarrLayer)
+    mapRef.current.addLayer(demoCountriesOutline)
 
-      // https://github.com/carbonplan/maps/blob/main/src/line.js
-    //   <Line
-    //   color={theme.rawColors.primary}
-    //   source={'https://storage.googleapis.com/risk-maps/vector/land'}
-    //   variable={'land'}
-    //   width={1}
-    // />
+    mapRef.current.on('move', () => {
+      // get the current center coordinates and zoom level from the map
+      let newCenter = mapRef.current.getCenter()
+      let newZoom = mapRef.current.getZoom()
 
+      // update state
+      setCenter([newCenter.lng, newCenter.lat])
+      setZoom(newZoom)
     })
 
     return () => {
       mapRef.current = null
     }
+    // return
+
   }, [])
 
   return (
-    <>
-      {/* <Minimap projection={equirectangular} translate={translate} scale={scale}>
-        <Path
-          stroke={theme.colors.primary}
-          source={'https://cdn.jsdelivr.net/npm/world-atlas@2/land-50m.json'}
-          feature={'land'}
-        />
-        <Graticule stroke={theme.colors.primary} />
-      </Minimap> */}
-      <Box  sx={{ height: '200px', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
-        <div ref={mapRef}style={{ width: '100%', height: '100%' }} ></div>
-        {/* <Map id={'demo-map'} zoom={zoom} center={center} >
-
-          <Line
-            color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector/land'}
-            variable={'land'}
-            width={1}
-          />
-          <ZoomResetDemo reference={mapRef} zoom={zoom} center={center} />
-        </Map> */}
-      </Box>
-    </>
+    <Box>
+      <div
+        ref={mapRef}
+        style={{
+          width: '100%',
+          height: '200px',
+          outlineWidth: '1px',
+          outlineStyle: 'solid',
+          outlineColor: theme.rawColors.primary,
+        }}
+      >
+      </div>
+      <IconButton
+        aria-label='Reset map extent - demo'
+        onClick={handleResetClick}
+        onAnimationEnd={handleAnimationEnd}
+        disabled={zoom == 0.6 && center[0] == -103.0 && center[1] == 53.0}
+        sx={{
+          stroke: 'primary', cursor: 'pointer', ml: [2],
+          display: ['initial', 'initial', 'initial', 'initial'],
+          position: 'absolute',
+          color: (zoom == 0.6 && center[0] == -103.0 && center[1] == 53.0) ? 'muted' : 'primary',
+          left: [4],
+          bottom: [13],
+          '.spin': {
+            animation: `${spin.toString()} 1s`,
+          },
+        }}
+      >
+        <Reset sx={{ strokeWidth: 1.75, width: 20, height: 20 }} />
+      </IconButton>
+    </Box>
   )
 }
 

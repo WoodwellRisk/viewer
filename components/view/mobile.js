@@ -5,7 +5,7 @@ import { Left } from '@carbonplan/icons'
 import { Button, Tray, FadeIn } from '@carbonplan/components'
 import Map from '../map'
 import Layers from '../sidebar/layers'
-import Content from '../sidebar/about/content'
+import MobileContent from '../sidebar/about/mobile-content'
 import Loading from './loading'
 
 function Mobile({ expanded }) {
@@ -48,13 +48,13 @@ function Mobile({ expanded }) {
               inverted
               prefix={<Left />}
               onClick={() => setSection('map')}
-              sx={{ mt: [1], cursor: 'pointer' }}
+              sx={{ mt: [1], ml: [3], cursor: 'pointer' }}
             >
               Back
             </Button>
 
             <Box sx={{ height: '100%' }}>
-              <Content />
+              <MobileContent />
             </Box>
           </FadeIn>
         </>

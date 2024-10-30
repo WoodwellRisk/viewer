@@ -3,6 +3,7 @@ import { SidebarDivider } from '@carbonplan/layouts'
 
 import SidebarHeader from './sidebar-header'
 import Menu from './menu'
+import About from './about/index'
 import Layers from './layers'
 import ExpandingSection from './expanding-section'
 import Overlays from './overlays'
@@ -81,6 +82,9 @@ const Sidebar = () => {
         <Box onClick={() => setShowAbout(!showAbout)} sx={sx['expand-section']} >
           ABOUT THIS SITE <Text sx={sx.arrow}>→</Text>
         </Box>
+        {showAbout && (
+          <About />
+        )}
         <SidebarDivider sx={{ width: '100%', my: 4 }} />
 
         <Layers />
