@@ -14,8 +14,6 @@ const Layers = () => {
   const band = useStore((state) => state.band)
   const setBand = useStore((state) => state.setBand)
   const clim = useStore((state) => state.clim)()
-  // const setClim = useStore((state) => state.setClim)
-  // const climRanges = useStore((state) => state.climRanges)
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
@@ -34,9 +32,7 @@ const Layers = () => {
   // state variables for specific risks
   const riskDescription = useStore((state) => state.riskDescription)()
   const riskOptions = useStore((state) => state.riskOptions)
-  const riskBands = useStore((state) => state.riskBands)
   const setRiskBands = useStore((state) => state.setRiskBands)
-  const riskColors = useStore((state) => state.riskColors)()
   const riskLabels = useStore((state) => state.riskLabels)()
   const colormapLabel = useStore((state) => state.colormapLabel)()
   const colormapUnits = useStore((state) => state.colormapUnits)()
@@ -64,31 +60,15 @@ const Layers = () => {
     if (variables.includes(risk)) {
       let bands = riskOptions[risk].bands
       let band
-      if (risk == 'slr' || risk == 'tc_rp') {
-        band = parseFloat(Object.keys(bands)[0])
+      if (risk == 'lethal_heat') {
+        band = bands[bands.length - 1]
       } else {
-        if (risk == 'lethal_heat') {
-          band = bands[bands.length - 1]
-        } else {
-          band = bands[0]
-        }
+        band = bands[0]
       }
 
       setVariable(risk)
       setRiskBands(bands)
       setBand(band)
-    }
-  })
-
-  const handleBandChange = useCallback((event) => {
-    if (variable == 'slr' || variable == 'tc_rp') {
-      let keys = Object.keys(riskOptions[variable].bands);
-      let label = event.target.innerHTML;
-      // https://stackoverflow.com/questions/23013573/swap-key-with-value-in-object
-      let band = Object.fromEntries(Object.entries(riskOptions[variable].labels).map(([k, v]) => [v, k]))[label]
-      if (keys.includes(band)) {
-        setBand(parseFloat(band));
-      }
     }
   })
 
@@ -136,21 +116,45 @@ const Layers = () => {
           </Box>
 
           <Box className='risk-layers'>
-            {(variable == 'slr' || variable == 'tc_rp') && (
-              <Filter
-                values={riskBands}
-                setValues={setRiskBands}
-                colors={riskColors}
-                labels={riskLabels}
-                multiSelect={false}
-                onClick={handleBandChange}
-              />
+            {variable == 'slr' && (
+              <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
+                <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
+              </Box>
+
+            )}
+
+            {variable != 'slr' && (
+              <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
+                <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
+                <Slider
+                  sx={{ mt: [3], mb: [2], width: variable == 'tc_rp' ? '150px' : '175px', display: 'inline-block' }}
+                  value={band}
+                  onChange={(e) => setBand(parseFloat(e.target.value))}
+                  onMouseDown={handleMouseDown}
+                  onMouseUp={handleMouseUp}
+                  min={variable == 'tc_rp' ? 2017.0 : variable == 'lethal_heat' ? 1.0 : 1.5}
+                  max={variable == 'tc_rp' ? 2050.0 : variable == 'lethal_heat' ? 4.0 : (variable == 'drought' || variable == 'warm_nights' || variable == 'wdd') ? 2.0 : 3.5}
+                  step={variable == 'tc_rp' ? 33.0 : 0.5}
+                />
+                <Badge
+                  sx={{
+                    bg: 'primary',
+                    color: 'background',
+                    display: 'inline-block',
+                    position: 'relative',
+                    left: [3],
+                    top: [-1],
+                  }}
+                >
+                  {variable == 'tc_rp' ? riskOptions[variable].bandLabels[band] : parseFloat(band).toFixed(1)}
+                </Badge>
+              </Box>
             )}
           </Box>
 
           <Box sx={{ ...sx.label, }}>
             <Colorbar
-              sx={{ width: '250px', display: 'inline-block', flexShrink: 1, }}
+              sx={{ width: '250px', display: 'inline-block', flexShrink: 1 }}
               sxClim={{ fontSize: [1, 1, 1, 2], pt: [1] }}
               width='100%'
               colormap={colormap}
@@ -161,34 +165,6 @@ const Layers = () => {
               discrete // only applies for lethal heat layer, does not affect other layers
             />
           </Box>
-
-          {(variable != 'slr' && variable != 'tc_rp') && (
-            <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
-              <Box sx={{...sx.label, mb: [1] }}>{variable == 'lethal_heat' ? 'Warming level of emergence' : 'Warming level'}</Box>
-              <Slider
-                sx={{ mt: [3], mb: [2], width: '175px', display: 'inline-block' }}
-                value={band}
-                onChange={(e) => setBand(parseFloat(e.target.value))}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                min={variable == 'lethal_heat' ? 1.0 : 1.5}
-                max={variable == 'lethal_heat' ? 4.0 : (variable == 'drought' || variable == 'warm_nights' || variable == 'wdd') ? 2.0 : 3.5}
-                step={0.5}
-              />
-              <Badge
-                sx={{
-                  bg: 'primary',
-                  color: 'background',
-                  display: 'inline-block',
-                  position: 'relative',
-                  left: [3],
-                  top: [-1],
-                }}
-              >
-                {parseFloat(band).toFixed(1)}
-              </Badge>
-            </Box>
-          )}
 
         </Box>
       </Box>

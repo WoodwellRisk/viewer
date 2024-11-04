@@ -118,7 +118,7 @@ const useStore = create((set, get) => ({
         precip: 'Annual precipitation',
         slr: 'Sea level rise',
         tavg: 'Annual temperature',
-        tc_rp: 'Return period',
+        tc_rp: 'Tropical cyclone risk',
         warm_nights: 'Nights over 20°C',
         wdd: 'Widlfire danger days',
     },
@@ -273,9 +273,12 @@ const useStore = create((set, get) => ({
     riskOptions: {
         drought: {            
             bands: [1.5, 2.0],
+            labels: { 'drought': 'Warming level' },
+
         },
         hot_days: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
+            labels: { 'hot_days': 'Warming level' },
         },
         lethal_heat: {
             bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
@@ -283,25 +286,28 @@ const useStore = create((set, get) => ({
         },
         precip: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
+            labels: { 'precip': 'Warming level' },
         },
         tavg: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
+            labels: { 'tavg': 'Warming level' },
         },
         tc_rp: {
-            bands: { '2017.0': true, '2050.0': false, },
-            colors: { '2017.0': 'orange', '2050.0': 'red', },
-            labels: { '2017.0': '1980-2017', '2050.0': '2015-2050', },
+            bands: [2017.0, 2050.0],
+            bandLabels: { 2017.0: '1980-2017', 2050.0: '2015-2050', },
+            labels: { 'tc_rp': 'Time period'},
         },
         slr: {
-            bands: { '2050.0': true, },
-            colors: { '2050.0': 'red', },
-            labels: { '2050.0': 'Depth value by 2050', },
+            bands: [2050.0],
+            labels: { 'slr': 'Depth value by 2050', },
         },
         warm_nights: {
             bands: [1.5, 2.0],
+            labels: { 'warm_nights': 'Warming level' },
         },
         wdd: {
             bands: [1.5, 2.0],
+            labels: { 'wdd': 'Warming level' },
         },
     },
 
@@ -311,7 +317,6 @@ const useStore = create((set, get) => ({
     // },
     // riskBands: { '1.5': true, '2.0': false, },
     riskBands: [1.5, 2.0],
-
     setRiskBands: (riskBands) => set({ riskBands }),
 
     riskColors: () => {
