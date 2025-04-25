@@ -178,9 +178,11 @@ const useStore = create((set, get) => ({
         cdd:
         <Box className='risk-layer-description' sx={sx.data_description}>
             <Box>
-            A metric designed to quantify the energy demand for air conditioning at a specific location. 
-            Cooling degree days are calculated by summing up the difference between the daily temperature and some base temperature over the course of a year 
-            (i.e., how much total air conditioning would you need in a particular location to maintain a comfortable temperature). We used a uniform base temperature of 65°F to compare cooling degree days across locations.
+                The annual cumulative sum of the difference between daily average temperature and a base temperature of 65°F, but only for days where the daily average temperature is over 65°F. 
+            </Box>
+            <Box sx={{mt: [2]}}>
+                Cooling degree days is a metric designed to quantify the energy demand for air conditioning at a specific location.
+                We used a uniform base temperature of 65°F to compare cooling degree days across locations.
             </Box>
             <Box sx={sx.data_source}>
                 Base data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -199,9 +201,11 @@ const useStore = create((set, get) => ({
         hdd:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                A metric designed to quantify the energy demand for building heating at a specific location. 
-                Heating degree days are calculated summing up the cumulative difference between a given base temperature and the actual daily temperature over the course of a year 
-                (i.e., how much total heat would you need for a space to maintain a comfortable temperature). We used a uniform base temperature of 65°F to compare heating degree days across locations.
+                    The annual cumulative sum of the difference between 65°F and the daily average temperature, but only for days where the daily average temperature is under 65°F. 
+                </Box>
+                <Box sx={{mt: [2]}}>
+                    Heating degree days is a metric designed to quantify the energy demand for building heating at a specific location. 
+                    We used a uniform base temperature of 65°F to compare heating degree days across locations.
                 </Box>
                 <Box sx={sx.data_source}>
                     Base data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
@@ -270,7 +274,8 @@ const useStore = create((set, get) => ({
         warm_nights:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    Heat stress. The number of days in a year with nightly minimum temperatures over 20°C. Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
+                    Heat stress. The number of days in a year with nightly minimum temperatures over 20°C. 
+                    Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
                 </Box>
                 <Box sx={sx.data_source}>
                     This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
