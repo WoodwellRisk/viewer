@@ -24,7 +24,7 @@ const useStore = create((set, get) => ({
 
     // general / raster state variables
     variables: [
-        'drought', 'hot_days', 'lethal_heat', 'precip',
+        'cdd', 'drought', 'hdd', 'hot_days', 'lethal_heat', 'precip',
         'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
     ],
     variable: 'drought',
@@ -34,7 +34,9 @@ const useStore = create((set, get) => ({
     setBand: (band) => set({ band }),
 
     defaultColormaps: {
+        cdd: 'cool',
         drought: 'warm',
+        hdd: 'cool', // could keep this cool if we wanted to match cdd
         hot_days: 'fire',
         lethal_heat: 'fire',
         precip: 'water',
@@ -50,7 +52,9 @@ const useStore = create((set, get) => ({
     },
 
     climRanges: {
+        cdd: { min: 0.0, max: 10000 },
         drought: { min: 0.0, max: 0.5 },
+        hdd: { min: 0.0, max: 15000 },
         hot_days: { min: 0.0, max: 365.0 },
         lethal_heat: { min: 1.0, max: 4.0 },
         precip: { min: 0, max: 2500 },
@@ -112,7 +116,9 @@ const useStore = create((set, get) => ({
 
     // sidebar options
     riskTitles: {
+        cdd: 'Cooling degree days',
         drought: 'Extreme drought',
+        hdd: 'Heating degree days',
         hot_days: 'Days over 90°F',
         lethal_heat: 'Lethal heat',
         precip: 'Annual precipitation',
@@ -137,10 +143,14 @@ const useStore = create((set, get) => ({
         tc_rp: false,
         warm_nights: false,
         wdd: false,
+        cdd: false,
+        hdd: false,
     },
     setRiskThemes: (riskThemes) => set({ riskThemes }),
     riskThemeLabels: {
+        cdd: 'Cooling degree days',
         drought: 'Drought',
+        hdd: 'Heating degree days',
         hot_days: 'Hot days',
         lethal_heat: 'Lethal heat',
         precip: 'Precipitation',
@@ -151,7 +161,9 @@ const useStore = create((set, get) => ({
         wdd: 'Widlfires'
     },
     riskThemeLookup: {
+        'Cooling degree days': 'cdd',
         'Drought': 'drought',
+        'Heating degree days': 'hdd',
         'Hot days': 'hot_days',
         'Lethal heat': 'lethal_heat',
         'Precipitation': 'precip',
@@ -163,6 +175,17 @@ const useStore = create((set, get) => ({
     },
 
     riskDescriptions: {
+        cdd:
+        <Box className='risk-layer-description' sx={sx.data_description}>
+            <Box>
+            A metric designed to quantify the energy demand for air conditioning at a specific location. 
+            Cooling degree days are calculated by summing up the difference between the daily temperature and some base temperature over the course of a year 
+            (i.e., how much total air conditioning would you need in a particular location to maintain a comfortable temperature). We used a uniform base temperature of 65°F to compare cooling degree days across locations.
+            </Box>
+            <Box sx={sx.data_source}>
+                Base data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+            </Box>
+        </Box>,
         drought:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
@@ -171,6 +194,17 @@ const useStore = create((set, get) => ({
                 </Box>
                 <Box sx={sx.data_source}>
                     This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                </Box>
+            </Box>,
+        hdd:
+            <Box className='risk-layer-description' sx={sx.data_description}>
+                <Box>
+                A metric designed to quantify the energy demand for building heating at a specific location. 
+                Heating degree days are calculated summing up the cumulative difference between a given base temperature and the actual daily temperature over the course of a year 
+                (i.e., how much total heat would you need for a space to maintain a comfortable temperature). We used a uniform base temperature of 65°F to compare heating degree days across locations.
+                </Box>
+                <Box sx={sx.data_source}>
+                    Base data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         hot_days:
@@ -259,7 +293,9 @@ const useStore = create((set, get) => ({
     },
 
     riskThemeColors: {
+        cdd: 'red',
         drought: 'red',
+        hdd: 'blue',
         hot_days: 'red',
         lethal_heat: 'red',
         precip: 'blue',
@@ -271,10 +307,17 @@ const useStore = create((set, get) => ({
     },
 
     riskOptions: {
+        cdd: {            
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
+            labels: { 'cdd': 'Warming level' },
+        },
         drought: {            
             bands: [1.5, 2.0],
             labels: { 'drought': 'Warming level' },
-
+        },
+        hdd: {            
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
+            labels: { 'hdd': 'Warming level' },
         },
         hot_days: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
@@ -330,7 +373,9 @@ const useStore = create((set, get) => ({
     },
 
     defaultLabels: {
+        cdd: 'Cooling degree days',
         drought: 'Probability of extreme drought',
+        hdd: 'Heating degree days',
         hot_days: 'Number of days per year',
         lethal_heat: '°C',
         precip: 'Precipitation',
@@ -346,7 +391,9 @@ const useStore = create((set, get) => ({
     },
 
     defaultUnits: {
+        cdd: '',
         drought: '',
+        hdd: '',
         hot_days: '',
         lethal_heat: '',
         precip: '(mm)',

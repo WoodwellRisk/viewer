@@ -26,10 +26,11 @@ const Map = ({ mobile }) => {
   const clim = useStore((state) => state.clim)()
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
-    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-      (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-          useThemedColormap(colormapName)
+    (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
+      (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+        (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+          (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
+            useThemedColormap(colormapName)
 
   const opacity = useStore((state) => state.opacity)
   const display = useStore((state) => state.display)
@@ -190,7 +191,7 @@ const Map = ({ mobile }) => {
           key={variable}
           display={display}
           opacity={opacity}
-          source={`https://storage.googleapis.com/risk-maps/zarr_layers/${variable}.zarr`}
+          source={`https://storage.googleapis.com/risk-maps/zarr/${variable}.zarr`}
           variable={variable}
           clim={clim}
           colormap={colormap}

@@ -13,6 +13,7 @@ const Router = () => {
     const variable = useStore((state) => state.variable)
     const setVariable = useStore((state) => state.setVariable)
     const variables = useStore((state) => state.variables)
+
     const setRiskThemes = useStore((state) => state.setRiskThemes)
     const riskOptions = useStore((state) => state.riskOptions)
     const setBand = useStore((state) => state.setBand)
@@ -102,7 +103,9 @@ const Router = () => {
         setZoom(savedZoom)
         setCenter(savedCenter)
         setRiskThemes({
+            cdd: savedLayer == 'cdd',
             drought: savedLayer == 'drought',
+            hdd: savedLayer == 'hdd',
             hot_days: savedLayer == 'hot_days',
             lethal_heat: savedLayer == 'lethal_heat',
             precip: savedLayer == 'precip',

@@ -1,7 +1,7 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
-import { Badge, Colorbar, Filter, Link, Tag, Slider } from '@carbonplan/components'
+import { Badge, Colorbar, Filter, Link, Slider } from '@carbonplan/components'
 import { SidebarDivider } from '@carbonplan/layouts'
 
 import Info from './info'
@@ -9,6 +9,7 @@ import useStore from '../store/index'
 
 const Layers = () => {
   const variables = useStore((state) => state.variables)
+
   const variable = useStore((state) => state.variable)
   const setVariable = useStore((state) => state.setVariable)
   const band = useStore((state) => state.band)
@@ -16,10 +17,11 @@ const Layers = () => {
   const clim = useStore((state) => state.clim)()
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
-    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-      (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-          useThemedColormap(colormapName)
+    (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
+      (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+        (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+          (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
+            useThemedColormap(colormapName)
 
   // state variables for risk themes
   const riskTitle = useStore((state) => state.riskTitle)()
