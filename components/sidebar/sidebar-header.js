@@ -99,10 +99,10 @@ const SidebarHeader = ({ showMenu, toggleMenu }) => {
          fontFamily: 'heading',
          letterSpacing: 'smallcaps',
          textTransform: 'uppercase',
+        //  fontWeight: 500,
+         textAlign: 'vertical',
       }}>
-        <Box
-          sx={{ display: 'block', ml:4, pt: 0.5, }}
-        >
+        <Box sx={{ display: 'block', ml: 4, pt: 2.5, }}>
           Woodwell Risk
         </Box>
       </Box>

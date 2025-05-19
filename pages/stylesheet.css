@@ -1,0 +1,18 @@
+/* woodwell fonts */
+@font-face {
+    font-family: "ginto-normal";
+    /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
+    src: url('../assets/GintoNormal-Regular.ttf');
+}
+
+@font-face {
+    font-family: "ginto-medium";
+    /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
+    src: url('../assets/GintoNormal-Medium.ttf');
+}
+
+@font-face {
+    font-family: "ginto-bold";
+    /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
+    src: url('../assets/GintoNormal-Bold.ttf');
+}

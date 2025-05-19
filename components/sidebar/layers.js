@@ -126,7 +126,7 @@ const Layers = () => {
             )}
 
             {variable != 'slr' && (
-              <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
+              <Box  sx={{ ...sx.label, mt: [4], width: '90%' }}>
                 <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
                 <Slider
                   sx={{ mt: [3], mb: [2], width: variable == 'tc_rp' ? '150px' : '175px', display: 'inline-block' }}
