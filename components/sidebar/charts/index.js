@@ -21,16 +21,20 @@ const StatsDisplay = ({ data, variable, colormap }) => {
       result = `Average: ${average.toFixed(2)} mm`
     } else if (variable.startsWith('tavg') || variable == 'lethal_heat') {
       result = `Average: ${average.toFixed(2)} ºC`
-    } else if (variable.startsWith('hot_days') || variable.startsWith('wdd')) {
-      result = `Average: ${average.toFixed(2)} days per year`
-    } else if (variable.startsWith('wn')) {
-      result = `Average: ${average.toFixed(2)} nights per year`
+    } else if (variable.startsWith('hot_days')) {
+      result = `Average: ${average.toFixed(2)} hot days`
+    } else if (variable.startsWith('wdd')) {
+      result = `Average: ${average.toFixed(2)} danger days`
+    }else if (variable.startsWith('cdd') || variable.startsWith('hdd')) {
+      result = `Average: ${average.toFixed(2)} degree days`
+    } else if (variable.startsWith('warm_nights')) {
+      result = `Average: ${average.toFixed(2)} nights`
     } else if (variable == 'slr') {
       result = `Average: ${average.toFixed(2)} meters`
     } else if (variable.startsWith('tc')) {
       result = `Average: ${average.toFixed(2)} years`
     } else { // else drought
-      result = `Average: ${average.toFixed(2)}`
+      result = `Average: ${average.toFixed(2)}%`
     }
   }
 
