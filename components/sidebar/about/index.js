@@ -22,15 +22,10 @@ function About({ mobile }) {
         height: '100%',
         left: 0,
         backgroundColor: 'background',
-        maxWidth: [
-          0,
-          '350px',
-          '350px',
-          '400px',
-        ],
+        maxWidth: '450px',
         transform: showAbout ? 'translateX(0px)' : 'translateX(-100%)',
         overflowY: 'scroll',
-        display: showAbout ? 'initial'  : 'hidden',
+        display: showAbout ? 'initial' : 'hidden',
       }}
     >
       <Box
@@ -90,7 +85,7 @@ function About({ mobile }) {
           <Content />
         </Box>
       </Box>
-     </Box>
+    </Box>
   )
 }
 
