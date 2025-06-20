@@ -13,7 +13,7 @@ const Layout = ({
   status,
   nav,
   settings,
-  header = true,
+  header = false,
   metadata = 'mouse',
   dimmer = 'bottom',
   scrollbar = false,
@@ -98,7 +98,7 @@ const Layout = ({
           minHeight: '100vh',
         }}
       >
-        {header && (
+        {/* {header && (
           <Box
             as='header'
             sx={{
@@ -123,7 +123,7 @@ const Layout = ({
               />
             </Container>
           </Box>
-        )}
+        )} */}
 
         <Box
           sx={{

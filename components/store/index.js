@@ -108,6 +108,9 @@ const useStore = create((set, get) => ({
     showAbout: false,
     setShowAbout: (showAbout) => set({ showAbout }),
 
+    showAboutMobile: false,
+    setShowAboutMobile: (showAboutMobile) => set({ showAboutMobile }),
+
     showMenu: false,
     setShowMenu: (showMenu) => set({ showMenu }),
 

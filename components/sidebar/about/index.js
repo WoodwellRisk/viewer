@@ -12,6 +12,8 @@ function About({ mobile }) {
     <Box className='desktop-about-container'
       sx={{
         position: 'absolute',
+        display: ['none', 'flex', 'flex'],
+        flexBasis: '100%',
         zIndex: 200,
         borderStyle: 'solid',
         borderWidth: 0,
@@ -20,11 +22,11 @@ function About({ mobile }) {
         height: '100%',
         left: 0,
         backgroundColor: 'background',
-        width: [
+        maxWidth: [
           0,
-          'calc(4 * 100vw / 8 - 8px)',
-          'calc(5 * 100vw / 12 - 12px)',
-          'calc(5 * 100vw / 12 - 20px)',
+          '350px',
+          '350px',
+          '400px',
         ],
         transform: showAbout ? 'translateX(0px)' : 'translateX(-100%)',
         overflowY: 'scroll',
