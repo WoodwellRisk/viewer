@@ -4,7 +4,7 @@ import { Globe, Reset } from '@carbonplan/icons'
 import { Dimmer } from '@carbonplan/components'
 import InfoDemo from './info-demo'
 import GlobeDemo from './globe-demo'
-import ResetDemo from './reset-demo'
+// import ResetDemo from './reset-demo'
 
 const Content = () => {
   const [showGraticule, setShowGraticule] = useState(false)
@@ -12,20 +12,27 @@ const Content = () => {
 
   const sx = {
     'container': {
-      mx: [3, 4, 5, 6],
-      pt: [1],
-      mt: 2,
       pb: [2],
       mb: [3],
       fontSize: [2, 2, 2, 3],
       width: 'fit-content',
     },
+    'heading': {
+      mt: [3],
+      mb: [4],
+      pr: [0, 5, 5, 6],
+      fontSize: [4, 4, 4, 5],
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'h3',
+      width: '100%',
+    }
   }
 
   return (
     <>
       <Box sx={sx['container']} >
-        <Box as='h2' variant='styles.h4'>
+        <Box sx={sx['heading']}>
           <Text sx={{ textDecoration: 'underline' }}>How to use this site</Text>
         </Box>
 

@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Slider } from '@carbonplan/components'
-import { SidebarDivider } from '@carbonplan/layouts'
 
+import SidebarDivider from './sidebar-divider'
 import Info from './info'
 import useStore from '../store/index'
 
@@ -108,7 +108,7 @@ const Layers = () => {
           </Box>
         </Box>
       </Box>
-      <SidebarDivider sx={{ width: '100%', my: 4 }} />
+      <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} />
 
       <Box sx={sx.group}>
         <Box className='risk-layer-container' sx={{ mt: 0, mb: 4 }} >

@@ -1,6 +1,6 @@
 import { Box, Text } from 'theme-ui'
-import { SidebarDivider } from '@carbonplan/layouts'
 
+import SidebarDivider from './sidebar-divider'
 import SidebarHeader from './sidebar-header'
 import Menu from './menu'
 import About from './about/index'
@@ -24,6 +24,9 @@ const Sidebar = () => {
   
   const sx = {
     'sidebar-container': {
+      position: 'relative',
+      zIndex: 100,
+      display: ['none', 'flex', 'flex'],
       maxWidth: [
         0,
         '350px',
@@ -37,9 +40,7 @@ const Sidebar = () => {
       borderWidth: '0px',
       borderRightWidth: '1px',
       borderColor: 'muted',
-      zIndex: 900,
       backgroundColor: 'background',
-      display: ['none', 'flex', 'flex'],
     },
     'expand-section': {
       mx: [3, 4, 5, 6],
@@ -91,13 +92,10 @@ const Sidebar = () => {
         <Box as='h2' onClick={() => setShowAbout(!showAbout)} sx={sx['expand-section']} >
           ABOUT THIS SITE <Text sx={sx.arrow}>→</Text>
         </Box>
-        {showAbout && (
-          <About />
-        )}
-        <SidebarDivider sx={{ width: '100%', my: 4 }} />
+        <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} />
 
         <Layers />
-        <SidebarDivider sx={{ width: '100%', my: 4 }} />
+        <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} />
 
         <ExpandingSection label='Charts' expanded={showRegionPicker} setExpanded={setShowRegionPicker}>
           {showRegionPicker && (
@@ -106,12 +104,12 @@ const Sidebar = () => {
             </Box>
           )}
         </ExpandingSection>
-        <SidebarDivider sx={{ width: '100%', my: 4 }} /> 
+        <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} /> 
 
         <ExpandingSection label='Overlays' expanded={showOverlays} setExpanded={setShowOverlays}>
           <Overlays />
         </ExpandingSection>
-        <SidebarDivider sx={{ width: '100%', mt: 4 }} />
+        <SidebarDivider sx={{ width: '100%', ml: 0, mt: 4 }} />
 
         <Footer />
       </Box>
