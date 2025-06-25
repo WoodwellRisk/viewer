@@ -5,7 +5,7 @@ import Bar from './bar'
 import useStore from '../../store/index'
 import * as d3 from 'd3'
 
-const BarChart = ({ data, variable, colormap }) => {
+const BarChart = ({ data, variable }) => {
     const climRanges = useStore((state) => state.climRanges)
 
     const sx = {

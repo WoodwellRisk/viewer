@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Slider } from '@carbonplan/components'
@@ -9,19 +9,24 @@ import useStore from '../store/index'
 
 const Layers = () => {
   const variables = useStore((state) => state.variables)
-
   const variable = useStore((state) => state.variable)
   const setVariable = useStore((state) => state.setVariable)
-  const band = useStore((state) => state.band)
+  const cropOptions = useStore((state) => state.cropOptions)
+  const setCropOptions = useStore((state) => state.setCropOptions)
+  const setCrop = useStore((state) => state.setCrop)
+  const bandIndex = useStore((state) => state.bandIndex)
+  const setBandIndex = useStore((state) => state.setBandIndex)
   const setBand = useStore((state) => state.setBand)
   const clim = useStore((state) => state.clim)()
+  const customColormaps = useStore((state) => state.customColormaps)
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-      (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-          (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-            useThemedColormap(colormapName)
+    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+    (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+    (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
+    variable.startsWith('cf') ? useMemo(() => customColormaps[colormapName]) :
+    useThemedColormap(colormapName)
 
   // state variables for risk themes
   const riskTitle = useStore((state) => state.riskTitle)()
@@ -29,7 +34,6 @@ const Layers = () => {
   const setRiskThemes = useStore((state) => state.setRiskThemes)
   const riskThemeLabels = useStore((state) => state.riskThemeLabels)
   const riskThemeLookup = useStore((state) => state.riskThemeLookup)
-  const riskThemeColors = useStore((state) => state.riskThemeColors)
 
   // state variables for specific risks
   const riskDescription = useStore((state) => state.riskDescription)()
@@ -61,26 +65,43 @@ const Layers = () => {
     let risk = riskThemeLookup[event.target.innerHTML];
     if (variables.includes(risk)) {
       let bands = riskOptions[risk].bands
-      let band
+      let bandIndex
       if (risk == 'lethal_heat') {
-        band = bands[bands.length - 1]
+        bandIndex = riskOptions[risk].bands.length - 1
       } else {
-        band = bands[0]
+        bandIndex = 0
       }
 
       setVariable(risk)
       setRiskBands(bands)
-      setBand(band)
+      setBandIndex(bandIndex)
+      setBand(riskOptions[risk].bands[bandIndex])
     }
   })
 
   const handleMouseDown = useCallback((event) => {
     setSliding(true)
-  }, [band])
+  }, [bandIndex])
 
   const handleMouseUp = useCallback((event) => {
     setSliding(false)
-  }, [band])
+  }, [bandIndex])
+
+  const handleSliderChange = useCallback((event) => {
+    let bandIndex = event.target.value;
+    setBandIndex(bandIndex)
+  })
+
+  useEffect(() => {
+    setBand(riskOptions[variable].bands[bandIndex])
+  }, [bandIndex])
+
+  const handleCropChange = useCallback((event) => {
+    let crop = event.target.innerText.toLowerCase();
+    if (Object.keys(cropOptions).includes(crop))
+      setCrop(crop)
+  })
+
 
   return (
     <>
@@ -101,7 +122,7 @@ const Layers = () => {
               values={riskThemes}
               labels={riskThemeLabels}
               setValues={setRiskThemes}
-              colors={riskThemeColors}
+              colors={'primary'}
               multiSelect={false}
               onClick={handleRiskChange}
             />
@@ -122,21 +143,41 @@ const Layers = () => {
               <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
                 <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
               </Box>
+            )}
 
+            {variable.startsWith('cf') && (
+              <Box className='risk-theme-layers'>
+                <Filter
+                  sx={{
+                    mr: [3],
+                    mb: [2],
+                  }}
+                  values={cropOptions}
+                  setValues={setCropOptions}
+                  colors={'primary'}
+                  multiSelect={false}
+                  onClick={handleCropChange}
+                />
+              </Box>
             )}
 
             {variable != 'slr' && (
-              <Box  sx={{ ...sx.label, mt: [4], width: '90%' }}>
+              <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
                 <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
                 <Slider
-                  sx={{ mt: [3], mb: [2], width: variable == 'tc_rp' ? '150px' : '175px', display: 'inline-block' }}
-                  value={band}
-                  onChange={(e) => setBand(parseFloat(e.target.value))}
+                  sx={{ mt: [3], mb: [2], width: (variable.startsWith('tc') || variable.startsWith('cf')) ? '150px' : '175px', display: 'inline-block' }}
+                  value={bandIndex}
+                  onChange={handleSliderChange}
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}
-                  min={variable == 'tc_rp' ? 2017.0 : variable == 'lethal_heat' ? 1.0 : 1.5}
-                  max={variable == 'tc_rp' ? 2050.0 : variable == 'lethal_heat' ? 4.0 : (variable == 'drought' || variable == 'warm_nights' || variable == 'wdd') ? 2.0 : 3.5}
-                  step={variable == 'tc_rp' ? 33.0 : 0.5}
+                  min={0}
+                  max={
+                    variable == 'lethal_heat' ? 6 :
+                      variable.startsWith('cf') ? 3 :
+                        (variable == 'drought' || variable.startsWith('tc') || variable == 'warm_nights' || variable == 'wdd') ? 1 :
+                          4
+                  }
+                  step={1}
                 />
                 <Badge
                   sx={{
@@ -148,7 +189,7 @@ const Layers = () => {
                     top: [-1],
                   }}
                 >
-                  {variable == 'tc_rp' ? riskOptions[variable].bandLabels[band] : parseFloat(band).toFixed(1)}
+                  {(variable.startsWith('tc') || variable.startsWith('cf')) ? riskOptions[variable].bandLabels[bandIndex] : riskOptions[variable].bands[bandIndex].toFixed(1)}
                 </Badge>
               </Box>
             )}

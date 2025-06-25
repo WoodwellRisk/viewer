@@ -25,9 +25,9 @@ function Mobile({ expanded }) {
 
   const sx = {
     'map': {
-      width: '100vw',
-      height: showAboutMobile ? '0vh' : 'calc(100vh - 64px)',
       display: 'flex',
+      width: '100vw',
+      height: showAboutMobile ? '0vh' : '100vh',
       ml: -3,
     },
     'about': {

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useMemo, useState, useRef } from 'react'
 import { useThemeUI, Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
@@ -22,15 +22,18 @@ const Map = ({ mobile }) => {
   const glyphs = useStore((state) => state.glyphs)
 
   const variable = useStore((state) => state.variable)
+  const crop = useStore((state) => state.crop)
   const band = useStore((state) => state.band)
   const clim = useStore((state) => state.clim)()
+  const customColormaps = useStore((state) => state.customColormaps)
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-      (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-          (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-            useThemedColormap(colormapName)
+    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+    (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+    (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
+    variable.startsWith('cf') ? useMemo(() => customColormaps[colormapName]) :
+    useThemedColormap(colormapName)
 
   const opacity = useStore((state) => state.opacity)
   const display = useStore((state) => state.display)
@@ -195,7 +198,7 @@ const Map = ({ mobile }) => {
           variable={variable}
           clim={clim}
           colormap={colormap}
-          selector={{ band }}
+          selector={variable.startsWith('cf') ? { crop, band } : { band }}
           mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
           regionOptions={{ setData: setRegionData }}
         />

@@ -1,10 +1,9 @@
 import { Box } from 'theme-ui'
-import { useThemedColormap } from '@carbonplan/colormaps'
 import BarChart from './bar-chart'
 
 import useStore from '../../store/index'
 
-const StatsDisplay = ({ data, variable, colormap }) => {
+const StatsDisplay = ({ data, variable }) => {
 
   if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
     return
@@ -33,7 +32,7 @@ const StatsDisplay = ({ data, variable, colormap }) => {
       result = `Average: ${average.toFixed(2)} meters`
     } else if (variable.startsWith('tc')) {
       result = `Average: ${average.toFixed(2)} years`
-    } else { // else drought
+    } else { // else drought or crop failure data
       result = `Average: ${average.toFixed(2)}%`
     }
   }
@@ -50,26 +49,20 @@ const StatsDisplay = ({ data, variable, colormap }) => {
         {result}
       </Box>
 
-      <BarChart data={data} variable={variable} colormap={colormap} />
+      <BarChart data={data} variable={variable} />
     </>
   )
 }
 
 const Charts = () => {
   const variable = useStore((state) => state.variable)
-  const colormapName = useStore((state) => state.colormapName)()
-  const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
-    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-      (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-        (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-          useThemedColormap(colormapName)
   const regionData = useStore((state) => state.regionData)
   const showRegionPicker = useStore((state) => state.showRegionPicker)
 
   return (
     <Box>
       {showRegionPicker && regionData?.value && (
-        <StatsDisplay data={regionData} variable={variable} colormap={colormap} />
+        <StatsDisplay data={regionData} variable={variable} />
       )}
     </Box>
   )

@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import { Box } from 'theme-ui'
 import { Link } from '@carbonplan/components'
 
+import {customColormaps} from './colormaps.js';
+
 const sx = {
     data_description: {
         fontSize: '14px',
@@ -12,6 +14,14 @@ const sx = {
     }
 }
 
+const NEX_URL = 'https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6'
+const AGMIP_URL = 'https://agmip.org/'
+const MAPSPAM_URL = 'https://www.mapspam.info/'
+
+// NOTE: the order of the variables in the sidebar is determined both by the riskThemes dictionary included in this
+// store AND in the router component. So to keep track of which variables have been added, we can still maintain most
+// lists in alphabetical order, but riskThemes needs to be in a set order.
+
 const useStore = create((set, get) => ({
     // map container state
     zoom: 1,
@@ -20,21 +30,36 @@ const useStore = create((set, get) => ({
     center: [-40, 40],
     setCenter: (center) => set({ center }),
 
-    glyphs: "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+    glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
 
     // general / raster state variables
     variables: [
-        'cdd', 'drought', 'hdd', 'hot_days', 'lethal_heat', 'precip',
-        'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
+        'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
+        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
     ],
     variable: 'drought',
     setVariable: (variable) => set({ variable }),
 
+    cropOptions: {'maize': true, 'rice': false, 'soy': false, 'wheat': false},
+    setCropOptions: (cropOptions) => set({ cropOptions }),
+    
+    crop: 'maize',
+    setCrop: (crop) => set({ crop }),
+
+    bandIndex: 0,
+    setBandIndex: (bandIndex) => set({ bandIndex }),
+
     band: 1.5,
     setBand: (band) => set({ band }),
 
+    customColormaps: customColormaps,
+
     defaultColormaps: {
         cdd: 'cool',
+        cf_irr: 'greenyellowred',
+        cf_rain: 'greenyellowred',
+        // cf_irr: 'fire',
+        // cf_rain: 'fire',
         drought: 'warm',
         hdd: 'cool', // could keep this cool if we wanted to match cdd
         hot_days: 'fire',
@@ -53,8 +78,10 @@ const useStore = create((set, get) => ({
 
     climRanges: {
         cdd: { min: 0.0, max: 10000 },
-        drought: { min: 0.0, max: 0.5 },
+        cf_irr: { min: 0.0, max: 100 },
+        cf_rain: { min: 0.0, max: 100 },
         hdd: { min: 0.0, max: 15000 },
+        drought: { min: 0.0, max: 0.5 },
         hot_days: { min: 0.0, max: 365.0 },
         lethal_heat: { min: 1.0, max: 4.0 },
         precip: { min: 0, max: 2500 },
@@ -68,8 +95,6 @@ const useStore = create((set, get) => ({
         const {climRanges, variable} = get()
         return [climRanges[variable].min, climRanges[variable].max]
     },
-    // clim: [0.0, 0.5],
-    // setClim: (clim) => set({ clim }),
 
     opacity: 1,
     setOpacity: (opacity) => set({ opacity }),
@@ -120,6 +145,8 @@ const useStore = create((set, get) => ({
     // sidebar options
     riskTitles: {
         cdd: 'Cooling degree days',
+        cf_irr: 'Irrigated crop failure',
+        cf_rain: 'Rainfed crop failure',
         drought: 'Extreme drought',
         hdd: 'Heating degree days',
         hot_days: 'Days over 90°F',
@@ -145,13 +172,18 @@ const useStore = create((set, get) => ({
         tavg: false,
         tc_rp: false,
         warm_nights: false,
+        cf_irr: false,
+        cf_rain: false,
         wdd: false,
         cdd: false,
         hdd: false,
+
     },
     setRiskThemes: (riskThemes) => set({ riskThemes }),
     riskThemeLabels: {
         cdd: 'Cooling degree days',
+        cf_irr: 'Irrigated crops',
+        cf_rain: 'Rainfed crops',
         drought: 'Drought',
         hdd: 'Heating degree days',
         hot_days: 'Hot days',
@@ -165,6 +197,8 @@ const useStore = create((set, get) => ({
     },
     riskThemeLookup: {
         'Cooling degree days': 'cdd',
+        'Irrigated crops': 'cf_irr',
+        'Rainfed crops': 'cf_rain',
         'Drought': 'drought',
         'Heating degree days': 'hdd',
         'Hot days': 'hot_days',
@@ -188,7 +222,35 @@ const useStore = create((set, get) => ({
                 We used a uniform base temperature of 65°F to compare cooling degree days across locations.
             </Box>
             <Box sx={sx.data_source}>
-                Base data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                Base data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+            </Box>
+        </Box>,
+        cf_irr:
+        <Box className='risk-layer-description' sx={sx.data_description}>
+            <Box>
+                The probability of at least a 10% yield failure for a given crop.
+            </Box>
+            <Box sx={{mt: [2]}}>
+                Crop failure data was clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> crop extents, 
+                meaning that the future risk to irrigated crops takes into account changing climate conditions, but not modeled land- and water-use decisions.
+            </Box>
+            <Box sx={sx.data_source}>
+                Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> based on <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> output. 
+                To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/agriculture/' target='_blank'>methodology website.</Link>
+            </Box>
+        </Box>,
+        cf_rain:
+        <Box className='risk-layer-description' sx={sx.data_description}>
+            <Box>
+                The probability of at least a 10% yield failure for a given crop.
+            </Box>
+            <Box sx={{mt: [2]}}>
+            Crop failure data was clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> crop extents, 
+                meaning that the future risk to rainfed crops takes into account changing climate conditions, but not modeled land- and water-use decisions.
+            </Box>
+            <Box sx={sx.data_source}>
+                Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> based on <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> output. 
+                To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/agriculture/' target='_blank'>methodology website.</Link>
             </Box>
         </Box>,
         drought:
@@ -198,7 +260,7 @@ const useStore = create((set, get) => ({
                     Hyper-arid regions are masked as drought cannot occur under permanently dry conditions. Drought is defined as a temporary negative anomaly in local water balance conditions.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         hdd:
@@ -211,7 +273,7 @@ const useStore = create((set, get) => ({
                     We used a uniform base temperature of 65°F to compare heating degree days across locations.
                 </Box>
                 <Box sx={sx.data_source}>
-                    Base data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         hot_days:
@@ -220,7 +282,7 @@ const useStore = create((set, get) => ({
                     The number of days in a year with a daily maximum temperature over 90°F.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         lethal_heat:
@@ -231,7 +293,7 @@ const useStore = create((set, get) => ({
                     This data illustrates the warming level at which at least 1 day of at least 6 hours of lethal heat per year begins to occur.
                 </Box>
                 <Box sx={sx.data_source}>
-                    To learn more about how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risks/heat/#lethal-heat-" target="_blank">methodology website.</Link>
+                    To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/heat/#lethal-heat-' target='_blank'>methodology website.</Link>
                 </Box>
             </Box>,
         precip:
@@ -240,18 +302,18 @@ const useStore = create((set, get) => ({
                     Average annual precipitation.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         slr:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    Future sea level change from the <Link href="https://www.ipcc.ch/assessment-report/ar6/" target="_blank">IPCC AR6</Link> report under a medium confidence fossil-fueled development pathway (SSP5-8.5) scenario.
-                    The layer represents the median model projections from 2020 to 2050, relative to a <Link href="https://podaac.jpl.nasa.gov/announcements/2021-08-09-Sea-level-projections-from-the-IPCC-6th-Assessment-Report" target="_blank">1995-2014 baseline period</Link>.
+                    Future sea level change from the <Link href='https://www.ipcc.ch/assessment-report/ar6/' target='_blank'>IPCC AR6</Link> report under a medium confidence fossil-fueled development pathway (SSP5-8.5) scenario.
+                    The layer represents the median model projections from 2020 to 2050, relative to a <Link href='https://podaac.jpl.nasa.gov/announcements/2021-08-09-Sea-level-projections-from-the-IPCC-6th-Assessment-Report' target='_blank'>1995-2014 baseline period</Link>.
                 </Box>
                 <Box sx={sx.data_source}>
-                    The base data is from <Link href="https://sealevel.nasa.gov/data_tools/17" target="_blank">NASA Sea Level Change</Link>{' '}
-                    with the vertical land movement data replaced with data from <Link href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355" target="_blank">Hammond et al. (2021)</Link>.
+                    The base data is from <Link href='https://sealevel.nasa.gov/data_tools/17' target='_blank'>NASA Sea Level Change</Link>{' '}
+                    with the vertical land movement data replaced with data from <Link href='https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355' target='_blank'>Hammond et al. (2021)</Link>.
                 </Box>
             </Box>,
         tavg:
@@ -260,7 +322,7 @@ const useStore = create((set, get) => ({
                     Average annual temperature.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         tc_rp:
@@ -271,7 +333,7 @@ const useStore = create((set, get) => ({
                 </Box>
                 <Box sx={sx.data_source}>
                     The data presented here was generated using the open-source STORM model and our Coastal Risk Framework.
-                    For a more detailed discussion on how this data layer was created, please see our <Link href="https://woodwellrisk.github.io/risks/tropical-cyclones/" target="_blank">methodology website.</Link>
+                    For a more detailed discussion on how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/tropical-cyclones/' target='_blank'>methodology website.</Link>
                 </Box>
             </Box>,
         warm_nights:
@@ -281,7 +343,7 @@ const useStore = create((set, get) => ({
                     Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
         wdd:
@@ -291,7 +353,7 @@ const useStore = create((set, get) => ({
                     Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. FWI is based on meteorological variables only.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href="https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6" target="_blank">NEX-GDDP-CMIP6</Link> dataset.
+                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
                 </Box>
             </Box>,
     },
@@ -300,24 +362,20 @@ const useStore = create((set, get) => ({
         return riskDescriptions[variable]
     },
 
-    riskThemeColors: {
-        cdd: 'red',
-        drought: 'red',
-        hdd: 'blue',
-        hot_days: 'red',
-        lethal_heat: 'red',
-        precip: 'blue',
-        slr: 'blue',
-        tavg: 'red',
-        tc_rp: 'gray',
-        warm_nights: 'red',
-        wdd: 'orange',
-    },
-
     riskOptions: {
         cdd: {            
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             labels: { 'cdd': 'Warming level' },
+        },
+        cf_irr: {   
+            bands: [1981.0, 2021.0, 2041.0, 2081.0],   
+            bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
+            labels: { 'cf_irr': 'Time period' },
+        },
+        cf_rain: {            
+            bands: [1981.0, 2021.0, 2041.0, 2081.0],
+            bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
+            labels: { 'cf_rain': 'Time period' },
         },
         drought: {            
             bands: [1.5, 2.0],
@@ -345,7 +403,7 @@ const useStore = create((set, get) => ({
         },
         tc_rp: {
             bands: [2017.0, 2050.0],
-            bandLabels: { 2017.0: '1980-2017', 2050.0: '2015-2050', },
+            bandLabels: ['1980-2017', '2015-2050',],
             labels: { 'tc_rp': 'Time period'},
         },
         slr: {
@@ -362,18 +420,8 @@ const useStore = create((set, get) => ({
         },
     },
 
-    // riskBands: () => {
-    //     const {riskOptions, variable} = get()
-    //     return riskOptions[variable].bands
-    // },
-    // riskBands: { '1.5': true, '2.0': false, },
     riskBands: [1.5, 2.0],
     setRiskBands: (riskBands) => set({ riskBands }),
-
-    riskColors: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].colors
-    },
 
     riskLabels: () => {
         const {riskOptions, variable} = get()
@@ -382,6 +430,8 @@ const useStore = create((set, get) => ({
 
     defaultLabels: {
         cdd: 'Cooling degree days',
+        cf_irr: 'Probability of yield failure',
+        cf_rain: 'Probability of yield failure',
         drought: 'Probability of extreme drought',
         hdd: 'Heating degree days',
         hot_days: 'Number of days per year',
@@ -400,6 +450,8 @@ const useStore = create((set, get) => ({
 
     defaultUnits: {
         cdd: '',
+        cf_irr: '%',
+        cf_rain: '%',
         drought: '',
         hdd: '',
         hot_days: '',

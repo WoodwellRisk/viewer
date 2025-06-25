@@ -103,9 +103,7 @@ const Router = () => {
         setZoom(savedZoom)
         setCenter(savedCenter)
         setRiskThemes({
-            cdd: savedLayer == 'cdd',
             drought: savedLayer == 'drought',
-            hdd: savedLayer == 'hdd',
             hot_days: savedLayer == 'hot_days',
             lethal_heat: savedLayer == 'lethal_heat',
             precip: savedLayer == 'precip',
@@ -113,7 +111,11 @@ const Router = () => {
             tavg: savedLayer == 'tavg',
             tc_rp: savedLayer == 'tc_rp',
             warm_nights: savedLayer == 'warm_nights',
+            cf_irr: savedLayer == 'cf_irr',
+            cf_rain: savedLayer == 'cf_rain',
             wdd: savedLayer == 'wdd',
+            cdd: savedLayer == 'cdd',
+            hdd: savedLayer == 'hdd',
         })
 
         if (map && savedZoom && savedCenter) {
