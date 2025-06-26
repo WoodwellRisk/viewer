@@ -228,28 +228,27 @@ const useStore = create((set, get) => ({
         cf_irr:
         <Box className='risk-layer-description' sx={sx.data_description}>
             <Box>
-                The probability of at least a 10% yield failure for a given crop.
+                The probability of at least a 10% yield failure for a given crop, clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> irrigated crop extents.
             </Box>
             <Box sx={{mt: [2]}}>
-                Crop failure data was clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> crop extents, 
-                meaning that the future risk to irrigated crops takes into account changing climate conditions, but not modeled land- and water-use decisions.
+                Future risk to irrigated crops takes into account changing climate conditions without constraints on crop water availability. 
+                Any socioeconomic forcing or adaptation efforts are held constant at 2015 levels.
             </Box>
             <Box sx={sx.data_source}>
-                Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> based on <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> output. 
+                Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> GGCMI Phase 3 based on CMIP6. 
                 To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/agriculture/' target='_blank'>methodology website.</Link>
             </Box>
         </Box>,
         cf_rain:
         <Box className='risk-layer-description' sx={sx.data_description}>
             <Box>
-                The probability of at least a 10% yield failure for a given crop.
+                The probability of at least a 10% yield failure for a given crop, clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> rainfed crop extents.
             </Box>
             <Box sx={{mt: [2]}}>
-            Crop failure data was clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> crop extents, 
-                meaning that the future risk to rainfed crops takes into account changing climate conditions, but not modeled land- and water-use decisions.
+                Future risk to rainfed crops takes into account changing climate conditions. Any socioeconomic forcing or adaptation efforts are held constant at 2015 levels.
             </Box>
             <Box sx={sx.data_source}>
-                Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> based on <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> output. 
+                Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> GGCMI Phase 3 based on CMIP6. 
                 To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/agriculture/' target='_blank'>methodology website.</Link>
             </Box>
         </Box>,
