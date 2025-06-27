@@ -153,7 +153,7 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Days over 90°F',
         lethal_heat: 'Lethal heat',
-        permafrost: 'Likelihood of permafrost',
+        permafrost: 'Permafrost loss',
         precip: 'Annual precipitation',
         slr: 'Sea level rise',
         tavg: 'Annual temperature',
@@ -305,10 +305,12 @@ const useStore = create((set, get) => ({
         permafrost:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    The likelihood of permafrost extent.
+                    The likelihood of permafrost extent. Permafrost is considered to be present if the active layer thickness, or the depth of the soil layer that thaws seasonally in the summer, is less than 3 meters.
                 </Box>
                 <Box sx={sx.data_source}>
                     Base data from CMIP6 climate model output.
+                </Box>
+                <Box sx={sx.data_source}>
                     To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/permafrost/' target='_blank'>methodology website.</Link>
                 </Box>
             </Box>,
@@ -456,7 +458,7 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Number of days per year',
         lethal_heat: '°C',
-        precip: 'Likelihood',
+        permafrost: 'Likelihood',
         precip: 'Precipitation',
         tavg: 'Temperature',
         tc_rp: 'Return period of Category 3+ storm',
