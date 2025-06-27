@@ -172,6 +172,7 @@ const Layers = () => {
                   onMouseUp={handleMouseUp}
                   min={0}
                   max={
+                    variable == 'permafrost' ? 7 :
                     variable == 'lethal_heat' ? 6 :
                       variable.startsWith('cf') ? 3 :
                         (variable == 'drought' || variable.startsWith('tc') || variable == 'warm_nights' || variable == 'wdd') ? 1 :

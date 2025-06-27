@@ -35,7 +35,7 @@ const useStore = create((set, get) => ({
     // general / raster state variables
     variables: [
         'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
-        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
+        'permafrost', 'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
     ],
     variable: 'drought',
     setVariable: (variable) => set({ variable }),
@@ -64,6 +64,7 @@ const useStore = create((set, get) => ({
         hdd: 'cool', // could keep this cool if we wanted to match cdd
         hot_days: 'fire',
         lethal_heat: 'fire',
+        permafrost: 'cool',
         precip: 'water',
         tavg: 'redteal',
         tc_rp: 'fire', // water also looks good
@@ -84,6 +85,7 @@ const useStore = create((set, get) => ({
         drought: { min: 0.0, max: 0.5 },
         hot_days: { min: 0.0, max: 365.0 },
         lethal_heat: { min: 1.0, max: 4.0 },
+        permafrost: { min: 0.0, max: 100.0 },
         precip: { min: 0, max: 2500 },
         tavg: { min: -30, max: 30 },
         tc_rp: { min: 0.0, max: 100 },
@@ -151,6 +153,7 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Days over 90°F',
         lethal_heat: 'Lethal heat',
+        permafrost: 'Likelihood of permafrost',
         precip: 'Annual precipitation',
         slr: 'Sea level rise',
         tavg: 'Annual temperature',
@@ -166,20 +169,21 @@ const useStore = create((set, get) => ({
     riskThemes: {
         drought: true,
         hot_days: false,
-        lethal_heat: false,
-        precip: false,
-        slr: false,
-        tavg: false,
-        tc_rp: false,
         warm_nights: false,
+        lethal_heat: false,
+        tc_rp: false,
+        permafrost: false,
         cf_irr: false,
         cf_rain: false,
         wdd: false,
+        slr: false,
+        tavg: false,
+        precip: false,
         cdd: false,
         hdd: false,
-
     },
     setRiskThemes: (riskThemes) => set({ riskThemes }),
+
     riskThemeLabels: {
         cdd: 'Cooling degree days',
         cf_irr: 'Irrigated crops',
@@ -188,6 +192,7 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Hot days',
         lethal_heat: 'Lethal heat',
+        permafrost: 'Permafrost',
         precip: 'Precipitation',
         slr: 'Sea level rise',
         tavg: 'Temperature', 
@@ -195,6 +200,7 @@ const useStore = create((set, get) => ({
         warm_nights: 'Warm nights',
         wdd: 'Widlfires'
     },
+
     riskThemeLookup: {
         'Cooling degree days': 'cdd',
         'Irrigated crops': 'cf_irr',
@@ -203,6 +209,7 @@ const useStore = create((set, get) => ({
         'Heating degree days': 'hdd',
         'Hot days': 'hot_days',
         'Lethal heat': 'lethal_heat',
+        'Permafrost': 'permafrost',
         'Precipitation': 'precip',
         'Sea level rise': 'slr',
         'Temperature': 'tavg', 
@@ -222,7 +229,7 @@ const useStore = create((set, get) => ({
                 We used a uniform base temperature of 65°F to compare cooling degree days across locations.
             </Box>
             <Box sx={sx.data_source}>
-                Base data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
             </Box>
         </Box>,
         cf_irr:
@@ -259,7 +266,7 @@ const useStore = create((set, get) => ({
                     Hyper-arid regions are masked as drought cannot occur under permanently dry conditions. Drought is defined as a temporary negative anomaly in local water balance conditions.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
         hdd:
@@ -272,7 +279,7 @@ const useStore = create((set, get) => ({
                     We used a uniform base temperature of 65°F to compare heating degree days across locations.
                 </Box>
                 <Box sx={sx.data_source}>
-                    Base data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
         hot_days:
@@ -281,7 +288,7 @@ const useStore = create((set, get) => ({
                     The number of days in a year with a daily maximum temperature over 90°F.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
         lethal_heat:
@@ -295,13 +302,23 @@ const useStore = create((set, get) => ({
                     To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/heat/#lethal-heat-' target='_blank'>methodology website.</Link>
                 </Box>
             </Box>,
+        permafrost:
+            <Box className='risk-layer-description' sx={sx.data_description}>
+                <Box>
+                    The likelihood of permafrost extent.
+                </Box>
+                <Box sx={sx.data_source}>
+                    Base data from CMIP6 climate model output.
+                    To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/permafrost/' target='_blank'>methodology website.</Link>
+                </Box>
+            </Box>,
         precip:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
                     Average annual precipitation.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
         slr:
@@ -321,7 +338,7 @@ const useStore = create((set, get) => ({
                     Average annual temperature.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
         tc_rp:
@@ -342,7 +359,7 @@ const useStore = create((set, get) => ({
                     Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
         wdd:
@@ -352,7 +369,7 @@ const useStore = create((set, get) => ({
                     Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. FWI is based on meteorological variables only.
                 </Box>
                 <Box sx={sx.data_source}>
-                    This data layer was created using input data from the <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link> dataset.
+                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
     },
@@ -391,6 +408,10 @@ const useStore = create((set, get) => ({
         lethal_heat: {
             bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
             labels: { 'lethal_heat': 'Warming level of emergence', },
+        },
+        permafrost: {
+            bands: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
+            labels: { 'permafrost': 'Warming level' },
         },
         precip: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
@@ -435,6 +456,7 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Number of days per year',
         lethal_heat: '°C',
+        precip: 'Likelihood',
         precip: 'Precipitation',
         tavg: 'Temperature',
         tc_rp: 'Return period of Category 3+ storm',
@@ -455,6 +477,7 @@ const useStore = create((set, get) => ({
         hdd: '',
         hot_days: '',
         lethal_heat: '',
+        permafrost: '%',
         precip: '(mm)',
         tavg: '(°C)',
         tc_rp: '(years)',
