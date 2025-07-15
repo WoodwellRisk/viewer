@@ -112,6 +112,8 @@ const Router = () => {
             cf_irr: savedLayer == 'cf_irr',
             cf_rain: savedLayer == 'cf_rain',
             wdd: savedLayer == 'wdd',
+            // pm25: savedLayer == 'pm25',
+            // lsp: savedLayer == 'lsp',
             slr: savedLayer == 'slr',
             tavg: savedLayer == 'tavg',
             precip: savedLayer == 'precip',

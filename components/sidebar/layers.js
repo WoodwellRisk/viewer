@@ -175,6 +175,7 @@ const Layers = () => {
                     variable == 'permafrost' ? 7 :
                     variable == 'lethal_heat' ? 6 :
                       variable.startsWith('cf') ? 3 :
+                        variable == 'lsp' || variable.startsWith('pm') ? 2 :
                         (variable == 'drought' || variable.startsWith('tc') || variable == 'warm_nights' || variable == 'wdd') ? 1 :
                           4
                   }
@@ -190,7 +191,11 @@ const Layers = () => {
                     top: [-1],
                   }}
                 >
-                  {(variable.startsWith('tc') || variable.startsWith('cf')) ? riskOptions[variable].bandLabels[bandIndex] : riskOptions[variable].bands[bandIndex].toFixed(1)}
+                  { 
+                    (variable.startsWith('tc') || variable.startsWith('cf')) ? riskOptions[variable].bandLabels[bandIndex] :
+                    (variable == 'lsp' || variable == 'pm25') ? riskOptions[variable].bands[bandIndex].toFixed(0) : 
+                    riskOptions[variable].bands[bandIndex].toFixed(1) 
+                  }
                 </Badge>
               </Box>
             )}

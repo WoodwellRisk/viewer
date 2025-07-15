@@ -32,7 +32,9 @@ const StatsDisplay = ({ data, variable }) => {
       result = `Average: ${average.toFixed(2)} meters`
     } else if (variable.startsWith('tc')) {
       result = `Average: ${average.toFixed(2)} years`
-    } else { // else drought or crop failure data
+    } else if ((variable.startsWith('pm'))) {
+      result = `Average: ${average.toFixed(2)} 	μg / m^3`
+    } else { // else drought, lost solar potential, or crop failure data
       result = `Average: ${average.toFixed(2)}%`
     }
   }
@@ -43,7 +45,7 @@ const StatsDisplay = ({ data, variable }) => {
         sx={{
           fontFamily: 'mono',
           letterSpacing: 'mono',
-          textTransform: 'uppercase',
+          // textTransform: 'uppercase',
         }}
       >
         {result}

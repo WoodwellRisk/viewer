@@ -35,7 +35,7 @@ const useStore = create((set, get) => ({
     // general / raster state variables
     variables: [
         'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
-        'permafrost', 'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
+        'lsp', 'permafrost', 'pm25', 'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
     ],
     variable: 'drought',
     setVariable: (variable) => set({ variable }),
@@ -64,7 +64,9 @@ const useStore = create((set, get) => ({
         hdd: 'cool', // could keep this cool if we wanted to match cdd
         hot_days: 'fire',
         lethal_heat: 'fire',
+        lsp: 'cool',
         permafrost: 'cool',
+        pm25: 'cool',
         precip: 'water',
         tavg: 'redteal',
         tc_rp: 'fire', // water also looks good
@@ -85,7 +87,9 @@ const useStore = create((set, get) => ({
         drought: { min: 0.0, max: 0.5 },
         hot_days: { min: 0.0, max: 365.0 },
         lethal_heat: { min: 1.0, max: 4.0 },
+        lsp: { min: 0.0, max: 10.0 },
         permafrost: { min: 0.0, max: 100.0 },
+        pm25: { min: 0.0, max: 25.0 },
         precip: { min: 0, max: 2500 },
         tavg: { min: -30, max: 30 },
         tc_rp: { min: 0.0, max: 100 },
@@ -153,7 +157,9 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Days over 90°F',
         lethal_heat: 'Lethal heat',
+        lsp: 'Lost solar potential',
         permafrost: 'Permafrost loss',
+        pm25: 'PM2.5 concentration',
         precip: 'Annual precipitation',
         slr: 'Sea level rise',
         tavg: 'Annual temperature',
@@ -176,6 +182,8 @@ const useStore = create((set, get) => ({
         cf_irr: false,
         cf_rain: false,
         wdd: false,
+        pm25: false,
+        lsp: false,
         slr: false,
         tavg: false,
         precip: false,
@@ -192,7 +200,9 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Hot days',
         lethal_heat: 'Lethal heat',
+        lsp: 'Lost solar potential',
         permafrost: 'Permafrost',
+        pm25: 'PM2.5',
         precip: 'Precipitation',
         slr: 'Sea level rise',
         tavg: 'Temperature', 
@@ -209,7 +219,9 @@ const useStore = create((set, get) => ({
         'Heating degree days': 'hdd',
         'Hot days': 'hot_days',
         'Lethal heat': 'lethal_heat',
+        'Lost solar potential': 'lsp',
         'Permafrost': 'permafrost',
+        'PM2.5': 'pm25',
         'Precipitation': 'precip',
         'Sea level rise': 'slr',
         'Temperature': 'tavg', 
@@ -302,6 +314,15 @@ const useStore = create((set, get) => ({
                     To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/heat/#lethal-heat-' target='_blank'>methodology website.</Link>
                 </Box>
             </Box>,
+        // lsp:
+        //     <Box className='risk-layer-description' sx={sx.data_description}>
+        //         <Box>
+        //             Lost solar potential
+        //         </Box>
+        //         <Box sx={sx.data_source}>
+        //             ...
+        //         </Box>
+        //     </Box>,
         permafrost:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
@@ -314,6 +335,15 @@ const useStore = create((set, get) => ({
                     To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/permafrost/' target='_blank'>methodology website.</Link>
                 </Box>
             </Box>,
+        // pm25:
+        //     <Box className='risk-layer-description' sx={sx.data_description}>
+        //         <Box>
+        //             PM2.5
+        //         </Box>
+        //         <Box sx={sx.data_source}>
+        //             ...
+        //         </Box>
+        //     </Box>,
         precip:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
@@ -411,9 +441,17 @@ const useStore = create((set, get) => ({
             bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
             labels: { 'lethal_heat': 'Warming level of emergence', },
         },
+        lsp: {
+            bands: [2000.0, 2050.0, 2100.0],
+            labels: { 'lsp': 'Time period', },
+        },
         permafrost: {
             bands: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
             labels: { 'permafrost': 'Warming level' },
+        },
+        pm25: {
+            bands: [2000.0, 2050.0, 2100.0],
+            labels: { 'pm25': 'Time period', },
         },
         precip: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
@@ -458,7 +496,9 @@ const useStore = create((set, get) => ({
         hdd: 'Heating degree days',
         hot_days: 'Number of days per year',
         lethal_heat: '°C',
+        lsp: '',
         permafrost: 'Likelihood',
+        pm25: 'Concentration',
         precip: 'Precipitation',
         tavg: 'Temperature',
         tc_rp: 'Return period of Category 3+ storm',
@@ -479,7 +519,9 @@ const useStore = create((set, get) => ({
         hdd: '',
         hot_days: '',
         lethal_heat: '',
+        // lsp: '%',
         permafrost: '%',
+        // pm25: '(μg / m^3)',
         precip: '(mm)',
         tavg: '(°C)',
         tc_rp: '(years)',
