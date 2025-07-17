@@ -117,6 +117,9 @@ const useStore = create((set, get) => ({
     showOceanMask: true,
     setShowOceanMask: (showOceanMask) => set({ showOceanMask }),
 
+    showJustAccess: false,
+    setShowJustAccess: (showJustAccess) => set({ showJustAccess }),
+
     showLakes: false,
     setShowLakes: (showLakes) => set({ showLakes }),
 

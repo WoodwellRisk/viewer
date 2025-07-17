@@ -42,6 +42,7 @@ const Map = ({ mobile }) => {
   const showRegionPicker = useStore((state) => state.showRegionPicker)
   const showLandOutline = useStore((state) => state.showLandOutline)
   const showOceanMask = useStore((state) => state.showOceanMask)
+  const showJustAccess = useStore((state) => state.showJustAccess)
   const showLakes = useStore((state) => state.showLakes)
   const showCountriesOutline = useStore((state) => state.showCountriesOutline)
   const showRegionsOutline = useStore((state) => state.showRegionsOutline)
@@ -79,7 +80,6 @@ const Map = ({ mobile }) => {
 
         {variable == 'slr' && (
           <>
-
             <Fill
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector/land'}
@@ -211,6 +211,15 @@ const Map = ({ mobile }) => {
             width={1}
           />
         )}
+
+        {/* {showJustAccess && (
+          <Line
+            color={theme.rawColors.secondary}
+            source={'https://storage.googleapis.com/risk-maps/vector/justAccess'}
+            variable={'justAccess'}
+            width={1}
+          />
+        )} */}
 
         {!mobile && (<Ruler />)}
 

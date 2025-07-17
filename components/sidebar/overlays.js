@@ -7,6 +7,8 @@ const Overlays = () => {
     const { theme } = useThemeUI()
 
     const zoom = useStore((state) => state.zoom)
+    const showJustAccess = useStore((state) => state.showJustAccess)
+    const setShowJustAccess = useStore((state) => state.setShowJustAccess)
     const showStatesZoom = useStore((state) => state.showStatesZoom)
     const showLakes = useStore((state) => state.showLakes)
     const setShowLakes = useStore((state) => state.setShowLakes)
@@ -51,6 +53,15 @@ const Overlays = () => {
 
     return (
         <Box sx={sx['overlays-container']}>
+            {/* <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                <Box sx={sx.label}>Just Access</Box>
+                <Toggle
+                    sx={sx['toggle']}
+                    value={showJustAccess}
+                    onClick={() => setShowJustAccess(!showJustAccess)}
+                />
+            </Flex> */}
+            
             <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                 <Box sx={sx.label}>Countries</Box>
                 <Toggle
