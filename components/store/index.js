@@ -114,6 +114,9 @@ const useStore = create((set, get) => ({
     showRegionPicker: false,
     setShowRegionPicker: (showRegionPicker) => set({ showRegionPicker }),
 
+    chartTypes: {Bar: true, Timeseries: false},
+    setChartTypes: (chartTypes) => set({ chartTypes }),
+
     showOceanMask: true,
     setShowOceanMask: (showOceanMask) => set({ showOceanMask }),
 

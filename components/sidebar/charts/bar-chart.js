@@ -1,12 +1,18 @@
 import { Box } from 'theme-ui'
 import { AxisLabel, Chart, Grid, Plot, Ticks, TickLabels } from '@carbonplan/charts'
-import Bar from './bar'
 
-import useStore from '../../store/index'
+import Bar from './bar'
+import DownloadBarData from './download-bar-data'
+
 import * as d3 from 'd3'
 
-const BarChart = ({ data, variable }) => {
+import useStore from '../../store/index'
+
+
+const BarChart = () => {
     const climRanges = useStore((state) => state.climRanges)
+    const variable = useStore((state) => state.variable)
+    const regionData = useStore((state) => state.regionData)
 
     const sx = {
         chart: {
@@ -14,6 +20,12 @@ const BarChart = ({ data, variable }) => {
             mx: 'auto',
             width: '100%',
             height: '200px',
+        },
+        'data-download': {
+            ml: [0],
+            mb: [2],
+            pl: [0],
+            mt: ['-1px'],
         }
     }
 
@@ -21,12 +33,12 @@ const BarChart = ({ data, variable }) => {
     const max = climRanges[variable].max
     const variableRange = [min, max]
 
-    if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+    if (!regionData.value || !regionData.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
         return
     }
 
-    let lat = data.value.coordinates.lat;
-    let lon = data.value.coordinates.lon;
+    let lat = regionData.value.coordinates.lat;
+    let lon = regionData.value.coordinates.lon;
     let graphData = []
     let graphLat = []
     let graphLon = []
@@ -35,7 +47,7 @@ const BarChart = ({ data, variable }) => {
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
     // i solved this by setting values above and below the colormap values to the min / max of climRanges.
     // https://stackoverflow.com/questions/22311544/get-indices-indexes-of-all-occurrences-of-an-element-in-an-array
-    data.value[variable].forEach(function (element, idx) {
+    regionData.value[variable].forEach(function (element, idx) {
         if (element !== 9.969209968386869e36) {
             if (element > max) {
                 graphData.push(max);
@@ -87,12 +99,13 @@ const BarChart = ({ data, variable }) => {
     // https://stackoverflow.com/questions/22015684/zip-arrays-in-javascript
     const zip = (x, y) => Array.from(Array(x.length), (_, i) => [x[i], y[i]]);
     let plotData = zip(binEdges, percentages);
-    const xMin = (variable == "tavg") ? -35 : min - binWidth;
-    const xMax = (variable == "tavg") ? 35 : max + binWidth;
+    const xMin = (variable == 'tavg') ? -35 : min - binWidth;
+    const xMax = (variable == 'tavg') ? 35 : max + binWidth;
 
     return (
         <>
             <Box sx={{ ...sx.chart }} className='chart-container'>
+                
                 <Chart x={[xMin, xMax]} y={[0, 100]} padding={{ left: 50, top: 0 }} >
                     <Grid vertical horizontal />
                     <Ticks left bottom />
@@ -106,6 +119,11 @@ const BarChart = ({ data, variable }) => {
                         />
                     </Plot>
                 </Chart>
+
+                {/* <Box sx={sx['data-download']}>
+                    Download data: <DownloadBarData data={plotData} fileType={'CSV'} /> / <DownloadBarData data={plotData} fileType={'JSON'} />
+                </Box> */}
+
             </Box>
         </>
     )

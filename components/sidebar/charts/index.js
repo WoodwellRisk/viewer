@@ -1,9 +1,13 @@
 import { Box } from 'theme-ui'
+import { Filter } from '@carbonplan/components'
 import BarChart from './bar-chart'
 
 import useStore from '../../store/index'
 
-const StatsDisplay = ({ data, variable }) => {
+const StatsDisplay = ({ data }) => {
+  const variable = useStore((state) => state.variable)
+  const chartTypes = useStore((state) => state.chartTypes)
+  const setChartTypes = useStore((state) => state.setChartTypes)
 
   if (!data.value || !data.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
     return
@@ -41,6 +45,17 @@ const StatsDisplay = ({ data, variable }) => {
 
   return (
     <>
+
+      {/* <Box sx={{
+        mb: [4],
+      }}>
+        <Filter
+          values={chartTypes}
+          setValues={setChartTypes}
+          multiSelect={false}
+        />
+      </Box> */}
+
       <Box
         sx={{
           fontFamily: 'mono',
@@ -51,20 +66,19 @@ const StatsDisplay = ({ data, variable }) => {
         {result}
       </Box>
 
-      <BarChart data={data} variable={variable} />
+      <BarChart />
     </>
   )
 }
 
 const Charts = () => {
-  const variable = useStore((state) => state.variable)
   const regionData = useStore((state) => state.regionData)
   const showRegionPicker = useStore((state) => state.showRegionPicker)
 
   return (
     <Box>
       {showRegionPicker && regionData?.value && (
-        <StatsDisplay data={regionData} variable={variable} />
+        <StatsDisplay data={regionData} />
       )}
     </Box>
   )
