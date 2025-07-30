@@ -6,6 +6,7 @@ import { Dimmer } from '@carbonplan/components'
 
 import Point from './point'
 import FilterLayer from './filter-layer'
+import JustAccess from './justAccess'
 import Search from './search/index'
 import ZoomReset from './zoom-reset'
 import Ruler from './ruler'
@@ -66,7 +67,7 @@ const Map = ({ mobile }) => {
               variable={'ocean'}
             />
 
-            <Point
+            {/* <Point
               id={'cities'}
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector/cities'}
@@ -74,11 +75,11 @@ const Map = ({ mobile }) => {
               label={true}
               labelText={'name'}
               minZoom={6}
-            />
+            /> */}
           </>
         )}
 
-        {variable == 'slr' && (
+        {(variable == 'slr' || variable.startsWith('tc')) && (
           <>
             <Fill
               color={theme.rawColors.background}
@@ -87,7 +88,7 @@ const Map = ({ mobile }) => {
               zIndex={-1}
             />
 
-            <Point
+            {/* <Point
               id={'cities'}
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector/cities'}
@@ -95,7 +96,7 @@ const Map = ({ mobile }) => {
               label={true}
               labelText={'name'}
               minZoom={6}
-            />
+            /> */}
           </>
         )}
 
@@ -155,18 +156,6 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {variable != 'slr' && (
-          <Point
-            id={'cities'}
-            color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector/cities'}
-            variable={'cities'}
-            label={true}
-            labelText={'name'}
-            minZoom={6}
-          />
-        )}
-
         {place != null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
           <FilterLayer
             key={`filter-layer-${place})}`}
@@ -212,14 +201,9 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {/* {showJustAccess && (
-          <Line
-            color={theme.rawColors.secondary}
-            source={'https://storage.googleapis.com/risk-maps/vector/justAccess'}
-            variable={'justAccess'}
-            width={1}
-          />
-        )} */}
+        {showJustAccess && (
+          <JustAccess theme={theme} />
+        )}
 
         {!mobile && (<Ruler />)}
 

@@ -18,8 +18,8 @@ const StatsDisplay = ({ data }) => {
   if (filteredData.length === 0) {
     result = 'no data in region'
   } else {
-    const average =
-      filteredData.reduce((a, b) => a + b, 0) / filteredData.length
+    const average = filteredData.reduce((a, b) => a + b, 0) / filteredData.length
+
     if (variable.startsWith('precip')) {
       result = `Average: ${average.toFixed(2)} mm`
     } else if (variable.startsWith('tavg') || variable == 'lethal_heat') {

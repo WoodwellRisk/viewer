@@ -171,14 +171,7 @@ const Layers = () => {
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}
                   min={0}
-                  max={
-                    variable == 'permafrost' ? 7 :
-                    variable == 'lethal_heat' ? 6 :
-                      variable.startsWith('cf') ? 3 :
-                        variable == 'lsp' || variable.startsWith('pm') ? 2 :
-                        (variable == 'drought' || variable.startsWith('tc') || variable == 'warm_nights' || variable == 'wdd') ? 1 :
-                          4
-                  }
+                  max={riskOptions[variable].bands.length - 1}
                   step={1}
                 />
                 <Badge

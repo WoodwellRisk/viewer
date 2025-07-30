@@ -84,7 +84,7 @@ const useStore = create((set, get) => ({
         cf_irr: { min: 0.0, max: 100 },
         cf_rain: { min: 0.0, max: 100 },
         hdd: { min: 0.0, max: 15000 },
-        drought: { min: 0.0, max: 0.5 },
+        drought: { min: 0.0, max: 75.0 },
         hot_days: { min: 0.0, max: 365.0 },
         lethal_heat: { min: 1.0, max: 4.0 },
         lsp: { min: 0.0, max: 10.0 },
@@ -94,7 +94,7 @@ const useStore = create((set, get) => ({
         tavg: { min: -30, max: 30 },
         tc_rp: { min: 0.0, max: 100 },
         slr: { min: -0.5, max: 0.5 },
-        wdd: { min: 0.0, max: 50.0 }, // true max 70 days
+        wdd: { min: 0.0, max: 75.0 },
         warm_nights: { min: 0.0, max: 365.0 },
     },
     clim: () => {
@@ -403,8 +403,9 @@ const useStore = create((set, get) => ({
         wdd:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    Wildfire danger days. The number of days in a year at or more extreme than the worst 5% of days of fire weather index (FWI) in the base period of 1°C of climate warming (2000-2020).
-                    Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. FWI is based on meteorological variables only.
+                    Wildfire danger days. The number of days in a year at or more extreme than the worst 5% of days of fire weather index (FWI) in the base period of 1°C of climate warming (2000-2020). 
+                    Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. 
+                    FWI is based on meteorological variables only.
                 </Box>
                 <Box sx={sx.data_source}>
                     Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
@@ -432,7 +433,7 @@ const useStore = create((set, get) => ({
             labels: { 'cf_rain': 'Time period' },
         },
         drought: {            
-            bands: [1.5, 2.0],
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5],
             labels: { 'drought': 'Warming level' },
         },
         hdd: {            
@@ -481,7 +482,7 @@ const useStore = create((set, get) => ({
             labels: { 'warm_nights': 'Warming level' },
         },
         wdd: {
-            bands: [1.5, 2.0],
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5],
             labels: { 'wdd': 'Warming level' },
         },
     },

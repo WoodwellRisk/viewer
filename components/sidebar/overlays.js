@@ -53,14 +53,14 @@ const Overlays = () => {
 
     return (
         <Box sx={sx['overlays-container']}>
-            {/* <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                 <Box sx={sx.label}>Just Access</Box>
                 <Toggle
                     sx={sx['toggle']}
                     value={showJustAccess}
                     onClick={() => setShowJustAccess(!showJustAccess)}
                 />
-            </Flex> */}
+            </Flex>
             
             <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                 <Box sx={sx.label}>Countries</Box>

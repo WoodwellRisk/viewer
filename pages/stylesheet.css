@@ -16,3 +16,55 @@
     /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
     src: url('../assets/GintoNormal-Bold.ttf');
 }
+
+.mapboxgl-map {
+    font-family: 'ginto-normal';
+}
+
+.mapboxgl-popup {
+    border: 1px solid #1b1e23;
+    /* width: 100%;
+    max-width: 450px; */
+    height: auto;
+    max-height: 450px;
+}
+
+.mapboxgl-popup-tip {
+    display: none;
+}
+
+.mapboxgl-popup-close-button {
+    color: #1b1e23;
+}
+
+.mapboxgl-popup-content {
+    color: #1b1e23;
+    font-family: 'ginto-normal';
+    font-size: 0.9rem;
+    box-shadow: none;
+    padding: 0.9375rem;
+}
+
+.mapboxgl-popup-content > p {
+    font-weight: bold;
+    padding: 0rem;
+    margin: 0rem;
+}
+
+.mapboxgl-popup-content > a {
+    display: inline-block;
+    color: #1b1e23;
+    text-decoration: underline;
+    margin-top: 0.25rem;
+}
+
+iframe {
+    border: 1px solid #1b1e23;
+    width: 100%;
+    max-width: 500px;
+    overflow-x: none;
+}
+
+/* .header.sticky-header-white, .header.header-white, .header.is-sticky.sticky-show {
+    display: none;
+} */
