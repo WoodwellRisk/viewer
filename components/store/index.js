@@ -170,7 +170,7 @@ const useStore = create((set, get) => ({
         slr: 'Sea level rise',
         tavg: 'Annual temperature',
         tc_rp: 'Tropical cyclone risk',
-        warm_nights: 'Nights over 20°C',
+        warm_nights: 'Nights over 70°F',
         wdd: 'Widlfire danger days',
     },
     riskTitle: () => {
@@ -303,7 +303,7 @@ const useStore = create((set, get) => ({
         hot_days:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    The number of days in a year with a daily maximum temperature over 90°F.
+                    The number of days in a year with a daily maximum temperature over 90°F (~32.2°C).
                 </Box>
                 <Box sx={sx.data_source}>
                     Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
@@ -393,7 +393,7 @@ const useStore = create((set, get) => ({
         warm_nights:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    Heat stress. The number of days in a year with nightly minimum temperatures over 20°C. 
+                    Heat stress. The number of days in a year with nightly minimum temperatures over 70°F (~21.1°C). 
                     Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
                 </Box>
                 <Box sx={sx.data_source}>
@@ -478,7 +478,7 @@ const useStore = create((set, get) => ({
             labels: { 'slr': 'Depth value by 2050', },
         },
         warm_nights: {
-            bands: [1.5, 2.0],
+            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             labels: { 'warm_nights': 'Warming level' },
         },
         wdd: {
