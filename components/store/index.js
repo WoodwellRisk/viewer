@@ -333,6 +333,7 @@ const useStore = create((set, get) => ({
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
                     The likelihood of permafrost extent. Permafrost is considered to be present if the active layer thickness, or the depth of the soil layer that thaws seasonally in the summer, is less than 3 meters.
+                    Glaciated areas are masked. In general, it is hard to monitor permafrost under glaciers and ice sheets and not much is known about permafrost in Antarctica.
                 </Box>
                 <Box sx={sx.data_source}>
                     Base data from CMIP6 climate model output.
@@ -512,7 +513,7 @@ const useStore = create((set, get) => ({
         const {riskOptions, variable} = get()
         return riskOptions[variable].colormapName
     },
-    
+
     clim: () => {
         const {riskOptions, variable} = get()
         return [riskOptions[variable].clim.min, riskOptions[variable].clim.max]

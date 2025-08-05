@@ -50,7 +50,7 @@ const Timeseries = ({ data }) => {
     return (
         <>
             <Box sx={{ ...sx.chart }} className='chart-container'>
-                {(variable == 'slr' || variable == 'lethal_heat') && (
+                {(variable == 'lethal_heat' || variable == 'slr' || variable == 'permafrost') && (
                     <Box sx={sx.chartWarning}>
                         <Box>
                             This type of chart is not available for the {riskTagLabels[variable].toLowerCase()} data.
@@ -58,7 +58,7 @@ const Timeseries = ({ data }) => {
                     </Box>
                 )}
 
-                {(variable != 'slr' && variable != 'lethal_heat') && (
+                {(variable != 'lethal_heat' && variable != 'slr' && variable != 'permafrost') && (
                     <Chart x={ [bands[0], bands.slice(-1)] } y={ clim } padding={{ left: 60, top: 20 }}>
                         <Ticks left bottom />
                         {
