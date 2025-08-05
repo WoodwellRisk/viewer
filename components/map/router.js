@@ -14,7 +14,7 @@ const Router = () => {
     const setVariable = useStore((state) => state.setVariable)
     const variables = useStore((state) => state.variables)
 
-    const setRiskThemes = useStore((state) => state.setRiskThemes)
+    const setRisks = useStore((state) => state.setRisks)
     const riskOptions = useStore((state) => state.riskOptions)
     const setBand = useStore((state) => state.setBand)
     const zoom = useStore((state) => state.zoom)
@@ -47,7 +47,7 @@ const Router = () => {
 
     const getInitialZoom = useCallback((url) => {
         let initialZoom
-        let tempZoom = url.searchParams.get("zoom")
+        let tempZoom = url.searchParams.get('zoom')
 
         if (tempZoom != null && typeof parseFloat(tempZoom) == 'number' && parseFloat(tempZoom) > 0.0) {
             initialZoom = tempZoom
@@ -102,7 +102,7 @@ const Router = () => {
         }
         setZoom(savedZoom)
         setCenter(savedCenter)
-        setRiskThemes({
+        setRisks({
             drought: savedLayer == 'drought',
             hot_days: savedLayer == 'hot_days',
             warm_nights: savedLayer == 'warm_nights',

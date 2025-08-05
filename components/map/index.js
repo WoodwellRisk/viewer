@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from 'react'
+import { useMemo, useState, useCallback, useRef } from 'react'
 import { useThemeUI, Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
@@ -39,6 +39,7 @@ const Map = ({ mobile }) => {
   const opacity = useStore((state) => state.opacity)
   const display = useStore((state) => state.display)
   const setRegionData = useStore((state) => state.setRegionData)
+  const setRegionDataLoading = useStore((state) => state.setRegionDataLoading)
 
   const showRegionPicker = useStore((state) => state.showRegionPicker)
   const showLandOutline = useStore((state) => state.showLandOutline)
@@ -55,6 +56,19 @@ const Map = ({ mobile }) => {
   const showSearch = useStore((state) => state.showSearch)
   const setShowSearch = useStore((state) => state.setShowSearch)
   const showFilter = useStore((state) => state.showFilter)
+
+  // this callback was modified from its source: https://github.com/carbonplan/oae-web/blob/3eff3fb99a24a024f6f9a8278add9233a31e853b/components/map.js#L93
+  const handleRegionData = useCallback((data) => {
+      // console.log(data)
+      if (data.value == null) {
+        setRegionDataLoading(true)
+      } else if (data.value) {
+        setRegionData(data.value)
+        setRegionDataLoading(false)
+      }
+    },
+    [setRegionData, setRegionDataLoading]
+  )
 
   return (
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
@@ -189,7 +203,7 @@ const Map = ({ mobile }) => {
           colormap={colormap}
           selector={variable.startsWith('cf') ? { crop, band } : { band }}
           mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
-          regionOptions={{ setData: setRegionData }}
+          regionOptions={{ setData: handleRegionData, selector: {} }}
         />
 
         {(variable.startsWith('tc')) && (

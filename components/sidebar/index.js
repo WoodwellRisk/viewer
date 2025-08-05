@@ -70,7 +70,7 @@ const Sidebar = () => {
       mb: [5],
       mx: 'auto',
       width: '100%',
-      height: '225px',
+      height: '300px',
     },
   }
 

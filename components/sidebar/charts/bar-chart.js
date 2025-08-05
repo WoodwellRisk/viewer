@@ -10,8 +10,10 @@ import useStore from '../../store/index'
 
 
 const BarChart = () => {
-    const climRanges = useStore((state) => state.climRanges)
+    const clim = useStore((state) => state.clim)()
     const variable = useStore((state) => state.variable)
+    const band = useStore((state) => state.band)
+    const crop = useStore((state) => state.crop)
     const regionData = useStore((state) => state.regionData)
 
     const sx = {
@@ -19,7 +21,7 @@ const BarChart = () => {
             mt: [4],
             mx: 'auto',
             width: '100%',
-            height: '200px',
+            height: '250px',
         },
         'data-download': {
             ml: [0],
@@ -29,16 +31,18 @@ const BarChart = () => {
         }
     }
 
-    const min = climRanges[variable].min;
-    const max = climRanges[variable].max
+    console.log(clim)
+
+    let min = clim[0]
+    let max = clim[1]
     const variableRange = [min, max]
 
-    if (!regionData.value || !regionData.value[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+    if (!regionData || !regionData[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
         return
     }
 
-    let lat = regionData.value.coordinates.lat;
-    let lon = regionData.value.coordinates.lon;
+    let lat = regionData.coordinates.lat;
+    let lon = regionData.coordinates.lon;
     let graphData = []
     let graphLat = []
     let graphLon = []
@@ -47,7 +51,14 @@ const BarChart = () => {
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
     // i solved this by setting values above and below the colormap values to the min / max of climRanges.
     // https://stackoverflow.com/questions/22311544/get-indices-indexes-of-all-occurrences-of-an-element-in-an-array
-    regionData.value[variable].forEach(function (element, idx) {
+    let data;
+    if(variable.startsWith('cf')) {
+        data = regionData[variable][crop][band];
+    } else {
+        data = regionData[variable][band];
+    }
+
+    data.forEach(function (element, idx) {
         if (element !== 9.969209968386869e36) {
             if (element > max) {
                 graphData.push(max);

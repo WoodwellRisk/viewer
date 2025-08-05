@@ -30,16 +30,16 @@ const Layers = () => {
 
   // state variables for risk themes
   const riskTitle = useStore((state) => state.riskTitle)()
-  const riskThemes = useStore((state) => state.riskThemes)
-  const setRiskThemes = useStore((state) => state.setRiskThemes)
-  const riskThemeLabels = useStore((state) => state.riskThemeLabels)
-  const riskThemeLookup = useStore((state) => state.riskThemeLookup)
+  const risks = useStore((state) => state.risks)
+  const setRisks = useStore((state) => state.setRisks)
+  const riskTagLabels = useStore((state) => state.riskTagLabels)()
+  const riskTagLookup = useStore((state) => state.riskTagLookup)()
 
   // state variables for specific risks
   const riskDescription = useStore((state) => state.riskDescription)()
   const riskOptions = useStore((state) => state.riskOptions)
   const setRiskBands = useStore((state) => state.setRiskBands)
-  const riskLabels = useStore((state) => state.riskLabels)()
+  const bandLabel = useStore((state) => state.bandLabel)()
   const colormapLabel = useStore((state) => state.colormapLabel)()
   const colormapUnits = useStore((state) => state.colormapUnits)()
 
@@ -62,7 +62,7 @@ const Layers = () => {
   }
 
   const handleRiskChange = useCallback((event) => {
-    let risk = riskThemeLookup[event.target.innerHTML];
+    let risk = riskTagLookup[event.target.innerHTML];
     if (variables.includes(risk)) {
       let bands = riskOptions[risk].bands
       let bandIndex
@@ -119,9 +119,9 @@ const Layers = () => {
                 mr: [3],
                 mb: [2],
               }}
-              values={riskThemes}
-              labels={riskThemeLabels}
-              setValues={setRiskThemes}
+              values={risks}
+              labels={riskTagLabels}
+              setValues={setRisks}
               colors={'primary'}
               multiSelect={false}
               onClick={handleRiskChange}
@@ -141,7 +141,7 @@ const Layers = () => {
           <Box className='risk-layers'>
             {variable == 'slr' && (
               <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
-                <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
+                <Box sx={{ ...sx.label, mb: [1] }}>{bandLabel}</Box>
               </Box>
             )}
 
@@ -163,7 +163,7 @@ const Layers = () => {
 
             {variable != 'slr' && (
               <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
-                <Box sx={{ ...sx.label, mb: [1] }}>{riskLabels[variable]}</Box>
+                <Box sx={{ ...sx.label, mb: [1] }}>{bandLabel}</Box>
                 <Slider
                   sx={{ mt: [3], mb: [2], width: (variable.startsWith('tc') || variable.startsWith('cf')) ? '150px' : '175px', display: 'inline-block' }}
                   value={bandIndex}
