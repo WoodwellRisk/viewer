@@ -8,11 +8,14 @@ import * as d3 from 'd3'
 
 import useStore from '../../store/index'
 
-
+// Next step: move towards processing all warming levels / time periods at the same time
+// so that users can download all of the data for the bar chart.
+// https://github.com/WoodwellRisk/drought-monitor/blob/react-v1/components/sidebar/charts/density-plot.js
 const BarChart = () => {
     const clim = useStore((state) => state.clim)()
     const variable = useStore((state) => state.variable)
     const band = useStore((state) => state.band)
+    const chartLabel = useStore((state) => state.chartLabel)()
     const crop = useStore((state) => state.crop)
     const regionData = useStore((state) => state.regionData)
 
@@ -122,7 +125,7 @@ const BarChart = () => {
                     <Ticks left bottom />
                     <TickLabels left bottom />
                     <AxisLabel left >Percent</AxisLabel>
-                    <AxisLabel bottom>Bins</AxisLabel>
+                    <AxisLabel bottom>{chartLabel}</AxisLabel>
                     <Plot>
                         <Bar 
                             data={plotData} 

@@ -412,12 +412,12 @@ const useStore = create((set, get) => ({
             colormapLabel: 'Sea level rise',
             colormapUnits: '(m)',
             statsLabel: 'meters',
-            chartLabel: '',
+            chartLabel: 'meters',
         },
         tavg: {
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
-            riskTagLabel: '',
+            riskTagLabel: 'Temperature',
             riskTitle: 'Annual temperature',
             riskDescription:
             <Box className='risk-layer-description' sx={sx.data_description}>

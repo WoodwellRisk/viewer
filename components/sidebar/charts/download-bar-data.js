@@ -8,6 +8,7 @@ const DownloadBarData = ({ data, fileType }) => {
     const band = useStore((state) => state.band);
     const crop = useStore((state) => state.crop);
     const riskTitle = useStore((state) => state.riskTitle)().toLowerCase();
+    const chartLabel = useStore((state) => state.chartLabel)()
     const regionData = useStore((state) => state.regionData);
     const region = regionData['coordinates'];
     const now = new Date().toGMTString()
@@ -84,17 +85,18 @@ const DownloadBarData = ({ data, fileType }) => {
             csv += `# Latitude max: ${maxLat}\n`;
             csv += `# Longitude min: ${minLon}\n`;
             csv += `# Longitude max: ${maxLon}\n`;
-            csv += 'bin, percent\n'
+            csv += `# Unit: ${chartLabel}\n`
+            csv += `bin, percent\n`
             data.forEach((array) => {
             csv += `${array[0]}, ${array[1]}\n`;
             });
-            // console.log(csv);
+            console.log(csv);
     
             let blob = new Blob([csv], {
             type: "text/csv;charset=utf-8",
             });
     
-            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-bar-${band}.csv`.replaceAll('_', '-'))
+            // saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-bar-${band}.csv`.replaceAll('_', '-'))
         } else {
             console.log('Unsupported file type. Please choose JSON or CSV.')
         }
