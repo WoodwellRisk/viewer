@@ -51,7 +51,8 @@ const StatsDisplay = ({ data }) => {
     <>
 
       <Box sx={{
-        mb: [4],
+        mt: [-2],
+        mb: [3],
       }}>
         <Filter
           values={chartTypes}
@@ -60,15 +61,16 @@ const StatsDisplay = ({ data }) => {
         />
       </Box>
 
-      <Box
+      {/* <Box
         sx={{
+          // mb: [-2],
           fontFamily: 'mono',
           letterSpacing: 'mono',
           // textTransform: 'uppercase',
         }}
       >
         {result}
-      </Box>
+      </Box> */}
 
       {chartTypes['bar'] == true && (<BarChart />)}
       {chartTypes['timeseries'] == true && (<Timeseries data={chartData} />)}

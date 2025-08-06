@@ -26,12 +26,11 @@ const BarChart = () => {
         'data-download': {
             ml: [0],
             mb: [2],
+            mt: [3],
             pl: [0],
-            mt: ['-1px'],
+            // textAlign: 'right',
         }
     }
-
-    console.log(clim)
 
     let min = clim[0]
     let max = clim[1]
@@ -113,10 +112,11 @@ const BarChart = () => {
     const xMin = (variable == 'tavg') ? -35 : min - binWidth;
     const xMax = (variable == 'tavg') ? 35 : max + binWidth;
 
+    console.log(plotData)
     return (
         <>
             <Box sx={{ ...sx.chart }} className='chart-container'>
-                
+
                 <Chart x={[xMin, xMax]} y={[0, 100]} padding={{ left: 50, top: 0 }} >
                     <Grid vertical horizontal />
                     <Ticks left bottom />
@@ -131,9 +131,9 @@ const BarChart = () => {
                     </Plot>
                 </Chart>
 
-                {/* <Box sx={sx['data-download']}>
+                <Box sx={sx['data-download']}>
                     Download data: <DownloadBarData data={plotData} fileType={'CSV'} /> / <DownloadBarData data={plotData} fileType={'JSON'} />
-                </Box> */}
+                </Box>
 
             </Box>
         </>

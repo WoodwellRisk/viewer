@@ -1,5 +1,7 @@
-import { Box, Text } from 'theme-ui'
+import { Box } from 'theme-ui'
 import { AxisLabel, Chart, Circle, Grid, Line, Plot, Ticks, TickLabels } from '@carbonplan/charts'
+
+import DownloadTimeseriesData from './download-timeseries-data'
 
 import useStore from '../../store/index'
 
@@ -16,8 +18,7 @@ const Timeseries = ({ data }) => {
 
     const sx = {
         chart: {
-            mt: [4],
-            mb: [0],
+            mt: [3],
             mx: 'auto',
             width: '100%',
             height: '250px',
@@ -43,6 +44,13 @@ const Timeseries = ({ data }) => {
             borderColor: 'red',
             borderRadius: '4px',
         },
+        'data-download': {
+            ml: [0],
+            mb: [2],
+            mt: [3],
+            pl: [0],
+            // textAlign: 'right',
+        }
     }
 
     const plotData = bands.map((b) => [b, data[b]]);
@@ -59,45 +67,51 @@ const Timeseries = ({ data }) => {
                 )}
 
                 {(variable != 'lethal_heat' && variable != 'slr' && variable != 'permafrost') && (
-                    <Chart x={ [bands[0], bands.slice(-1)] } y={ clim } padding={{ left: 60, top: 20 }}>
-                        <Ticks left bottom />
-                        {
-                            variable == 'cdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k']} /> 
-                            : variable == 'hdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k', '12k', '14k']} /> 
-                            : <TickLabels left />
-                        }
-                        <TickLabels bottom values={bands} />
-                        <AxisLabel left>{chartLabel}</AxisLabel>
-                        <AxisLabel bottom>{bandLabel}</AxisLabel>
-                        <Grid vertical horizontal />
+                    <>
+                        <Chart x={ [bands[0], bands.slice(-1)] } y={ clim } padding={{ left: 60, top: 20 }}>
+                            <Ticks left bottom />
+                            {
+                                variable == 'cdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k']} /> 
+                                : variable == 'hdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k', '12k', '14k']} /> 
+                                : <TickLabels left />
+                            }
+                            <TickLabels bottom values={bands} />
+                            <AxisLabel left>{chartLabel}</AxisLabel>
+                            <AxisLabel bottom>{bandLabel}</AxisLabel>
+                            <Grid vertical horizontal />
 
-                        <Plot>
-                            <Line
-                                data={[
-                                    [band, clim[0]],
-                                    [band, clim[1]],
-                                ]}
-                                color='secondary'
-                                sx={{
-                                    opacity: sliding ? 1 : 0,
-                                    strokeDasharray: 4,
-                                    transition: 'opacity 0.15s',
-                                }}
-                            />
-
-                            <Line data={plotData} width={1.5} color={'black'} />
-
-                            {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every */}
-                            {!plotData.every((value) => isNaN(value[1])) && (
-                                <Circle
-                                    x={band}
-                                    y={data[band]}
-                                    size={8}
+                            <Plot>
+                                <Line
+                                    data={[
+                                        [band, clim[0]],
+                                        [band, clim[1]],
+                                    ]}
+                                    color='secondary'
+                                    sx={{
+                                        opacity: sliding ? 1 : 0,
+                                        strokeDasharray: 4,
+                                        transition: 'opacity 0.15s',
+                                    }}
                                 />
-                            )}
 
-                        </Plot>
-                    </Chart>
+                                <Line data={plotData} width={1.5} color={'black'} />
+
+                                {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every */}
+                                {!plotData.every((value) => isNaN(value[1])) && (
+                                    <Circle
+                                        x={band}
+                                        y={data[band]}
+                                        size={8}
+                                    />
+                                )}
+
+                            </Plot>
+                        </Chart>
+
+                        <Box sx={sx['data-download']}>
+                            Download data: <DownloadTimeseriesData data={plotData} fileType={'CSV'} /> / <DownloadTimeseriesData data={plotData} fileType={'JSON'} />
+                        </Box>
+                    </>
                 )}
             </Box>
         </>

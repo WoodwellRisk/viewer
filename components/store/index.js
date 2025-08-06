@@ -160,7 +160,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'degree days',
         },
         cf_irr: {   
-            bands: [1981.0, 2021.0, 2041.0, 2081.0],   
+            bands: [1990.0, 2030.0, 2050.0, 2090.0],
             bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
             bandLabel: 'Time period',
             riskTagLabel: 'Irrigated crops',
@@ -187,7 +187,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'Probability (%)',
         },
         cf_rain: {            
-            bands: [1981.0, 2021.0, 2041.0, 2081.0],
+            bands: [1990.0, 2030.0, 2050.0, 2090.0],
             bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
             bandLabel: 'Time period',
             riskTagLabel: 'Rainfed crops',
