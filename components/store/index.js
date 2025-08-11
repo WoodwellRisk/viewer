@@ -113,6 +113,17 @@ const useStore = create((set, get) => ({
     setShowOverlays: (showOverlays) => set({ showOverlays }),
 
     // sidebar options
+    riskThemes: {
+        'water stress': true, 
+        'heat': false,
+        'coastal risk': false,
+        // 'flooding': false,
+        'wildfire': false,
+        'agriculture': false,
+        'permafrost': false,
+    },
+    setRiskThemes: (riskThemes) => set({ riskThemes }),
+
     risks: {
         drought: true,
         hot_days: false,
