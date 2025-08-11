@@ -227,7 +227,7 @@ const Map = ({ mobile }) => {
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
 
-        <Router />
+        {/* <Router /> */}
 
       </MapContainer>
 

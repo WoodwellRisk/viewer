@@ -29,8 +29,8 @@ const Layers = () => {
     useThemedColormap(colormapName)
 
   // state variables for risk themes
-  // const riskThemes = useStore((state) => state.riskThemes)
-  // const setRiskThemes = useStore((state) => state.setRiskThemes)
+  const riskThemes = useStore((state) => state.riskThemes)
+  const setRiskThemes = useStore((state) => state.setRiskThemes)
   const riskTitle = useStore((state) => state.riskTitle)()
   const risks = useStore((state) => state.risks)
   const setRisks = useStore((state) => state.setRisks)
@@ -61,6 +61,22 @@ const Layers = () => {
       fontSize: [1, 1, 1, 2],
       mt: [3],
     },
+    h2: {
+      fontSize: [4, 4, 4, 5],
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'h3',
+      mt: [5],
+      mb: [2],
+    },
+    h3: {
+      fontSize: [4, 4, 4, 5],
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'h3',
+      mt: [4],
+      mb: [2],
+    }
   }
 
   const handleRiskChange = useCallback((event) => {
@@ -109,15 +125,15 @@ const Layers = () => {
       <Box sx={sx.group}>
         <Box sx={{ mt: -3 }} className='risk-theme-container'>
 
-        {/* <Box as='h2' variant='styles.h4' className='risk-theme-title'>
-            Risk category
+        <Box as='h2' sx={sx.h2} className='risk-theme-title'>
+            Climate risks
           </Box>
 
           <Box className='risk-themes'>
             <Filter
                 sx={{
-                  mr: [3],
-                  mb: [2],
+                  mr: [1],
+                  mb: [0],
                 }}
                 values={riskThemes}
                 setValues={setRiskThemes}
@@ -125,10 +141,10 @@ const Layers = () => {
                 multiSelect={false}
                 // onClick={handleRiskThemeChange}
               />
-          </Box> */}
+          </Box>
 
-          <Box as='h2' variant='styles.h4' className='risk-title'>
-            Climate risks <Info>
+          <Box as='h3' sx={sx.h3} className='risk-title'>
+            Layers <Info>
               Several layers on this map were created by aggregating climate model output not by year, but by warming level.
               To learn more about this approach, please see our <Link href="https://woodwellrisk.github.io/tools/warming-levels/#evaluating-warming-level-calculations" target="_blank">methodology website</Link>.
             </Info>
@@ -137,7 +153,7 @@ const Layers = () => {
           <Box className='risk-layers'>
             <Filter
               sx={{
-                mr: [3],
+                mr: [1],
                 mb: [2],
               }}
               values={risks}
