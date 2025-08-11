@@ -90,13 +90,13 @@ const DownloadBarData = ({ data, fileType }) => {
             data.forEach((array) => {
             csv += `${array[0]}, ${array[1]}\n`;
             });
-            console.log(csv);
+            // console.log(csv);
     
             let blob = new Blob([csv], {
             type: "text/csv;charset=utf-8",
             });
     
-            // saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-bar-${band}.csv`.replaceAll('_', '-'))
+            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-bar-${band}.csv`.replaceAll('_', '-'))
         } else {
             console.log('Unsupported file type. Please choose JSON or CSV.')
         }
