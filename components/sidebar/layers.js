@@ -170,7 +170,7 @@ const Layers = () => {
 
       <Box sx={sx.group}>
         <Box className='risk-layer-container' sx={{ mt: 0, mb: 4 }} >
-          <Box as='h2' variant='styles.h4' className='risk-layer-title'>
+          <Box as='h2' sx={sx.h3} className='risk-layer-title'>
             {riskTitle}
             <Info>{riskDescription}</Info>
           </Box>
