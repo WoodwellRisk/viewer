@@ -72,10 +72,11 @@ const Map = ({ mobile }) => {
 
   return (
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
-      <MapContainer zoom={zoom} center={center} glyphs={glyphs} >
+      <MapContainer zoom={zoom} maxZoom={24} center={center} glyphs={glyphs} >
         {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
           <>
             <Fill
+              id={'ocean-fill'}
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
               variable={'ocean'}
@@ -96,10 +97,18 @@ const Map = ({ mobile }) => {
         {(variable == 'slr' || variable.startsWith('tc')) && (
           <>
             <Fill
+              id={'land-fill'}
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector/land'}
               variable={'land'}
               zIndex={-1}
+            />
+            <Line
+              id={'ocean'}
+              color={theme.rawColors.primary}
+              source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
+              variable={'ocean'}
+              width={1}
             />
 
             {/* <Point
@@ -148,11 +157,13 @@ const Map = ({ mobile }) => {
         {showLakes && variable != 'slr' && (
           <>
             <Fill
+              id={'lakes-fill'}
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector/lakes'}
               variable={'lakes'}
             />
             <Line
+              id={'lakes'}
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector/lakes'}
               variable={'lakes'}
@@ -163,23 +174,18 @@ const Map = ({ mobile }) => {
 
         {showLandOutline && (
           <Line
+            id={'land'}
             color={theme.rawColors.primary}
             source={'https://storage.googleapis.com/risk-maps/vector/land'}
             variable={'land'}
             width={1}
           />
-        )}
-
-        {place != null && showFilter && showSearch && (lookup != null && lookup != 'cities') && (
-          <FilterLayer
-            key={`filter-layer-${place})}`}
-            id={`filter-layer-${Date.now()}`}
-            source={'https://storage.googleapis.com/risk-maps/vector/' + lookup}
-            opacity={0.0}
-            // color={theme.rawColors.primary}
-            color={'#860F4F'}
-            type={'line'}
-          />
+          // <Line
+          //   color={theme.rawColors.primary}
+          //   source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
+          //   variable={'ocean'}
+          //   width={1}
+          // />
         )}
 
         {showRegionPicker && (
@@ -208,6 +214,7 @@ const Map = ({ mobile }) => {
 
         {(variable.startsWith('tc')) && (
           <Line
+            id={'tc-boundaries'}
             color={theme.rawColors.secondary}
             source={'https://storage.googleapis.com/risk-maps/vector/tc_boundaries'}
             variable={'tc_boundaries'}
@@ -238,6 +245,26 @@ const Map = ({ mobile }) => {
               width={1}
             />
           </>
+        )}
+
+      {/* 
+        Right now, when a variable is re-rendered, the land outline layer get redrawn.
+        This means that if the filter layer is active, it will be drawn over by the land outline.
+        There might be a way to make sure that when the land outline layer gets redrawn, the filter 
+        layer (if active) is always on top. This might mean writing custom Line and Fill components.
+        https://docs.mapbox.com/mapbox-gl-js/api/map/#map#movelayer 
+      */}
+      {place != null && lookup != null && showFilter && showSearch && (
+          <FilterLayer
+            key={`filter-layer-${place})}`}
+            id={`filter-layer-${Date.now()}`}
+            source={'https://storage.googleapis.com/risk-maps/vector/' + lookup}
+            // source={`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`}
+            opacity={0.0}
+            // color={theme.rawColors.primary}
+            color={'#860F4F'}
+            type={lookup == 'cities' ? 'circle' : 'line'}
+          />
         )}
 
         {showJustAccess && (

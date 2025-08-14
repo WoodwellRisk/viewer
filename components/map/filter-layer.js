@@ -9,7 +9,8 @@ const FilterLayer = ({
   id,
   source,
   color,
-  minZoom = null,
+  minZoom = 0,
+  maxZoom = 24,
   opacity = 1,
   type,
 }) => {
@@ -18,11 +19,40 @@ const FilterLayer = ({
   const removed = useRef(false)
   const sourceIdRef = useRef(null)
   const layerIdRef = useRef(null)
+  const textIdRef = useRef()
 
   const place = useStore((state) => state.place)
   const setPlace = useStore((state) => state.setPlace)
   const setSearchText = useStore((state) => state.setSearchText)
   const lookup = useStore((state) => state.lookup)
+
+  // console.log(lookup)
+  // console.log(map.getStyle().layers)
+  
+  // // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  // async function getData() {
+  //   const url = "https://storage.googleapis.com/risk-maps/vector/countries.geojson";
+  //   try {
+  //     const response = await fetch(url);
+  //     if (!response.ok) {
+  //       throw new Error(`Response status: ${response.status}`);
+  //     }
+  
+  //     const data = await response.json();
+  //     const country = data['features'].filter(d => d.properties.name == 'Russia')[0]
+  //     console.log(country);
+  //     // console.log(geoStitch(country))
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // }
+
+  // getData()
+  
+
+  useEffect(() => {
+    console.log(map.getZoom())
+  }, [map.getZoom()]) 
 
   let opacityProperty = type == 'line' ? 'line-opacity' : 'circle-opacity'
   let width = 2
@@ -73,9 +103,14 @@ const FilterLayer = ({
         map.addSource(sourceId, {
           type: 'vector',
           tiles: [`${source}/{z}/{x}/{y}.pbf`],
+          // type: 'geojson',
+          // data: source,
         })
         if (minZoom) {
           map.getSource(sourceId).minzoom = minZoom
+        }
+        if (maxZoom) {
+          map.getSource(sourceId).maxzoom = maxZoom
         }
       }
     }
@@ -86,25 +121,73 @@ const FilterLayer = ({
       const { current: sourceId } = sourceIdRef
       const layerId = place || uuidv4()
       layerIdRef.current = layerId
+      textIdRef.current = uuidv4()
+      const { current: textId } = textIdRef
   
       if (!map.getLayer(layerId)) {
         let tempLayer
-        tempLayer = map.addLayer({
-          id: layerId,
-          type: 'line',
-          source: sourceId,
-          'source-layer': lookup,
-          layout: {
-            visibility: 'visible',
-          },
-          paint: {
-            'line-blur': 0.4,
-            'line-color': color,
-            'line-opacity': opacity,
-            'line-width': width,
-          },
-          'filter': ['==', 'name', place]
-        })
+
+        if(type == 'line') {
+          tempLayer = map.addLayer({
+            'id': layerId,
+            'type': type,
+            'source': sourceId,
+            'source-layer': lookup,
+            'layout': {
+              'visibility': 'visible',
+            },
+            'paint': {
+              'line-blur': 0.4,
+              'line-color': color,
+              'line-opacity': opacity,
+              'line-width': width,
+            },
+            'filter': ['==', 'name', place]
+          })
+        } else if (type == 'circle') {
+          tempLayer = map.addLayer({
+            'id': layerId,
+            'type': type,
+            'source': sourceId,
+            'source-layer': lookup,
+            'layout': {
+              'visibility': 'visible',
+            },
+            'paint': {
+              'circle-color': color,
+              'circle-opacity': 0.7,
+              'circle-radius': 4,
+            },
+            'filter': ['==', 'name', place]
+          })
+
+          if (!map.style.stylesheet.glyphs) {
+            console.log("Please specify a glyphs object in the <Map /> component in order to use text labels.")
+            return
+          }
+    
+          if (!map.getLayer(textId)) {
+            map.addLayer({
+              'id': textId,
+              'type': 'symbol',
+              'source': sourceId,
+              'source-layer': lookup,
+              'paint': {
+                'text-color': color,
+              },
+              'filter': ['==', 'name', place],
+              'layout': {
+                'text-ignore-placement': false,
+                'text-font': ['Metropolis Regular'],
+                'text-field': ['format', ['get', 'name'], { 'font-scale': 1.0 }],
+                'text-variable-anchor': ['bottom-left'],
+                'text-justify': 'left',
+              },
+            })
+          }
+        } else { // if type is not in ['cirle', 'line'], return null
+          return null
+        }
   
         setTimeout(() => {
           map.setPaintProperty(layerId, opacityProperty, 1);
@@ -117,6 +200,9 @@ const FilterLayer = ({
             }
             if (map.getSource(sourceId)) {
               map.removeSource(sourceId)
+            }
+            if (map.getLayer(textId)) {
+              map.removeLayer(textId)
             }
           }
         }
