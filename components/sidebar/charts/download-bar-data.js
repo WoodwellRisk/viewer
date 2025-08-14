@@ -6,8 +6,10 @@ import useStore from '../../store/index'
 const DownloadBarData = ({ data, fileType }) => {
     const variable = useStore((state) => state.variable);
     const band = useStore((state) => state.band);
+    console.log(band)
     const crop = useStore((state) => state.crop);
     const riskTitle = useStore((state) => state.riskTitle)().toLowerCase();
+    const bandLabel = useStore((state) => state.bandLabel)().toLowerCase()
     const chartLabel = useStore((state) => state.chartLabel)()
     const regionData = useStore((state) => state.regionData);
     const region = regionData['coordinates'];
@@ -58,6 +60,11 @@ const DownloadBarData = ({ data, fileType }) => {
             jsonString = jsonString.replaceAll("\"variable\"", "  \"variable\"")
             if(variable.startsWith('cf')) { jsonString = jsonString.replaceAll("\"crop\"", "  \"crop\"") }
             jsonString = jsonString.replaceAll("\"band\"", "  \"band\"")
+            if(bandLabel == 'time period' || variable == 'slr') {
+                jsonString = jsonString.replaceAll("\"band\"", "\"time period\"")
+            } else {
+                jsonString = jsonString.replaceAll("\"band\"", "\"warming-level\"")
+            }
             jsonString = jsonString.replaceAll("\"extent\"", "  \"extent\"")
             jsonString = jsonString.replaceAll(", \"lon\"", "\n    \"lon\"")
             jsonString = jsonString.replaceAll("\"lat\"", "    \"lat\"")
@@ -73,19 +80,23 @@ const DownloadBarData = ({ data, fileType }) => {
                 type: "application/json",
             })
             // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
-            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-bar-${band}.json`.replaceAll('_', '-'))
+            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-${(bandLabel == 'time period' || variable == 'slr') ? 'year' : 'warming-level'}-${band}.json`.replaceAll('_', '-'))
 
         } else if(fileType == 'CSV') {
             let csv = `# Attribution: Woodwell Risk (${new Date().getFullYear()}). Drought Monitor [data download]. https://woodwellrisk.github.io/drought-monitor/\n`;
             csv += `# Accessed: ${now}\n`;
             csv += `# Variable: ${riskTitle}\n`
             if(variable.startsWith('cf')) { csv += `# Crop: ${crop}\n` }
-            csv += `# Band: ${band}\n`
+            if(variable == 'lethal_heat' || variable == 'slr') {
+                csv += `# Description: ${bandLabel}\n`
+            } else {
+                csv += `# ${bandLabel.slice(0, 1).toUpperCase() + bandLabel.slice(1,)}: ${band}\n`
+            }
+            csv += `# Unit: ${chartLabel}\n`
             csv += `# Latitude min: ${minLat}\n`;
             csv += `# Latitude max: ${maxLat}\n`;
             csv += `# Longitude min: ${minLon}\n`;
             csv += `# Longitude max: ${maxLon}\n`;
-            csv += `# Unit: ${chartLabel}\n`
             csv += `bin, percent\n`
             data.forEach((array) => {
             csv += `${array[0]}, ${array[1]}\n`;
@@ -96,7 +107,7 @@ const DownloadBarData = ({ data, fileType }) => {
             type: "text/csv;charset=utf-8",
             });
     
-            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-bar-${band}.csv`.replaceAll('_', '-'))
+            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-${(bandLabel == 'time period' || variable == 'slr') ? 'year' : 'warming-level'}-${band}.csv`.replaceAll('_', '-'))
         } else {
             console.log('Unsupported file type. Please choose JSON or CSV.')
         }
