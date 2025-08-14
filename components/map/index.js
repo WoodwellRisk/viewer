@@ -215,6 +215,31 @@ const Map = ({ mobile }) => {
           />
         )}
 
+        {/* 
+          they key={} in the Line and Fill components forces the components to re-render. 
+          so the variable prop controls whether any crop layer is shown and the change in the 
+          crop prop's state controls the actual re-render between crop layers.
+        */}
+        {(variable.startsWith('cf') && crop != "") && (
+          <>
+            <Fill
+              key={`${crop}_mask`}
+              source={crop == 'soy' ? `https://storage.googleapis.com/risk-maps/vector/${crop}bean_mask` : `https://storage.googleapis.com/risk-maps/vector/${crop}_mask`}
+              variable={crop == 'soy' ? `${crop}bean_mask` : `${crop}_mask`}
+              color={theme.rawColors.secondary}
+              opacity={0.5}
+            />
+
+            <Line
+              key={`${crop}`}
+              source={crop == 'soy' ? `https://storage.googleapis.com/risk-maps/vector/${crop}bean` : `https://storage.googleapis.com/risk-maps/vector/${crop}`}
+              variable={crop == 'soy' ? `${crop}bean` : `${crop}`}
+              color={'black'}
+              width={1}
+            />
+          </>
+        )}
+
         {showJustAccess && (
           <JustAccess theme={theme} />
         )}
