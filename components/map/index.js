@@ -227,7 +227,7 @@ const Map = ({ mobile }) => {
           so the variable prop controls whether any crop layer is shown and the change in the 
           crop prop's state controls the actual re-render between crop layers.
         */}
-        {(variable.startsWith('cf') && crop != "") && (
+        {/* {(variable.startsWith('cf') && crop != "") && (
           <>
             <Fill
               key={`${crop}_mask`}
@@ -245,7 +245,7 @@ const Map = ({ mobile }) => {
               width={1}
             />
           </>
-        )}
+        )} */}
 
       {/* 
         Right now, when a variable is re-rendered, the land outline layer get redrawn.
