@@ -11,6 +11,7 @@ import Search from './search/index'
 import ZoomReset from './zoom-reset'
 import Ruler from './ruler'
 import Router from './router'
+import LayerOrder from './layer-order'
 
 import useStore from '../store/index'
 
@@ -47,6 +48,7 @@ const Map = ({ mobile }) => {
   const showJustAccess = useStore((state) => state.showJustAccess)
   const showLakes = useStore((state) => state.showLakes)
   const showCountriesOutline = useStore((state) => state.showCountriesOutline)
+  const setShowCountriesOutline = useStore((state) => state.setShowCountriesOutline)
   const showRegionsOutline = useStore((state) => state.showRegionsOutline)
   const showStatesOutline = useStore((state) => state.showStatesOutline)
   const showStatesZoom = useStore((state) => state.showStatesZoom)
@@ -73,13 +75,14 @@ const Map = ({ mobile }) => {
   return (
     <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
       <MapContainer zoom={zoom} maxZoom={24} center={center} glyphs={glyphs} >
-        {showOceanMask && variable != 'slr' && !variable.startsWith('tc') && (
+        {variable != 'slr' && !variable.startsWith('tc') && (
           <>
             <Fill
               id={'ocean-fill'}
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
               variable={'ocean'}
+              zIndex={-1}
             />
 
             {/* <Point
@@ -94,7 +97,7 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-        {(variable == 'slr' || variable.startsWith('tc')) && (
+        {variable == 'slr' && (
           <>
             <Fill
               id={'land-fill'}
@@ -103,27 +106,33 @@ const Map = ({ mobile }) => {
               variable={'land'}
               zIndex={-1}
             />
-            <Line
-              id={'ocean'}
-              color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
-              variable={'ocean'}
-              width={1}
-            />
-
-            {/* <Point
-              id={'cities'}
-              color={theme.rawColors.primary}
-              source={'https://storage.googleapis.com/risk-maps/vector/cities'}
-              variable={'cities'}
-              label={true}
-              labelText={'name'}
-              minZoom={6}
-            /> */}
           </>
         )}
 
-        {variable != 'slr' && showRegionsOutline && (
+        <Line
+            id={'ocean'}
+            color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
+            variable={'ocean'}
+            width={1}
+          />
+
+        <Fill
+            id={'lakes-fill'}
+            color={theme.rawColors.background}
+            source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
+            variable={'largestLakes'}
+          />
+
+          <Line
+            id={'lakes'}
+            color={theme.rawColors.primary}
+            source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
+            variable={'largestLakes'}
+            width={1}
+          />
+
+        {showRegionsOutline && (
           <Line
             id={'regions'}
             color={theme.rawColors.primary}
@@ -133,7 +142,7 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {variable != 'slr' && showCountriesOutline && (
+        {showCountriesOutline && (
           <Line
             id={'countries'}
             color={theme.rawColors.primary}
@@ -143,7 +152,7 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {variable != 'slr' && showStatesOutline && zoom > showStatesZoom && (
+        {showStatesOutline && zoom > showStatesZoom && (
           <Line
             id={'states'}
             // color={theme.rawColors.primary}
@@ -154,16 +163,18 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {showLakes && variable != 'slr' && (
+        {showLakes && (
           <>
             <Fill
-              id={'lakes-fill'}
+              id={'all-lakes-fill'}
               color={theme.rawColors.background}
               source={'https://storage.googleapis.com/risk-maps/vector/lakes'}
               variable={'lakes'}
+              width={1}
             />
+
             <Line
-              id={'lakes'}
+              id={'all-lakes'}
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector/lakes'}
               variable={'lakes'}
@@ -172,20 +183,14 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-        {showLandOutline && (
+      {(variable.startsWith('tc')) && (
           <Line
-            id={'land'}
-            color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector/land'}
-            variable={'land'}
+            id={'tc-boundaries'}
+            color={theme.rawColors.secondary}
+            source={'https://storage.googleapis.com/risk-maps/vector/tc_boundaries'}
+            variable={'tc_boundaries'}
             width={1}
           />
-          // <Line
-          //   color={theme.rawColors.primary}
-          //   source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
-          //   variable={'ocean'}
-          //   width={1}
-          // />
         )}
 
         {showRegionPicker && (
@@ -196,29 +201,6 @@ const Map = ({ mobile }) => {
             fontSize={'14px'}
             minRadius={1}
             maxRadius={1500}
-          />
-        )}
-
-        <Raster
-          key={variable}
-          display={display}
-          opacity={opacity}
-          source={`https://storage.googleapis.com/risk-maps/zarr/${variable}.zarr`}
-          variable={variable}
-          clim={clim}
-          colormap={colormap}
-          selector={variable.startsWith('cf') ? { crop, band } : { band }}
-          mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
-          regionOptions={{ setData: handleRegionData, selector: {} }}
-        />
-
-        {(variable.startsWith('tc')) && (
-          <Line
-            id={'tc-boundaries'}
-            color={theme.rawColors.secondary}
-            source={'https://storage.googleapis.com/risk-maps/vector/tc_boundaries'}
-            variable={'tc_boundaries'}
-            width={1}
           />
         )}
 
@@ -246,6 +228,19 @@ const Map = ({ mobile }) => {
             />
           </>
         )} */}
+
+        <Raster
+          key={variable}
+          display={display}
+          opacity={opacity}
+          source={`https://storage.googleapis.com/risk-maps/zarr/${variable}.zarr`}
+          variable={variable}
+          clim={clim}
+          colormap={colormap}
+          selector={variable.startsWith('cf') ? { crop, band } : { band }}
+          mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+          regionOptions={{ setData: handleRegionData, selector: {} }}
+        />
 
       {/* 
         Right now, when a variable is re-rendered, the land outline layer get redrawn.
@@ -278,6 +273,8 @@ const Map = ({ mobile }) => {
         {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
+
+        <LayerOrder />
 
         <Router />
 

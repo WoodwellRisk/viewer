@@ -474,11 +474,11 @@ const useStore = create((set, get) => ({
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Warm nights',
-            riskTitle: 'Nights over 70°F',
+            riskTitle: 'Nights over 68°F',
             riskDescription:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    Heat stress. The number of days in a year with nightly minimum temperatures over 70°F (~21.1°C). 
+                    Heat stress. The number of days in a year with nightly minimum temperatures over 68°F (20°C). 
                     Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
                 </Box>
                 <Box sx={sx.data_source}>
