@@ -19,6 +19,7 @@ const SearchResults = () => {
     const setSearchText = useStore((state) => state.setSearchText)
     const setCoordinates = useStore((state) => state.setCoordinates)
     const setBbox = useStore((state) => state.setBbox)
+    const setShowSpinner = useStore((state) => state.setShowSpinner)
 
     const sx = {
         'search-container': {
@@ -79,6 +80,8 @@ const SearchResults = () => {
     })
 
     useEffect(() => {
+        setShowSpinner(true)
+
         if (place && lookup) {
             fetch(`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`)
                 .then((response) => response.json())

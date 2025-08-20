@@ -5,13 +5,14 @@ import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonpl
 import { Dimmer } from '@carbonplan/components'
 
 import Point from './point'
-import FilterLayer from './filter-layer'
 import JustAccess from './justAccess'
-import Search from './search/index'
 import ZoomReset from './zoom-reset'
 import Ruler from './ruler'
 import Router from './router'
 import LayerOrder from './layer-order'
+import Search from './search/index'
+import Spinner from './spinner'
+import FilterLayer from './filter-layer'
 
 import useStore from '../store/index'
 
@@ -57,6 +58,7 @@ const Map = ({ mobile }) => {
   const place = useStore((state) => state.place)
   const showSearch = useStore((state) => state.showSearch)
   const setShowSearch = useStore((state) => state.setShowSearch)
+  const showSpinner = useStore((state) => state.showSpinner)
   const showFilter = useStore((state) => state.showFilter)
 
   // this callback was modified from its source: https://github.com/carbonplan/oae-web/blob/3eff3fb99a24a024f6f9a8278add9233a31e853b/components/map.js#L93
@@ -73,7 +75,7 @@ const Map = ({ mobile }) => {
   )
 
   return (
-    <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
+    <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >      
       <MapContainer zoom={zoom} maxZoom={24} center={center} glyphs={glyphs} >
         {variable != 'slr' && !variable.startsWith('tc') && (
           <>
@@ -241,6 +243,10 @@ const Map = ({ mobile }) => {
           mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
           regionOptions={{ setData: handleRegionData, selector: {} }}
         />
+
+        {showSpinner && (
+          <Spinner />
+        )}
 
       {/* 
         Right now, when a variable is re-rendered, the land outline layer get redrawn.

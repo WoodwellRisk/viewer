@@ -23,6 +23,7 @@ const SearchUI = () => {
   const setResults = useStore((state) => state.setResults)
   const searchBy = useStore((state) => state.searchBy)
   const setSearchBy = useStore((state) => state.setSearchBy)
+  const setShowSpinner = useStore((state) => state.setShowSpinner)
 
   const sx = {
     'toggle-search': {
@@ -50,6 +51,8 @@ const SearchUI = () => {
 
   useEffect(() => {
     if (coordinates) {
+      setShowSpinner(false)
+
       map.flyTo({
         center: coordinates,
         zoom: 7.5,
@@ -59,6 +62,8 @@ const SearchUI = () => {
 
   useEffect(() => {
     if (bbox) {
+      setShowSpinner(false)
+
       map.fitBounds(bbox)
     }
   }, [bbox])

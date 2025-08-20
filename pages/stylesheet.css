@@ -68,3 +68,25 @@ iframe {
 /* .header.sticky-header-white, .header.header-white, .header.is-sticky.sticky-show {
     display: none;
 } */
+
+@keyframes circle-dash {
+    0%,
+    25% {
+      stroke-dashoffset: 187;
+      transform: rotate(0);
+    }
+    50%,
+    75% {
+        stroke-dashoffset: 75;
+        transform: rotate(85deg);
+    }
+    100% {
+        stroke-dashoffset: 187;
+        transform: rotate(400deg);
+    }
+}
+
+.path {
+    animation: circle-dash 2s ease-in-out infinite;
+}
+  

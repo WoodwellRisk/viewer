@@ -587,6 +587,9 @@ const useStore = create((set, get) => ({
     showSearch: false,
     setShowSearch: (showSearch) => set({ showSearch }),
 
+    showSpinner: true,
+    setShowSpinner: (showSpinner) => set({ showSpinner }),
+
     showFilter: true,
     setShowFilter: (showFilter) => set({ showFilter }),
 
