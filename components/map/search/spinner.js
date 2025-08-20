@@ -20,7 +20,7 @@ const Spinner = () => {
           position: "absolute",
           display: ["initial", "initial", "initial", "initial"],
           left: ["49%"],
-          top: ["37.5%"],
+          top: ["40%"],
           padding: [0],
           margin: [0],
           cursor: "pointer",
@@ -60,7 +60,7 @@ const Spinner = () => {
         sx={{
           position: "absolute",
           left: ["45%"],
-          top: ["48%"],
+          top: ["46%"],
           cursor: "pointer",
           ml: [2],
           display: ["initial", "initial", "initial", "initial"],

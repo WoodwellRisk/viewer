@@ -80,9 +80,9 @@ const SearchResults = () => {
     })
 
     useEffect(() => {
-        setShowSpinner(true)
-
         if (place && lookup) {
+            setShowSpinner(true)
+            
             fetch(`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`)
                 .then((response) => response.json())
                 .then((json) => {

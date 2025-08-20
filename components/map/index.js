@@ -11,7 +11,7 @@ import Ruler from './ruler'
 import Router from './router'
 import LayerOrder from './layer-order'
 import Search from './search/index'
-import Spinner from './spinner'
+import Spinner from './search/spinner'
 import FilterLayer from './filter-layer'
 
 import useStore from '../store/index'
