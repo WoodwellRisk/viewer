@@ -439,8 +439,8 @@ const useStore = create((set, get) => ({
                     Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
-            colormapName: 'redteal',
-            clim: { min: -30, max: 30 },
+            colormapName: 'magma',
+            clim: { min: -25, max: 35 },
             colormapLabel: 'Temperature',
             colormapUnits: '(°C)',
             statsLabel: 'ºC',

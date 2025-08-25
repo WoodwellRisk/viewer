@@ -1,9 +1,10 @@
-import { useMemo, useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useThemeUI, Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
 
+import useCustomColormap from '../store/useCustomColormap'
 import Point from './point'
 import JustAccess from './justAccess'
 import ZoomReset from './zoom-reset'
@@ -28,14 +29,14 @@ const Map = ({ mobile }) => {
   const crop = useStore((state) => state.crop)
   const band = useStore((state) => state.band)
   const clim = useStore((state) => state.clim)()
-  const customColormaps = useStore((state) => state.customColormaps)
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+    (variable.startsWith('tavg')) ? useCustomColormap(colormapName) :
+    // (variable.startsWith('precip')) ? useCustomColormap(colormapName) :
     (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
     (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-    variable.startsWith('cf') ? useMemo(() => customColormaps[colormapName]) :
+    variable.startsWith('cf') ? useCustomColormap(colormapName) :
     useThemedColormap(colormapName)
 
   const opacity = useStore((state) => state.opacity)

@@ -48,7 +48,7 @@ const BarChart = () => {
     const variableRange = [min, max]
 
     // bin the data
-    const nBins = 10;
+    const nBins = variable == 'tavg' ? 12 : 10;
     const range = max - min;
     const binWidth = (variable == "hot_days") || (variable == "warm_nights") ? 30 : range / nBins;
 
@@ -62,13 +62,19 @@ const BarChart = () => {
     } else if (variable == 'lethal_heat') {
         binEdges = binEdges.map((d) => Number((d + 1.0).toFixed(1)))
     } else if (variable == 'tavg') {
-        binEdges = binEdges.map((d) => d - 30)
+        binEdges = []
+        let start = min;
+        let end = max;
+        for (let idx = min; idx < end + 5; idx += 5) {
+            binEdges.push(idx);
+          }
+        console.log(binEdges)
     }
 
     const bin = d3.bin().domain(variableRange).thresholds(binEdges)
 
-    const xMin = (variable == 'tavg') ? -35 : min - binWidth;
-    const xMax = (variable == 'tavg') ? 35 : max + binWidth;
+    const xMin = (variable == 'tavg') ? min - 5 : min - binWidth;
+    const xMax = (variable == 'tavg') ? max + 5 : max + binWidth;
 
     // for some layers, there are values that are above the ranges in climRanges, where I created a "truncated" colormap. 
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
