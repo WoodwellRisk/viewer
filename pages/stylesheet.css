@@ -58,11 +58,33 @@
     margin-top: 0.25rem;
 }
 
-iframe {
+/* iframe {
     border: 1px solid #1b1e23;
     width: 100%;
     max-width: 500px;
     overflow-x: none;
+} */
+
+iframe {
+    width: 100%;
+    border: none;
+}
+
+#toolbarViewer {
+    border: 1px solid limegreen;
+}
+
+#header, .header, .header-white {
+    display: none;
+}
+
+iframe > #toolbarViewerRight {
+    display: none;
+}
+
+iframe > * {
+    border: 1px solid limegreen;
+
 }
 
 /* .header.sticky-header-white, .header.header-white, .header.is-sticky.sticky-show {
@@ -88,5 +110,17 @@ iframe {
 
 .path {
     animation: circle-dash 2s ease-in-out infinite;
+}
+
+.report-link {
+    display: inline-block;
+    color: #1b1e23;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    padding-left: 0;
+    margin-top: 0.25rem;
+    box-sizing: border-box;
+    background: none;
+    border: none;
 }
   

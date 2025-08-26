@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { useMapbox } from "@carbonplan/maps";
 import mapboxgl from "mapbox-gl";
 
@@ -17,6 +17,8 @@ const updatePaintProperty = (map, id, key, value) => {
 const JustAccess = ({ theme }) => {
   const { map } = useMapbox();
   const zoom = useStore((state) => state.zoom);
+  const setReportURL = useStore((state) => state.setReportURL);
+  const setShowReport = useStore((state) => state.setShowReport);
   const removed = useRef(false);
 
   let hoverPolygonId = null;
@@ -27,6 +29,16 @@ const JustAccess = ({ theme }) => {
       removed.current = true;
     });
   }, []);
+
+  const onReportClick = ((event) => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/data-*
+    // alternatively: let url = button.getAttribute("data-url")
+    let url = event.target.dataset.url;
+    setReportURL(url)
+    setShowReport(true)
+  })
 
   const addJustAccessLayers = async () => {
     const popup = new mapboxgl.Popup({
@@ -127,12 +139,14 @@ const JustAccess = ({ theme }) => {
               let name = polygonFeatures[0].properties.name;
               let url = polygonFeatures[0].properties.url;
               
-              let htmlString = `<p>${name}</p>`
+              let htmlString = `<p style='user-select: none;'>${name}</p>`
               if(url != 'none') {
                   if(name == 'Chiapas, Mexico') {
-                      htmlString += `<a href='${url}' target='_blank'>Read the full assessment (Spanish)</a>`
+                      // htmlString += `<a href='#' style='user-select: none;'>Read the full assessment (Spanish)</a>`
+                      htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment (Spanish)</button>`
                   } else {
-                      htmlString += `<a href='${url}' target='_blank'>Read the full assessment</a>`
+                      // htmlString += `<a href='#' style='user-select: none;'>Read the full assessment</a>`
+                      htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment</button>`
                   }
                   // htmlString += `<iframe src='${url}'></iframe>`
               }
@@ -142,6 +156,8 @@ const JustAccess = ({ theme }) => {
                 .setHTML(htmlString)
                 .setMaxWidth(500)
                 .addTo(map);
+
+                document.querySelector('.report-link').addEventListener('click', onReportClick); 
             }
           });
         } catch (error) {
@@ -224,12 +240,12 @@ const JustAccess = ({ theme }) => {
               .filter((feature) => feature.geometry["type"] == "Point");
             let name = pointFeatures[0].properties.name;
             let url = pointFeatures[0].properties.url;
-            console.log(pointFeatures[0])
-            console.log(url)
+            // console.log(pointFeatures[0])
+            // console.log(url)
 
-            let htmlString = `<p>${name}</p>`
+            let htmlString = `<p style='user-select: none;'>${name}</p>`
             if(url != 'none') {
-                htmlString += `<a href='${url}' target='_blank'>Read the full assessment</a>`
+                htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment</button>`
                 // htmlString += `<iframe src='${url}'></iframe>`
             }
 
@@ -238,6 +254,9 @@ const JustAccess = ({ theme }) => {
               .setHTML(htmlString)
               .setMaxWidth(500)
               .addTo(map);
+
+              document.querySelector('.report-link').addEventListener('click', onReportClick); 
+
           });
         } catch (error) {
           console.error(error);

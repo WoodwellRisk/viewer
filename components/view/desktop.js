@@ -2,7 +2,6 @@ import { Flex } from 'theme-ui'
 import Sidebar from '../sidebar'
 import About from '../sidebar/about'
 import Map from '../map'
-import Loading from './loading'
 
 function Desktop() {
 
@@ -25,7 +24,6 @@ function Desktop() {
 
       <Map mobile={false} />
 
-      <Loading />
     </Flex>
   )
 }

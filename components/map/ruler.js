@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { useRuler } from '@carbonplan/maps'
 import { Globe } from '@carbonplan/icons'
 
-const Ruler = () => {
+const Ruler = ({ mobile=false }) => {
   const { theme } = useThemeUI()
   const [showAxes, setShowAxes] = useState(true)
   const [showGrid, setShowGrid] = useState(false)
@@ -31,12 +31,14 @@ const Ruler = () => {
       aria-label='Switch ruler mode'
       onClick={switchMode}
       sx={{
-        stroke: 'primary', cursor: 'pointer', ml: [2],
+        stroke: 'primary', 
+        cursor: 'pointer', 
+        ml: [2],
         display: ['initial', 'initial', 'initial', 'initial'],
         position: 'absolute',
         color: 'primary',
-        right: [5],
-        bottom: [20, 20, 20, 20],
+        right: [35],
+        bottom: mobile ? 80 : 20,
       }}
     >
       <Globe sx={{ strokeWidth: 1.25 }} />

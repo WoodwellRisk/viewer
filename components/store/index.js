@@ -81,6 +81,12 @@ const useStore = create((set, get) => ({
     showJustAccess: false,
     setShowJustAccess: (showJustAccess) => set({ showJustAccess }),
 
+    reportURL: '',
+    setReportURL: (reportURL) => set({ reportURL }),
+
+    showReport: false,
+    setShowReport: (setShowReport) => set({ setShowReport }),
+
     showLakes: false,
     setShowLakes: (showLakes) => set({ showLakes }),
 

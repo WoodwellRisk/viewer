@@ -1,9 +1,10 @@
 import { useState, useCallback, useRef } from 'react'
-import { useThemeUI, Box } from 'theme-ui'
+import { useThemeUI, Box, Embed } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
 
+import Loading from '../view/loading'
 import useCustomColormap from '../store/use-custom-colormap'
 import Point from './point'
 import JustAccess from './just-access'
@@ -32,12 +33,12 @@ const Map = ({ mobile }) => {
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-    (variable.startsWith('tavg')) ? useCustomColormap(colormapName) :
-    // (variable.startsWith('precip')) ? useCustomColormap(colormapName) :
-    (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-    (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-    variable.startsWith('cf') ? useCustomColormap(colormapName) :
-    useThemedColormap(colormapName)
+      (variable.startsWith('tavg')) ? useCustomColormap(colormapName) :
+        // (variable.startsWith('precip')) ? useCustomColormap(colormapName) :
+        (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+          (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
+            variable.startsWith('cf') ? useCustomColormap(colormapName) :
+              useThemedColormap(colormapName)
 
   const opacity = useStore((state) => state.opacity)
   const display = useStore((state) => state.display)
@@ -64,19 +65,20 @@ const Map = ({ mobile }) => {
 
   // this callback was modified from its source: https://github.com/carbonplan/oae-web/blob/3eff3fb99a24a024f6f9a8278add9233a31e853b/components/map.js#L93
   const handleRegionData = useCallback((data) => {
-      // console.log(data)
-      if (data.value == null) {
-        setRegionDataLoading(true)
-      } else if (data.value) {
-        setRegionData(data.value)
-        setRegionDataLoading(false)
-      }
-    },
+    // console.log(data)
+    if (data.value == null) {
+      setRegionDataLoading(true)
+    } else if (data.value) {
+      setRegionData(data.value)
+      setRegionDataLoading(false)
+    }
+  },
     [setRegionData, setRegionDataLoading]
   )
 
   return (
-    <Box ref={container} sx={{ flexBasis: '100%', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >      
+    <Box ref={container} sx={{ display: 'flex', flexBasis: '100%', justifyContent: 'center', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
+
       <MapContainer zoom={zoom} maxZoom={24} center={center} glyphs={glyphs} >
         {variable != 'slr' && !variable.startsWith('tc') && (
           <>
@@ -113,27 +115,27 @@ const Map = ({ mobile }) => {
         )}
 
         <Line
-            id={'ocean'}
-            color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
-            variable={'ocean'}
-            width={1}
-          />
+          id={'ocean'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/vector/ocean'}
+          variable={'ocean'}
+          width={1}
+        />
 
         <Fill
-            id={'lakes-fill'}
-            color={theme.rawColors.background}
-            source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
-            variable={'largestLakes'}
-          />
+          id={'lakes-fill'}
+          color={theme.rawColors.background}
+          source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
+          variable={'largestLakes'}
+        />
 
-          <Line
-            id={'lakes'}
-            color={theme.rawColors.primary}
-            source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
-            variable={'largestLakes'}
-            width={1}
-          />
+        <Line
+          id={'lakes'}
+          color={theme.rawColors.primary}
+          source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
+          variable={'largestLakes'}
+          width={1}
+        />
 
         {showRegionsOutline && (
           <Line
@@ -186,7 +188,7 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-      {(variable.startsWith('tc')) && (
+        {(variable.startsWith('tc')) && (
           <Line
             id={'tc-boundaries'}
             color={theme.rawColors.secondary}
@@ -249,14 +251,14 @@ const Map = ({ mobile }) => {
           <Spinner />
         )}
 
-      {/* 
+        {/* 
         Right now, when a variable is re-rendered, the land outline layer get redrawn.
         This means that if the filter layer is active, it will be drawn over by the land outline.
         There might be a way to make sure that when the land outline layer gets redrawn, the filter 
         layer (if active) is always on top. This might mean writing custom Line and Fill components.
         https://docs.mapbox.com/mapbox-gl-js/api/map/#map#movelayer 
       */}
-      {place != null && lookup != null && showFilter && showSearch && (
+        {place != null && lookup != null && showFilter && showSearch && (
           <FilterLayer
             key={`filter-layer-${place})}`}
             id={`filter-layer-${Date.now()}`}
@@ -269,23 +271,57 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {showJustAccess && (
+        {!mobile && showJustAccess && (
           <JustAccess theme={theme} />
         )}
 
-        {!mobile && (<Ruler />)}
+        <Ruler mobile={mobile} />
 
-        {!mobile && (<ZoomReset />)}
+        <ZoomReset mobile={mobile} />
 
         {!mobile && (
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
 
+        {/* {showAbout && ( */}
+        {/* <Box
+          sx={{
+              display: ['none', 'flex'],
+              position: 'relative',
+              zIndex: 100,
+              top: ['5%'],
+              width: 'auto',
+              maxWidth: '700px',
+              height: '90%',
+              mx: ['none', 2, 'auto'],
+              my: 'auto',
+              backgroundColor: 'background',
+              borderWidth: '1px',
+              borderColor: 'primary',
+              borderStyle: 'solid',
+            }}
+        >
+          <iframe
+            src='https://www.woodwellclimate.org/wp-content/uploads/2023/01/Woodwell-Climate-Risk-Assessment-Addis-Ababa-Ethiopia-2023.pdf#page=2#toolbar=0'
+            title='Just Access report PDF'
+          >
+          </iframe>
+          <Embed 
+            src='https://www.woodwellclimate.org/wp-content/uploads/2023/01/Woodwell-Climate-Risk-Assessment-Addis-Ababa-Ethiopia-2023.pdf#page=2'
+            // src='https://www.woodwellclimate.org/climate-risk-assessment-addis-ababa-ethiopia/'
+            title='Just Access report PDF'
+            sx={{
+              height: '100%',
+            }}
+          />
+        </Box> */}
+
+        {/* )} */}
+
         <LayerOrder />
 
         <Router />
 
-      </MapContainer>
 
       {!mobile && (<Dimmer
         sx={{
@@ -298,6 +334,9 @@ const Map = ({ mobile }) => {
       />
       )}
 
+      <Loading />
+
+      </MapContainer>
     </Box>
   )
 }
