@@ -3,7 +3,7 @@ import { Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Slider } from '@carbonplan/components'
 
-import useCustomColormap from '../store/useCustomColormap'
+import useCustomColormap from '../store/use-custom-colormap'
 import SidebarDivider from './sidebar-divider'
 import Info from './info'
 import useStore from '../store/index'
