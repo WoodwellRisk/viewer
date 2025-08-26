@@ -440,7 +440,7 @@ const useStore = create((set, get) => ({
                 </Box>
             </Box>,
             colormapName: 'magma',
-            clim: { min: -25, max: 35 },
+            clim: { min: -25, max: 30 },
             colormapLabel: 'Temperature',
             colormapUnits: '(°C)',
             statsLabel: 'ºC',

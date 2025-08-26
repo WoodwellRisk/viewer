@@ -73,7 +73,7 @@ const BarChart = () => {
 
     const bin = d3.bin().domain(variableRange).thresholds(binEdges)
 
-    const xMin = (variable == 'tavg') ? min - 5 : min - binWidth;
+    const xMin = (variable == 'tavg') ? min - 2.5 : min - binWidth;
     const xMax = (variable == 'tavg') ? max + 5 : max + binWidth;
 
     // for some layers, there are values that are above the ranges in climRanges, where I created a "truncated" colormap. 
