@@ -1,3 +1,6 @@
+// these colormaps come from matplotlib
+// see their license here: https://github.com/matplotlib/matplotlib/blob/main/LICENSE/LICENSE
+
 export const customColormaps = {
   "bluered": [
     [5.0, 48.0, 97.0],
