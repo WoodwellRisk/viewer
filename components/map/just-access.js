@@ -135,29 +135,32 @@ const JustAccess = ({ theme }) => {
             let polygonFeatures = features.filter((feature) => feature.geometry["type"] != "Point")
             // there is at least one instance of when a point feature overlays a polygon feature
             // in this case, we want to be able to see the polygon feature's properties on click unless we click on the point
-            if(pointFeatures.length == 0 && polygonFeatures.length > 0) {
+            if (pointFeatures.length == 0 && polygonFeatures.length > 0) {
               let name = polygonFeatures[0].properties.name;
               let url = polygonFeatures[0].properties.url;
-              
+
               let htmlString = `<p style='user-select: none;'>${name}</p>`
-              if(url != 'none') {
-                  if(name == 'Chiapas, Mexico') {
-                      // htmlString += `<a href='#' style='user-select: none;'>Read the full assessment (Spanish)</a>`
-                      htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment (Spanish)</button>`
-                  } else {
-                      // htmlString += `<a href='#' style='user-select: none;'>Read the full assessment</a>`
-                      htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment</button>`
-                  }
-                  // htmlString += `<iframe src='${url}'></iframe>`
+              if (url != 'none') {
+                if (name == 'Chiapas, Mexico') {
+                  // htmlString += `<a href='#' style='user-select: none;'>Read the full assessment (Spanish)</a>`
+                  htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment (Spanish)</button>`
+                } else {
+                  // htmlString += `<a href='#' style='user-select: none;'>Read the full assessment</a>`
+                  htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment</button>`
+                }
+                // htmlString += `<iframe src='${url}'></iframe>`
               }
-  
+
               popup
                 .setLngLat(e.lngLat)
                 .setHTML(htmlString)
                 .setMaxWidth(500)
                 .addTo(map);
 
-                document.querySelector('.report-link').addEventListener('click', onReportClick); 
+              // some reports don't have links
+              if(document.querySelector('.report-link') != null) {
+                document.querySelector('.report-link').addEventListener('click', onReportClick);
+              }
             }
           });
         } catch (error) {
@@ -244,9 +247,9 @@ const JustAccess = ({ theme }) => {
             // console.log(url)
 
             let htmlString = `<p style='user-select: none;'>${name}</p>`
-            if(url != 'none') {
-                htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment</button>`
-                // htmlString += `<iframe src='${url}'></iframe>`
+            if (url != 'none') {
+              htmlString += `<button class='report-link' style='user-select: none;' data-url=${url}>Read the full assessment</button>`
+              // htmlString += `<iframe src='${url}'></iframe>`
             }
 
             popup
@@ -255,8 +258,10 @@ const JustAccess = ({ theme }) => {
               .setMaxWidth(500)
               .addTo(map);
 
-              document.querySelector('.report-link').addEventListener('click', onReportClick); 
-
+            // some reports don't have links
+            if(document.querySelector('.report-link') != null) {
+              document.querySelector('.report-link').addEventListener('click', onReportClick);
+            }
           });
         } catch (error) {
           console.error(error);

@@ -65,28 +65,6 @@
     overflow-x: none;
 } */
 
-iframe {
-    width: 100%;
-    border: none;
-}
-
-#toolbarViewer {
-    border: 1px solid limegreen;
-}
-
-#header, .header, .header-white {
-    display: none;
-}
-
-iframe > #toolbarViewerRight {
-    display: none;
-}
-
-iframe > * {
-    border: 1px solid limegreen;
-
-}
-
 /* .header.sticky-header-white, .header.header-white, .header.is-sticky.sticky-show {
     display: none;
 } */

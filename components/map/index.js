@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import { useThemeUI, Box, Embed } from 'theme-ui'
+import { useThemeUI, Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
 import { Dimmer } from '@carbonplan/components'
@@ -8,6 +8,7 @@ import Loading from '../view/loading'
 import useCustomColormap from '../store/use-custom-colormap'
 import Point from './point'
 import JustAccess from './just-access'
+import PDF from './pdf.js'
 import ZoomReset from './zoom-reset'
 import Ruler from './ruler'
 import Router from './router'
@@ -49,6 +50,7 @@ const Map = ({ mobile }) => {
   const showLandOutline = useStore((state) => state.showLandOutline)
   const showOceanMask = useStore((state) => state.showOceanMask)
   const showJustAccess = useStore((state) => state.showJustAccess)
+  const showReport = useStore((state) => state.showReport)
   const showLakes = useStore((state) => state.showLakes)
   const showCountriesOutline = useStore((state) => state.showCountriesOutline)
   const setShowCountriesOutline = useStore((state) => state.setShowCountriesOutline)
@@ -283,40 +285,7 @@ const Map = ({ mobile }) => {
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
 
-        {/* {showAbout && ( */}
-        {/* <Box
-          sx={{
-              display: ['none', 'flex'],
-              position: 'relative',
-              zIndex: 100,
-              top: ['5%'],
-              width: 'auto',
-              maxWidth: '700px',
-              height: '90%',
-              mx: ['none', 2, 'auto'],
-              my: 'auto',
-              backgroundColor: 'background',
-              borderWidth: '1px',
-              borderColor: 'primary',
-              borderStyle: 'solid',
-            }}
-        >
-          <iframe
-            src='https://www.woodwellclimate.org/wp-content/uploads/2023/01/Woodwell-Climate-Risk-Assessment-Addis-Ababa-Ethiopia-2023.pdf#page=2#toolbar=0'
-            title='Just Access report PDF'
-          >
-          </iframe>
-          <Embed 
-            src='https://www.woodwellclimate.org/wp-content/uploads/2023/01/Woodwell-Climate-Risk-Assessment-Addis-Ababa-Ethiopia-2023.pdf#page=2'
-            // src='https://www.woodwellclimate.org/climate-risk-assessment-addis-ababa-ethiopia/'
-            title='Just Access report PDF'
-            sx={{
-              height: '100%',
-            }}
-          />
-        </Box> */}
-
-        {/* )} */}
+        {showReport && ( <PDF /> )}
 
         <LayerOrder />
 

@@ -85,7 +85,7 @@ const useStore = create((set, get) => ({
     setReportURL: (reportURL) => set({ reportURL }),
 
     showReport: false,
-    setShowReport: (setShowReport) => set({ setShowReport }),
+    setShowReport: (showReport) => set({ showReport }),
 
     showLakes: false,
     setShowLakes: (showLakes) => set({ showLakes }),
