@@ -7,8 +7,8 @@ import { Dimmer } from '@carbonplan/components'
 import Loading from '../view/loading'
 import useCustomColormap from '../store/use-custom-colormap'
 import Point from './point'
-import JustAccess from './just-access'
-import PDF from './pdf.js'
+import JustAccessLayer from './just-access-layer'
+import JustAccessPDF from './just-access-pdf'
 import ZoomReset from './zoom-reset'
 import Ruler from './ruler'
 import Router from './router'
@@ -274,7 +274,7 @@ const Map = ({ mobile }) => {
         )}
 
         {!mobile && showJustAccess && (
-          <JustAccess theme={theme} />
+          <JustAccessLayer theme={theme} />
         )}
 
         <Ruler mobile={mobile} />
@@ -285,7 +285,7 @@ const Map = ({ mobile }) => {
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
 
-        {showReport && ( <PDF /> )}
+        {/* {showReport && ( <JustAccessPDF /> )} */}
 
         <LayerOrder />
 

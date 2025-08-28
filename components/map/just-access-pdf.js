@@ -5,8 +5,7 @@ import useStore from "../store/index";
 const PDF = () => {
 
     const setShowReport = useStore((store) => store.setShowReport)
-    // const reportURL = useStore((store) => store.reportURL)
-    const reportURL = 'https://www.woodwellclimate.org/wp-content/uploads/2023/01/Woodwell-Climate-Risk-Assessment-Addis-Ababa-Ethiopia-2023.pdf#page=1'
+    const reportURL = useStore((store) => store.reportURL) + '#page=1'
 
     return (
         <>
