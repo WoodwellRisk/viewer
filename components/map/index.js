@@ -127,15 +127,15 @@ const Map = ({ mobile }) => {
         <Fill
           id={'lakes-fill'}
           color={theme.rawColors.background}
-          source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
-          variable={'largestLakes'}
+          source={'https://storage.googleapis.com/risk-maps/vector/largest_lakes'}
+          variable={'largest_lakes'}
         />
 
         <Line
           id={'lakes'}
           color={theme.rawColors.primary}
-          source={'https://storage.googleapis.com/risk-maps/vector/largestLakes'}
-          variable={'largestLakes'}
+          source={'https://storage.googleapis.com/risk-maps/vector/largest_lakes'}
+          variable={'largest_lakes'}
           width={1}
         />
 
