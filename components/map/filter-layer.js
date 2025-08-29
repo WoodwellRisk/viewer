@@ -26,12 +26,14 @@ const FilterLayer = ({
   const setSearchText = useStore((state) => state.setSearchText)
   const lookup = useStore((state) => state.lookup)
 
-  // console.log(lookup)
-  // console.log(map.getStyle().layers)
-  
-  // // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  // for the most part, this method works fine, but it is slow
+  // however, countries that cross the antimeridian have an artificial line going through them
+  // lower resolution datasets from topojson/world-atlas (110m, 50m) do not have this issue, but the high resolution dataset (10m) does
+  // there are ways to fix this in d3 and topojson, but seem difficult
+  // see: https://github.com/topojson/topojson/issues/164
+  // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   // async function getData() {
-  //   const url = "https://storage.googleapis.com/risk-maps/vector/countries.geojson";
+  //   const url = source;
   //   try {
   //     const response = await fetch(url);
   //     if (!response.ok) {
@@ -39,8 +41,8 @@ const FilterLayer = ({
   //     }
   
   //     const data = await response.json();
-  //     const country = data['features'].filter(d => d.properties.name == 'Russia')[0]
-  //     console.log(country);
+  //     const feature = data['features'].filter(d => d.properties.name == place)[0]
+  //     console.log(feature);
   //     // console.log(geoStitch(country))
   //   } catch (error) {
   //     console.error(error.message);
@@ -48,11 +50,6 @@ const FilterLayer = ({
   // }
 
   // getData()
-  
-
-  useEffect(() => {
-    console.log(map.getZoom())
-  }, [map.getZoom()]) 
 
   let opacityProperty = type == 'line' ? 'line-opacity' : 'circle-opacity'
   let width = 2
@@ -132,7 +129,7 @@ const FilterLayer = ({
             'id': layerId,
             'type': type,
             'source': sourceId,
-            'source-layer': lookup,
+            'source-layer': lookup, // commented out if using geojson layer instead of pbf layer
             'layout': {
               'visibility': 'visible',
             },
@@ -149,7 +146,7 @@ const FilterLayer = ({
             'id': layerId,
             'type': type,
             'source': sourceId,
-            'source-layer': lookup,
+            'source-layer': lookup, // commented out if using geojson layer instead of pbf layer
             'layout': {
               'visibility': 'visible',
             },

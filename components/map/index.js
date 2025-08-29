@@ -285,7 +285,7 @@ const Map = ({ mobile }) => {
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
 
-        {/* {showReport && ( <JustAccessPDF /> )} */}
+        {showReport && ( <JustAccessPDF /> )}
 
         <LayerOrder />
 

@@ -63,6 +63,7 @@ const Spinner = () => {
           top: ["46%"],
           cursor: "pointer",
           ml: [2],
+          mt: [2],
           display: ["initial", "initial", "initial", "initial"],
           position: "absolute",
           color: "primary",

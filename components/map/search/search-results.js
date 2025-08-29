@@ -83,7 +83,7 @@ const SearchResults = () => {
         if (place && lookup) {
             setShowSpinner(true)
             
-            fetch(`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`)
+            fetch(`https://storage.googleapis.com/risk-maps/search/${lookup}.geojson`)
                 .then((response) => response.json())
                 .then((json) => {
                     let filtered = json.features.filter(feature => feature.properties.name == searchText)[0];
@@ -91,6 +91,9 @@ const SearchResults = () => {
                         let coords = filtered.geometry.coordinates
                         setCoordinates(coords)
                     } else {
+                        console.log(lookup)
+                        console.log(place)
+                        console.log(filtered.properties.bbox)
                         setBbox(filtered.properties.bbox)
                     }
                 })
