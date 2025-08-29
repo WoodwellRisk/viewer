@@ -6,11 +6,12 @@ import useStore from '../store/index'
 const LayerOrder = () => {
     const { map } = useMapbox()
     const variable = useStore((state) => state.variable)
+    const zoom = useStore((state) => state.zoom)
     const showStatesOutline = useStore((state) => state.showStatesOutline)
     const showCountriesOutline = useStore((state) => state.showCountriesOutline)
 
     useEffect(() => {
-        if(showStatesOutline && showCountriesOutline) {
+        if(showStatesOutline && showCountriesOutline && zoom >= 4.0) {
             let layers = map.getStyle().layers;
             let states = layers.filter((layer) => layer.source == 'states')[0]
             let countries = layers.filter((layer) => layer.source == 'countries')[0]
