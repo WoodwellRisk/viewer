@@ -7,11 +7,15 @@ const LayerOrder = () => {
     const { map } = useMapbox()
     const variable = useStore((state) => state.variable)
     const zoom = useStore((state) => state.zoom)
+    const showStatesZoom = useStore((state) => state.showStatesZoom)
+    const lookup = useStore((state) => state.lookup)
+    const place = useStore((state) => state.place)
+    const showFilter = useStore((state) => state.showFilter)
     const showStatesOutline = useStore((state) => state.showStatesOutline)
     const showCountriesOutline = useStore((state) => state.showCountriesOutline)
 
     useEffect(() => {
-        if(showStatesOutline && showCountriesOutline && zoom >= 4.0) {
+        if(showCountriesOutline && showStatesOutline && zoom >= showStatesZoom) {
             let layers = map.getStyle().layers;
             let states = layers.filter((layer) => layer.source == 'states')[0]
             let countries = layers.filter((layer) => layer.source == 'countries')[0]
@@ -23,7 +27,24 @@ const LayerOrder = () => {
       }, [showStatesOutline])
 
       useEffect(() => {
-        let layers = map.getStyle().layers;
+        if(showFilter && (showCountriesOutline || showStatesOutline)) {
+            let layers = map.getStyle().layers;
+            console.log(layers)
+            let states = layers.filter((layer) => layer.source == 'states')[0]
+            let countries = layers.filter((layer) => layer.source == 'countries')[0]
+            let filterLayer = layers.filter((layer) => layer.source.startsWith('filter-layer'))[0]
+
+            if(filterLayer && showCountriesOutline) {
+                map.moveLayer(countries.id, filterLayer.id)
+            } 
+            if (filterLayer && showStatesOutline && zoom >= showStatesZoom) {
+                map.moveLayer(states.id, filterLayer.id)
+            }
+        }
+      }, [place, showStatesOutline, showCountriesOutline])
+
+      useEffect(() => {
+        let layers = map.getStyle().layers; 
 
         if(variable != 'slr' && !variable.startsWith('tc')) {
             let oceanFill = layers.filter((layer) => layer.source == 'ocean-fill')[0]

@@ -39,7 +39,7 @@ const FilterLayer = ({
   //     if (!response.ok) {
   //       throw new Error(`Response status: ${response.status}`);
   //     }
-  
+
   //     const data = await response.json();
   //     const feature = data['features'].filter(d => d.properties.name == place)[0]
   //     console.log(feature);
@@ -50,6 +50,10 @@ const FilterLayer = ({
   // }
 
   // getData()
+
+  useEffect(() => {
+    console.log(map.getZoom())
+  }, [map.getZoom()])
 
   let opacityProperty = type == 'line' ? 'line-opacity' : 'circle-opacity'
   let width = 2
@@ -92,17 +96,23 @@ const FilterLayer = ({
   }, [])
 
   useEffect(() => {
-    if(place != null) {
+    if (place != null) {
       sourceIdRef.current = id || uuidv4()
       const { current: sourceId } = sourceIdRef
-  
+
       if (!map.getSource(sourceId)) {
-        map.addSource(sourceId, {
-          type: 'vector',
-          tiles: [`${source}/{z}/{x}/{y}.pbf`],
-          // type: 'geojson',
-          // data: source,
-        })
+        if(type == 'circle') {
+          map.addSource(sourceId, {
+            type: 'geojson',
+            data: source,
+          })
+        } else {
+          map.addSource(sourceId, {
+            type: 'vector',
+            tiles: [`${source}/{z}/{x}/{y}.pbf`],
+          })
+        }
+
         if (minZoom) {
           map.getSource(sourceId).minzoom = minZoom
         }
@@ -114,17 +124,17 @@ const FilterLayer = ({
   }, [id])
 
   useEffect(() => {
-    if(place != null) {
+    if (place != null) {
       const { current: sourceId } = sourceIdRef
       const layerId = place || uuidv4()
       layerIdRef.current = layerId
       textIdRef.current = uuidv4()
       const { current: textId } = textIdRef
-  
+
       if (!map.getLayer(layerId)) {
         let tempLayer
 
-        if(type == 'line') {
+        if (type == 'line') {
           tempLayer = map.addLayer({
             'id': layerId,
             'type': type,
@@ -146,13 +156,13 @@ const FilterLayer = ({
             'id': layerId,
             'type': type,
             'source': sourceId,
-            'source-layer': lookup, // commented out if using geojson layer instead of pbf layer
+            // 'source-layer': lookup, // commented out if using geojson layer instead of pbf layer
             'layout': {
               'visibility': 'visible',
             },
             'paint': {
               'circle-color': color,
-              'circle-opacity': 0.7,
+              // 'circle-opacity': 0.7,
               'circle-radius': 4,
             },
             'filter': ['==', 'name', place]
@@ -160,10 +170,10 @@ const FilterLayer = ({
 
           if (!map.style.stylesheet.glyphs) {
             console.log("Please specify a glyphs object in the <Map /> component in order to use text labels.")
-            return
+            // return
           }
-    
-          if (!map.getLayer(textId)) {
+
+          if (!map.getLayer(textId) && map.style.stylesheet.glyphs) {
             map.addLayer({
               'id': textId,
               'type': 'symbol',
@@ -175,8 +185,9 @@ const FilterLayer = ({
               'filter': ['==', 'name', place],
               'layout': {
                 'text-ignore-placement': false,
-                'text-font': ['Metropolis Regular'],
+                'text-font': ['ginto-normal-regular'],
                 'text-field': ['format', ['get', 'name'], { 'font-scale': 1.0 }],
+                // 'text-field': ['get', 'name'],
                 'text-variable-anchor': ['bottom-left'],
                 'text-justify': 'left',
               },
@@ -185,11 +196,11 @@ const FilterLayer = ({
         } else { // if type is not in ['cirle', 'line'], return null
           return null
         }
-  
+
         setTimeout(() => {
           map.setPaintProperty(layerId, opacityProperty, 1);
         }, 0)
-  
+
         return () => {
           if (!removed.current) {
             if (map.getLayer(layerId)) {
@@ -203,7 +214,7 @@ const FilterLayer = ({
             }
           }
         }
-  
+
       }
     }
 
@@ -212,7 +223,7 @@ const FilterLayer = ({
   const handleRemoveLayer = (() => {
     setSearchText('')
     setPlace(null)
-})
+  })
 
   // return null
   return (
@@ -223,7 +234,7 @@ const FilterLayer = ({
             Remove search layer
           </Badge>
         </Box>
-      : null}
+        : null}
     </Box>
   )
 }

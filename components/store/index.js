@@ -30,7 +30,10 @@ const useStore = create((set, get) => ({
     center: [-40, 40],
     setCenter: (center) => set({ center }),
 
-    glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    // glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    // glyphs: 'https://storage.googleapis.com/risk-maps/media/fonts/{fontstack}/{range}.pbf',
+    // glyphs: '../../assets/{fontstack}/{range}.pbf',
+    glyphs: false,
 
     // general / raster state variables
     variables: [

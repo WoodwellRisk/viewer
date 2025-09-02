@@ -81,7 +81,7 @@ const Map = ({ mobile }) => {
   return (
     <Box ref={container} sx={{ display: 'flex', flexBasis: '100%', justifyContent: 'center', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
 
-      <MapContainer zoom={zoom} maxZoom={24} center={center} glyphs={glyphs} >
+      <MapContainer zoom={zoom} maxZoom={8.9} center={center} glyphs={glyphs} >
         {variable != 'slr' && !variable.startsWith('tc') && (
           <>
             <Fill
@@ -253,19 +253,12 @@ const Map = ({ mobile }) => {
           <Spinner />
         )}
 
-        {/* 
-        Right now, when a variable is re-rendered, the land outline layer get redrawn.
-        This means that if the filter layer is active, it will be drawn over by the land outline.
-        There might be a way to make sure that when the land outline layer gets redrawn, the filter 
-        layer (if active) is always on top. This might mean writing custom Line and Fill components.
-        https://docs.mapbox.com/mapbox-gl-js/api/map/#map#movelayer 
-      */}
         {place != null && lookup != null && showFilter && showSearch && (
           <FilterLayer
             key={`filter-layer-${place})}`}
             id={`filter-layer-${Date.now()}`}
-            source={'https://storage.googleapis.com/risk-maps/vector/' + lookup}
-            // source={`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`}
+            // source={'https://storage.googleapis.com/risk-maps/vector/' + lookup }
+            source={lookup == 'cities' ? `https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson` : 'https://storage.googleapis.com/risk-maps/vector/' + lookup }
             opacity={0.0}
             // color={theme.rawColors.primary}
             color={'#860F4F'}
