@@ -183,7 +183,7 @@ const Layers = () => {
             )}
 
             {variable != 'slr' && (
-              <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
+              <Box sx={{ ...sx.label, mt: [4], width: '100%' }}>
                 <Box sx={{ ...sx.label, mb: [1] }}>{bandLabel}</Box>
                 <Slider
                   sx={{ mt: [3], mb: [2], width: (variable.startsWith('tc') || variable.startsWith('cf')) ? '150px' : '175px', display: 'inline-block' }}
