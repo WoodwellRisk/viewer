@@ -6,7 +6,7 @@ import { Dimmer } from '@carbonplan/components'
 
 import Loading from '../view/loading'
 import useCustomColormap from '../store/use-custom-colormap'
-import Point from './point'
+// import Point from './point'
 import JustAccessLayer from './just-access-layer'
 import JustAccessPDF from './just-access-pdf'
 import ZoomReset from './zoom-reset'
@@ -15,7 +15,7 @@ import Router from './router'
 import LayerOrder from './layer-order'
 import Search from './search/index'
 import Spinner from './search/spinner'
-import FilterLayer from './filter-layer'
+import SearchLayer from './search/search-layer'
 
 import useStore from '../store/index'
 
@@ -47,13 +47,11 @@ const Map = ({ mobile }) => {
   const setRegionDataLoading = useStore((state) => state.setRegionDataLoading)
 
   const showRegionPicker = useStore((state) => state.showRegionPicker)
-  const showLandOutline = useStore((state) => state.showLandOutline)
-  const showOceanMask = useStore((state) => state.showOceanMask)
+
   const showJustAccess = useStore((state) => state.showJustAccess)
   const showReport = useStore((state) => state.showReport)
   const showLakes = useStore((state) => state.showLakes)
   const showCountriesOutline = useStore((state) => state.showCountriesOutline)
-  const setShowCountriesOutline = useStore((state) => state.setShowCountriesOutline)
   const showRegionsOutline = useStore((state) => state.showRegionsOutline)
   const showStatesOutline = useStore((state) => state.showStatesOutline)
   const showStatesZoom = useStore((state) => state.showStatesZoom)
@@ -63,7 +61,7 @@ const Map = ({ mobile }) => {
   const showSearch = useStore((state) => state.showSearch)
   const setShowSearch = useStore((state) => state.setShowSearch)
   const showSpinner = useStore((state) => state.showSpinner)
-  const showFilter = useStore((state) => state.showFilter)
+  const showSearchLayer = useStore((state) => state.showSearchLayer)
 
   // this callback was modified from its source: https://github.com/carbonplan/oae-web/blob/3eff3fb99a24a024f6f9a8278add9233a31e853b/components/map.js#L93
   const handleRegionData = useCallback((data) => {
@@ -92,7 +90,8 @@ const Map = ({ mobile }) => {
               zIndex={-1}
             />
 
-            {/* <Point
+            {/* 
+            <Point
               id={'cities'}
               color={theme.rawColors.primary}
               source={'https://storage.googleapis.com/risk-maps/vector/cities'}
@@ -100,7 +99,8 @@ const Map = ({ mobile }) => {
               label={true}
               labelText={'name'}
               minZoom={6}
-            /> */}
+            /> 
+            */}
           </>
         )}
 
@@ -253,12 +253,12 @@ const Map = ({ mobile }) => {
           <Spinner />
         )}
 
-        {place != null && lookup != null && showFilter && showSearch && (
-          <FilterLayer
-            key={`filter-layer-${place})}`}
-            id={`filter-layer-${Date.now()}`}
+        {place != null && lookup != null && showSearch && showSearchLayer && (
+          <SearchLayer
+            key={`search-layer-${place})}`}
+            id={`search-layer-${Date.now()}`}
             // source={'https://storage.googleapis.com/risk-maps/vector/' + lookup }
-            source={lookup == 'cities' ? `https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson` : 'https://storage.googleapis.com/risk-maps/vector/' + lookup }
+            source={lookup == 'cities' ? `https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson` : 'https://storage.googleapis.com/risk-maps/vector/' + lookup}
             opacity={0.0}
             // color={theme.rawColors.primary}
             color={'#860F4F'}
@@ -278,25 +278,25 @@ const Map = ({ mobile }) => {
           <Search showSearch={showSearch} setShowSearch={setShowSearch} />
         )}
 
-        {showReport && ( <JustAccessPDF /> )}
+        {showReport && (<JustAccessPDF />)}
 
         <LayerOrder />
 
         <Router />
 
 
-      {!mobile && (<Dimmer
-        sx={{
-          display: ['initial', 'initial', 'initial', 'initial'],
-          position: 'absolute',
-          color: 'primary',
-          right: [70],
-          bottom: [20, 20, 20, 20],
-        }}
-      />
-      )}
+        {!mobile && (<Dimmer
+          sx={{
+            display: ['initial', 'initial', 'initial', 'initial'],
+            position: 'absolute',
+            color: 'primary',
+            right: [70],
+            bottom: [20, 20, 20, 20],
+          }}
+        />
+        )}
 
-      <Loading />
+        <Loading />
 
       </MapContainer>
     </Box>

@@ -8,9 +8,8 @@ const LayerOrder = () => {
     const variable = useStore((state) => state.variable)
     const zoom = useStore((state) => state.zoom)
     const showStatesZoom = useStore((state) => state.showStatesZoom)
-    const lookup = useStore((state) => state.lookup)
     const place = useStore((state) => state.place)
-    const showFilter = useStore((state) => state.showFilter)
+    const showSearchLayer = useStore((state) => state.showSearchLayer)
     const showStatesOutline = useStore((state) => state.showStatesOutline)
     const showCountriesOutline = useStore((state) => state.showCountriesOutline)
 
@@ -27,18 +26,18 @@ const LayerOrder = () => {
       }, [showStatesOutline])
 
       useEffect(() => {
-        if(showFilter && (showCountriesOutline || showStatesOutline)) {
+        if(showSearchLayer && (showCountriesOutline || showStatesOutline)) {
             let layers = map.getStyle().layers;
             console.log(layers)
             let states = layers.filter((layer) => layer.source == 'states')[0]
             let countries = layers.filter((layer) => layer.source == 'countries')[0]
-            let filterLayer = layers.filter((layer) => layer.source.startsWith('filter-layer'))[0]
+            let searchLayer = layers.filter((layer) => layer.source.startsWith('search-layer'))[0]
 
-            if(filterLayer && showCountriesOutline) {
-                map.moveLayer(countries.id, filterLayer.id)
+            if(searchLayer && showCountriesOutline) {
+                map.moveLayer(countries.id, searchLayer.id)
             } 
-            if (filterLayer && showStatesOutline && zoom >= showStatesZoom) {
-                map.moveLayer(states.id, filterLayer.id)
+            if (searchLayer && showStatesOutline && zoom >= showStatesZoom) {
+                map.moveLayer(states.id, searchLayer.id)
             }
         }
       }, [place, showStatesOutline, showCountriesOutline])

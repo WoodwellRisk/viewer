@@ -25,10 +25,6 @@ const SearchUI = () => {
   const setSearchBy = useStore((state) => state.setSearchBy)
   const setShowSpinner = useStore((state) => state.setShowSpinner)
 
-  // useEffect(() => {
-  //   console.log("Should be setting bounding box!")
-  // }, [setBbox])
-
   const sx = {
     'toggle-search': {
       color: 'primary',

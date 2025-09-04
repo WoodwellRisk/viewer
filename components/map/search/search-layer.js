@@ -3,14 +3,14 @@ import { Badge, Box, useThemeUI } from 'theme-ui'
 import { useMapbox } from '@carbonplan/maps'
 import { v4 as uuidv4 } from 'uuid'
 
-import useStore from '../store/index'
+import useStore from '../../store/index'
 
-const FilterLayer = ({
+const SearchLayer = ({
   id,
   source,
   color,
   minZoom = 0,
-  maxZoom = 24,
+  maxZoom = 8.9,
   opacity = 1,
   type,
 }) => {
@@ -25,35 +25,9 @@ const FilterLayer = ({
   const setPlace = useStore((state) => state.setPlace)
   const setSearchText = useStore((state) => state.setSearchText)
   const lookup = useStore((state) => state.lookup)
-
-  // for the most part, this method works fine, but it is slow
-  // however, countries that cross the antimeridian have an artificial line going through them
-  // lower resolution datasets from topojson/world-atlas (110m, 50m) do not have this issue, but the high resolution dataset (10m) does
-  // there are ways to fix this in d3 and topojson, but seem difficult
-  // see: https://github.com/topojson/topojson/issues/164
-  // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  // async function getData() {
-  //   const url = source;
-  //   try {
-  //     const response = await fetch(url);
-  //     if (!response.ok) {
-  //       throw new Error(`Response status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     const feature = data['features'].filter(d => d.properties.name == place)[0]
-  //     console.log(feature);
-  //     // console.log(geoStitch(country))
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // }
-
-  // getData()
-
-  useEffect(() => {
-    console.log(map.getZoom())
-  }, [map.getZoom()])
+  const result = useStore((state) => state.result)
+  const setCoordinates = useStore((state) => state.setCoordinates)
+  const setBbox = useStore((state) => state.setBbox)
 
   let opacityProperty = type == 'line' ? 'line-opacity' : 'circle-opacity'
   let width = 2
@@ -101,7 +75,7 @@ const FilterLayer = ({
       const { current: sourceId } = sourceIdRef
 
       if (!map.getSource(sourceId)) {
-        if(type == 'circle') {
+        if (type == 'circle') {
           map.addSource(sourceId, {
             type: 'geojson',
             data: source,
@@ -151,6 +125,7 @@ const FilterLayer = ({
             },
             'filter': ['==', 'name', place]
           })
+
         } else if (type == 'circle') {
           tempLayer = map.addLayer({
             'id': layerId,
@@ -201,6 +176,17 @@ const FilterLayer = ({
           map.setPaintProperty(layerId, opacityProperty, 1);
         }, 0)
 
+        if (result.length != 0) {
+          console.log(result)
+          if (lookup == 'cities') {
+            let coords = JSON.parse(result[2])
+            setCoordinates(coords)
+          } else {
+            let bbox = JSON.parse(result[2])
+            setBbox(bbox)
+          }
+        }
+
         return () => {
           if (!removed.current) {
             if (map.getLayer(layerId)) {
@@ -239,4 +225,4 @@ const FilterLayer = ({
   )
 }
 
-export default FilterLayer
+export default SearchLayer

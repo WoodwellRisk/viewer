@@ -599,9 +599,14 @@ const useStore = create((set, get) => ({
     showSpinner: false,
     setShowSpinner: (showSpinner) => set({ showSpinner }),
 
-    showFilter: true,
-    setShowFilter: (showFilter) => set({ showFilter }),
+    showSearchLayer: true,
+    setShowSearchLayer: (showSearchLayer) => set({ showSearchLayer }),
 
+    // result is the filtered search result that we want to zoom to on the map
+    result: [],
+    setResult: (result) => set({ result }),
+
+    // results is for the search results drop down, so can be an array of arrays of length [0, 10]
     results: [],
     setResults: (results) => set({ results }),
 
