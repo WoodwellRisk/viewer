@@ -1,5 +1,5 @@
-import { Badge, Box, Input, Text, useThemeUI } from 'theme-ui'
 import { useEffect } from 'react'
+import { Badge, Box, Input, Text, useThemeUI } from 'theme-ui'
 
 import useStore from '../../store/index'
 
@@ -7,16 +7,18 @@ const SearchBoxCoords = () => {
   const { theme } = useThemeUI()
 
   const setCoordinates = useStore((state) => state.setCoordinates)
+
   const latitudeInput = useStore((state) => state.latitudeInput)
   const setLatitudeInput = useStore((state) => state.setLatitudeInput)
-  const longitudeInput = useStore((state) => state.setLongitudeInput)
-  const setLongitudeInput = useStore((state) => state.setLatitudeInput)
   const latitude = useStore((state) => state.latitude)
   const setLatitude = useStore((state) => state.setLatitude)
-  const longitude = useStore((state) => state.longitude)
-  const setLongitude = useStore((state) => state.setLongitude)
   const validLatitude = useStore((state) => state.validLatitude)
   const setValidLatitude = useStore((state) => state.setValidLatitude)
+
+  const longitudeInput = useStore((state) => state.longitudeInput)
+  const setLongitudeInput = useStore((state) => state.setLongitudeInput)
+  const longitude = useStore((state) => state.longitude)
+  const setLongitude = useStore((state) => state.setLongitude)
   const validLongitude = useStore((state) => state.validLongitude)
   const setValidLongitude = useStore((state) => state.setValidLongitude)
 

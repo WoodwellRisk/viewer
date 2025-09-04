@@ -631,17 +631,17 @@ const useStore = create((set, get) => ({
     latitudeInput: '',
     setLatitudeInput: (latitudeInput) => set({ latitudeInput }),
 
-    longitudeInput: '',
-    setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
-
     latitude: '',
     setLatitude: (latitude) => set({ latitude }),
 
-    longitude: '',
-    setLongitude: (longitude) => set({ longitude }),
-
     validLatitude: true,
     setValidLatitude: (validLatitude) => set({ validLatitude }),
+
+    longitudeInput: '',
+    setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
+
+    longitude: '',
+    setLongitude: (longitude) => set({ longitude }),
 
     validLongitude: true,
     setValidLongitude: (validLongitude) => set({ validLongitude }),
