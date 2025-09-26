@@ -1,6 +1,6 @@
 // Adapted from Carbonplan's <Input /> component:
 // https://github.com/carbonplan/components/blob/main/src/input.js
-import { useEffect } from 'react'
+import {useEffect} from 'react'
 import { Box, Text, useThemeUI } from 'theme-ui'
 
 import useStore from '../../store/index'
@@ -13,12 +13,15 @@ const SearchResults = () => {
     const setPlace = useStore((state) => state.setPlace)
     const lookup = useStore((state) => state.lookup)
     const setLookup = useStore((state) => state.setLookup)
+    const result = useStore((state) => state.result)
+    const setResult = useStore((state) => state.setResult)
     const results = useStore((state) => state.results)
     const setResults = useStore((state) => state.setResults)
     const searchText = useStore((state) => state.searchText)
     const setSearchText = useStore((state) => state.setSearchText)
     const setCoordinates = useStore((state) => state.setCoordinates)
     const setBbox = useStore((state) => state.setBbox)
+    const setShowSpinner = useStore((state) => state.setShowSpinner)
 
     const sx = {
         'search-container': {
@@ -74,25 +77,16 @@ const SearchResults = () => {
         let place = event.target.innerText
         setSearchText(place)
         setPlace(place)
-        setLookup(results.filter(result => result[0] == place)[0][1])
+
+        // the results comes back in the form [name, search, coordinates / bbox]
+        let filtered = results.filter(result => result[0] == place)[0]
+        setResult(filtered)
+
+        let lookup = filtered[1];
+        setLookup(lookup)
+
         setResults([])
     })
-
-    useEffect(() => {
-        if (place && lookup) {
-            fetch(`https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`)
-                .then((response) => response.json())
-                .then((json) => {
-                    let filtered = json.features.filter(feature => feature.properties.name == searchText)[0];
-                    if (filtered.geometry != null && filtered.geometry.type == 'Point') {
-                        let coords = filtered.geometry.coordinates
-                        setCoordinates(coords)
-                    } else {
-                        setBbox(filtered.properties.bbox)
-                    }
-                })
-        }
-    }, [place, lookup])
 
     return (
         <Box>
@@ -115,7 +109,7 @@ const SearchResults = () => {
                                                         result[1] == 'states' ? 'state' :
                                                             result[1] == 'countries' ? 'country' :
                                                                 result[1] == 'regions' ? 'region' :
-                                                                    'lake'
+                                                                'none'
                                             }
                                         </Text>
                                     </Box>

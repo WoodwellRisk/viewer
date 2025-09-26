@@ -5,7 +5,6 @@ import Map from '../map'
 import Layers from '../sidebar/layers'
 import Content from '../sidebar/about/content'
 import MobileHeader from './mobile-header'
-import Loading from './loading'
 
 import useStore from '../store/index'
 
@@ -98,8 +97,6 @@ function Mobile({ expanded }) {
 
       <Box sx={sx['map']}>
         <Map mobile={true} />
-
-        <Loading isWide />
       </Box>
 
       {showSettings && (

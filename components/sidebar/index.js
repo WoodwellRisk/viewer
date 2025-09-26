@@ -28,7 +28,7 @@ const Sidebar = () => {
       display: ['none', 'flex', 'flex'],
       maxWidth: [
         0,
-        '350px',
+        '300px',
         '350px',
         '400px',
       ],

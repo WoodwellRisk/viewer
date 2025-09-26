@@ -6,7 +6,7 @@ import { Reset } from '@carbonplan/icons'
 
 import useStore from '../store/index'
 
-const ZoomReset = () => {
+const ZoomReset = ({ mobile=false }) => {
   const { map } = useMapbox()
   const zoom = useStore((state) => state.zoom)
   const center = useStore((state) => state.center)
@@ -60,7 +60,7 @@ const ZoomReset = () => {
         position: 'absolute',
         color: (zoom == 1.00 && center[0] == -40 && center[1] == 40) ? 'muted' : 'primary',
         left: [2],
-        bottom: [20, 20, 20, 20],
+        bottom: mobile ? 80 : 20,
         '.spin': {
           animation: `${spin.toString()} 1s`,
         },

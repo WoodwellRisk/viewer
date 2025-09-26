@@ -36,3 +36,11 @@ For back-end data analysis/transformation of `NetCDF` and `TIF` files, we used P
 
 ## Acknowledgements
 This site's interface and functionality rely heavily on code developed by [CarbonPlan](https://carbonplan.org/). Specifically, we used the [`maps`](https://github.com/carbonplan/maps), [`components`](https://github.com/carbonplan/components), and [`layouts`](https://github.com/carbonplan/layouts) libraries. We took inspiration from CarbonPlan's [`forest-risks-web`](https://github.com/carbonplan/forest-risks-web) code repository to create an updated and modified user interface for this data viewer. Additionally, we modified the `<ExpandingSection />` component from the <a href="https://github.com/carbonplan/prototype-maps" target="_blank">`prototype-maps`</a> repository. You can read more about CarbonPlan's research and software development work [here](https://carbonplan.org/research).
+
+This repository contains code from the CarbonPlan `components` package. Copyright (c) 2020 CarbonPlan, distributed under a MIT License.
+
+This repository contains code from the CarbonPlan `maps` package. Copyright (c) 2021 CarbonPlan, distributed under a MIT License.
+
+This repository contains code from the CarbonPlan `layouts` package. Copyright (c) 2021 CarbonPlan, distributed under a MIT License.
+
+This repository contains code from the CarbonPlan `prototype-maps` package. Copyright (c) 2021 CarbonPlan, distributed under a MIT License.

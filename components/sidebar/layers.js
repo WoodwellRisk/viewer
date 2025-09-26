@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Box } from 'theme-ui'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import { Badge, Colorbar, Filter, Link, Slider } from '@carbonplan/components'
 
+import useCustomColormap from '../store/use-custom-colormap'
 import SidebarDivider from './sidebar-divider'
 import Info from './info'
 import useStore from '../store/index'
@@ -18,14 +19,13 @@ const Layers = () => {
   const setBandIndex = useStore((state) => state.setBandIndex)
   const setBand = useStore((state) => state.setBand)
   const clim = useStore((state) => state.clim)()
-  const customColormaps = useStore((state) => state.customColormaps)
   const colormapName = useStore((state) => state.colormapName)()
   const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
     (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-    (variable.startsWith('tavg')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+    (variable.startsWith('tavg')) ? useCustomColormap(colormapName) :
     (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
     (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-    variable.startsWith('cf') ? useMemo(() => customColormaps[colormapName]) :
+    variable.startsWith('cf') ? useCustomColormap(colormapName) :
     useThemedColormap(colormapName)
 
   // state variables for risk themes
@@ -199,7 +199,7 @@ const Layers = () => {
             )}
 
             {variable != 'slr' && (
-              <Box sx={{ ...sx.label, mt: [4], width: '90%' }}>
+              <Box sx={{ ...sx.label, mt: [4], width: '100%' }}>
                 <Box sx={{ ...sx.label, mb: [1] }}>{bandLabel}</Box>
                 <Slider
                   sx={{ mt: [3], mb: [2], width: (variable.startsWith('tc') || variable.startsWith('cf')) ? '150px' : '175px', display: 'inline-block' }}

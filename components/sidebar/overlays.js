@@ -71,15 +71,6 @@ const Overlays = () => {
                 />
             </Flex>
 
-            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                <Box sx={sx.label}>Regions</Box>
-                <Toggle
-                    sx={sx['toggle']}
-                    value={showRegionsOutline}
-                    onClick={() => setShowRegionsOutline(!showRegionsOutline)}
-                />
-            </Flex>
-
             <Flex sx={{ justifyContent: 'space-between' }}>
                 <Box sx={sx.label}>States</Box>
                 <Toggle
@@ -102,6 +93,17 @@ const Overlays = () => {
                     onClick={() => setShowLakes(!showLakes)}
                 />
             </Flex>
+
+            {/*             
+            <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                <Box sx={sx.label}>Regions</Box>
+                <Toggle
+                    sx={sx['toggle']}
+                    value={showRegionsOutline}
+                    onClick={() => setShowRegionsOutline(!showRegionsOutline)}
+                />
+            </Flex> 
+            */}
         </Box>
     )
 }

@@ -30,7 +30,10 @@ const useStore = create((set, get) => ({
     center: [-40, 40],
     setCenter: (center) => set({ center }),
 
-    glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    // glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    // glyphs: 'https://storage.googleapis.com/risk-maps/media/fonts/{fontstack}/{range}.pbf',
+    // glyphs: '../../assets/{fontstack}/{range}.pbf',
+    glyphs: false,
 
     // general / raster state variables
     variables: [
@@ -80,6 +83,12 @@ const useStore = create((set, get) => ({
 
     showJustAccess: false,
     setShowJustAccess: (showJustAccess) => set({ showJustAccess }),
+
+    reportURL: '',
+    setReportURL: (reportURL) => set({ reportURL }),
+
+    showReport: false,
+    setShowReport: (showReport) => set({ showReport }),
 
     showLakes: false,
     setShowLakes: (showLakes) => set({ showLakes }),
@@ -439,8 +448,8 @@ const useStore = create((set, get) => ({
                     Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
                 </Box>
             </Box>,
-            colormapName: 'redteal',
-            clim: { min: -30, max: 30 },
+            colormapName: 'magma',
+            clim: { min: -25, max: 30 },
             colormapLabel: 'Temperature',
             colormapUnits: '(°C)',
             statsLabel: 'ºC',
@@ -474,11 +483,11 @@ const useStore = create((set, get) => ({
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Warm nights',
-            riskTitle: 'Nights over 70°F',
+            riskTitle: 'Nights over 68°F',
             riskDescription:
             <Box className='risk-layer-description' sx={sx.data_description}>
                 <Box>
-                    Heat stress. The number of days in a year with nightly minimum temperatures over 70°F (~21.1°C). 
+                    Heat stress. The number of days in a year with nightly minimum temperatures over 68°F (20°C). 
                     Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
                 </Box>
                 <Box sx={sx.data_source}>
@@ -587,9 +596,17 @@ const useStore = create((set, get) => ({
     showSearch: false,
     setShowSearch: (showSearch) => set({ showSearch }),
 
-    showFilter: true,
-    setShowFilter: (showFilter) => set({ showFilter }),
+    showSpinner: false,
+    setShowSpinner: (showSpinner) => set({ showSpinner }),
 
+    showSearchLayer: true,
+    setShowSearchLayer: (showSearchLayer) => set({ showSearchLayer }),
+
+    // result is the filtered search result that we want to zoom to on the map
+    result: [],
+    setResult: (result) => set({ result }),
+
+    // results is for the search results drop down, so can be an array of arrays of length [0, 10]
     results: [],
     setResults: (results) => set({ results }),
 
@@ -614,17 +631,17 @@ const useStore = create((set, get) => ({
     latitudeInput: '',
     setLatitudeInput: (latitudeInput) => set({ latitudeInput }),
 
-    longitudeInput: '',
-    setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
-
     latitude: '',
     setLatitude: (latitude) => set({ latitude }),
 
-    longitude: '',
-    setLongitude: (longitude) => set({ longitude }),
-
     validLatitude: true,
     setValidLatitude: (validLatitude) => set({ validLatitude }),
+
+    longitudeInput: '',
+    setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
+
+    longitude: '',
+    setLongitude: (longitude) => set({ longitude }),
 
     validLongitude: true,
     setValidLongitude: (validLongitude) => set({ validLongitude }),

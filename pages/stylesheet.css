@@ -2,19 +2,19 @@
 @font-face {
     font-family: "ginto-normal";
     /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
-    src: url('../assets/GintoNormal-Regular.ttf');
+    src: url('../assets/ginto-normal-regular.ttf');
 }
 
 @font-face {
     font-family: "ginto-medium";
     /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
-    src: url('../assets/GintoNormal-Medium.ttf');
+    src: url('../assets/ginto-normal-medium.ttf');
 }
 
 @font-face {
     font-family: "ginto-bold";
     /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
-    src: url('../assets/GintoNormal-Bold.ttf');
+    src: url('../assets/ginto-normal-bold.ttf');
 }
 
 .mapboxgl-map {
@@ -58,13 +58,47 @@
     margin-top: 0.25rem;
 }
 
-iframe {
+/* iframe {
     border: 1px solid #1b1e23;
     width: 100%;
     max-width: 500px;
     overflow-x: none;
-}
+} */
 
 /* .header.sticky-header-white, .header.header-white, .header.is-sticky.sticky-show {
     display: none;
 } */
+
+@keyframes circle-dash {
+    0%,
+    25% {
+      stroke-dashoffset: 187;
+      transform: rotate(0);
+    }
+    50%,
+    75% {
+        stroke-dashoffset: 75;
+        transform: rotate(85deg);
+    }
+    100% {
+        stroke-dashoffset: 187;
+        transform: rotate(400deg);
+    }
+}
+
+.path {
+    animation: circle-dash 2s ease-in-out infinite;
+}
+
+.report-link {
+    display: inline-block;
+    color: #1b1e23;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    padding-left: 0;
+    margin-top: 0.25rem;
+    box-sizing: border-box;
+    background: none;
+    border: none;
+}
+  

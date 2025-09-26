@@ -35,7 +35,7 @@ const SearchBox = () => {
 
       tempResults = tempResults.concat(additionalResults)
     }
-    setResults(tempResults.map((place) => [place[0]["name"], place[0]["search"]]))
+    setResults(tempResults.map((place) => [place[0]["name"], place[0]["search"], place[0]["search"] == 'cities' ? place[0]["coords"] : place[0]["bbox"]]))
   }
 
   const sx = {
