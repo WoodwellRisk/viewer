@@ -10,39 +10,54 @@ const Router = () => {
     const router = useRouter()
     const pathname = usePathname()
 
-    const variable = useStore((state) => state.variable)
-    const setVariable = useStore((state) => state.setVariable)
-    const variables = useStore((state) => state.variables)
-
-    const setRisks = useStore((state) => state.setRisks)
-    const riskOptions = useStore((state) => state.riskOptions)
-    const setBand = useStore((state) => state.setBand)
+    const categories = useStore((state) => state.categories)()
+    const category = useStore((state) => state.category)
+    const setCategory = useStore((state) => state.setCategory)
+    const setCategoryNavigation = useStore((state) => state.setCategoryNavigation)
+    const associatedRisks = useStore((state) => state.associatedRisks)
+    const risk = useStore((state) => state.risk)
+    const setRisk = useStore((state) => state.setRisk)
+    const setRiskNavigation = useStore((state) => state.setRiskNavigation)
     const zoom = useStore((state) => state.zoom)
     const setZoom = useStore((state) => state.setZoom)
     const center = useStore((state) => state.center)
     const setCenter = useStore((state) => state.setCenter)
 
+
     const verifySearchParams = useCallback((url) => {
         // check to see if there are other search params that shouldn't be there
         url.searchParams.forEach(function (value, key) {
-            if (!['layer', 'zoom', 'center'].includes(key)) {
+            if (!['category', 'layer', 'zoom', 'center'].includes(key)) {
                 url.searchParams.delete(key)
             }
         })
     })
 
-    const getInitialLayer = useCallback((url) => {
-        let initialLayer
-        let tempLayer = url.searchParams.get("layer")
+    const getInitialCategoryAndLayer = useCallback((url) => {
+        let initialCategory, initialLayer;
+        let tempCategory = url.searchParams.get('category')
+        let tempLayer = url.searchParams.get('layer')
 
-        if (tempLayer != null && typeof tempLayer == 'string' && variables.includes(tempLayer)) {
-            initialLayer = tempLayer
+        if (tempCategory != null && typeof tempCategory == 'string' && categories.includes(tempCategory.replace('-', ' '))) {
+            initialCategory = tempCategory.replace('-', ' ')
+
+            // if the category is valid, we still need to validate that the layer is associated with that category 
+            if(tempLayer != null && typeof tempLayer == 'string' && Object.keys(associatedRisks[initialCategory]).includes(tempLayer)) {
+                initialLayer = tempLayer
+            } else {
+                // if the category exists, but the pairing [category, layer] does not, then default to the first layer in that category
+                initialLayer = Object.keys(associatedRisks[initialCategory])[0]
+            }
         } else {
+            // if neither the category is not valid, then default to first category and layer for landing page
+            initialCategory = 'water stress'
             initialLayer = 'drought'
         }
 
+        url.searchParams.set('category', initialCategory.replace(' ', '-'))
         url.searchParams.set('layer', initialLayer)
-        return initialLayer
+
+        return [initialCategory, initialLayer];
     })
 
     const getInitialZoom = useCallback((url) => {
@@ -63,7 +78,7 @@ const Router = () => {
         let initialCenter
 
         // this makes sure that the center search param is in array format, so we don't need to check the type
-        let tempCenter = url.searchParams.get("center")
+        let tempCenter = url.searchParams.get('center')
         if(tempCenter == null) {
             url.searchParams.set('center', '-40,40')
             return [-40, 40]
@@ -89,37 +104,32 @@ const Router = () => {
         const url = new URL(window.location)
         verifySearchParams(url)
 
-        let savedLayer = getInitialLayer(url)
+        let [savedCategory, savedLayer] = getInitialCategoryAndLayer(url)
         let savedZoom = getInitialZoom(url)
         let savedCenter = getInitialCenter(url)
 
-        setVariable(savedLayer)
-        let riskBands = riskOptions[savedLayer].bands
-        if (savedLayer == 'lethal_heat') {
-            setBand(riskBands[riskBands.length - 1])
-        } else {
-            setBand(riskBands[0])
-        }
+        let categoryNavigation = {}
+        categories.forEach(c => {
+            categoryNavigation[c] = c == savedCategory;
+        })
+        setCategoryNavigation(categoryNavigation)
+        setCategory(savedCategory)
+       
+        let riskNavigation = {}
+        Object.keys(associatedRisks[savedCategory]).map((key) => {
+            riskNavigation[key] = key == savedLayer;
+        })
+        setRiskNavigation(riskNavigation)
+        setRisk(savedLayer)
+
+        console.log("saved params: ")
+        console.log(savedCategory)
+        console.log(savedLayer)
+        console.log(riskNavigation)
+        console.log()
+
         setZoom(savedZoom)
         setCenter(savedCenter)
-        setRisks({
-            drought: savedLayer == 'drought',
-            hot_days: savedLayer == 'hot_days',
-            warm_nights: savedLayer == 'warm_nights',
-            lethal_heat: savedLayer == 'lethal_heat',
-            tc_rp: savedLayer == 'tc_rp',
-            permafrost: savedLayer == 'permafrost',
-            cf_irr: savedLayer == 'cf_irr',
-            cf_rain: savedLayer == 'cf_rain',
-            wdd: savedLayer == 'wdd',
-            // pm25: savedLayer == 'pm25',
-            // lsp: savedLayer == 'lsp',
-            slr: savedLayer == 'slr',
-            tavg: savedLayer == 'tavg',
-            precip: savedLayer == 'precip',
-            cdd: savedLayer == 'cdd',
-            hdd: savedLayer == 'hdd',
-        })
 
         if (map && savedZoom && savedCenter) {
             map.easeTo({
@@ -129,21 +139,13 @@ const Router = () => {
             })
         }
 
-        router.replace(`${pathname}?layer=${url.searchParams.get('layer')}&zoom=${url.searchParams.get('zoom')}&center=${url.searchParams.get('center')}`)
+        router.replace(`${pathname}?category=${url.searchParams.get('category')}&layer=${url.searchParams.get('layer')}&zoom=${url.searchParams.get('zoom')}&center=${url.searchParams.get('center')}`)
         // prevent back button
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event
         window.history.pushState(null, null, url);
         window.onpopstate = () => window.history.go(1)
 
     }, [window.onload]);
-
-    useEffect(() => {
-        const url = new URL(window.location)
-        verifySearchParams(url)
-
-        url.searchParams.set('layer', variable)
-        router.replace(`${pathname}?layer=${url.searchParams.get('layer')}&zoom=${url.searchParams.get('zoom')}&center=${url.searchParams.get('center')}`)
-    }, [variable])
 
     useEffect(() => {
         map.on('moveend', () => {
@@ -155,16 +157,16 @@ const Router = () => {
     }, [])
 
     useEffect(() => {
-        if (center && zoom) {
-            const url = new URL(window.location)
-            verifySearchParams(url)
+        const url = new URL(window.location)
+        verifySearchParams(url)
 
-            url.searchParams.set('zoom', zoom)
-            url.searchParams.set('center', center)
-            router.replace(`${pathname}?layer=${url.searchParams.get('layer')}&zoom=${url.searchParams.get('zoom')}&center=${url.searchParams.get('center')}`)
-        }
+        url.searchParams.set('category', category.replace(' ', '-'))
+        url.searchParams.set('layer', risk)
+        url.searchParams.set('zoom', zoom)
+        url.searchParams.set('center', center)
 
-    }, [zoom, center])
+        router.replace(`${pathname}?category=${url.searchParams.get('category')}&layer=${url.searchParams.get('layer')}&zoom=${url.searchParams.get('zoom')}&center=${url.searchParams.get('center')}`)
+    }, [category, risk, zoom, center])
 
     return null
 }

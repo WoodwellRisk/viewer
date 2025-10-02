@@ -6,12 +6,12 @@ import DownloadTimeseriesData from './download-timeseries-data'
 import useStore from '../../store/index'
 
 const Timeseries = ({ data }) => {
-    const variable = useStore((state) => state.variable)
+    const risk = useStore((state) => state.risk)
     const band = useStore((state) => state.band)
     const riskOptions = useStore((state) => state.riskOptions)
-    const bands = riskOptions[variable]['bands']
+    const bands = riskOptions[risk]['bands']
     const bandLabel = useStore((state) => state.bandLabel)()
-    const riskTagLabels = useStore((state) => state.riskTagLabels)()
+    const riskLabels = useStore((state) => state.riskLabels)()
     const chartLabel = useStore((state) => state.chartLabel)()
     const clim = useStore((state) => state.clim)()
     const sliding = useStore((state) => state.sliding)
@@ -58,21 +58,21 @@ const Timeseries = ({ data }) => {
     return (
         <>
             <Box sx={{ ...sx.chart }} className='chart-container'>
-                {(variable == 'lethal_heat' || variable == 'slr' || variable == 'permafrost') && (
+                {(risk == 'lethal_heat' || risk == 'slr' || risk == 'permafrost') && (
                     <Box sx={sx.chartWarning}>
                         <Box>
-                            This type of chart is not available for the {riskTagLabels[variable].toLowerCase()} data.
+                            This type of chart is not available for the {riskLabels[risk].toLowerCase()} data.
                         </Box>
                     </Box>
                 )}
 
-                {(variable != 'lethal_heat' && variable != 'slr' && variable != 'permafrost') && (
+                {(risk != 'lethal_heat' && risk != 'slr' && risk != 'permafrost') && (
                     <>
                         <Chart x={ [bands[0], bands.slice(-1)] } y={ clim } padding={{ left: 60, top: 20 }}>
                             <Ticks left bottom />
                             {
-                                variable == 'cdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k']} /> 
-                                : variable == 'hdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k', '12k', '14k']} /> 
+                                risk == 'cdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k']} /> 
+                                : risk == 'hdd' ? <TickLabels left labels={['0', '2k', '4k', '6k', '8k', '10k', '12k', '14k']} /> 
                                 : <TickLabels left />
                             }
                             <TickLabels bottom values={bands} />

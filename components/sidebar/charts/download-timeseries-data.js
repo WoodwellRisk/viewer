@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 import useStore from '../../store/index'
 
 const DownloadTimeseriesData = ({ data, fileType }) => {
-    const variable = useStore((state) => state.variable);
+    const risk = useStore((state) => state.risk);
     const crop = useStore((state) => state.crop);
     const riskTitle = useStore((state) => state.riskTitle)().toLowerCase();
     const bandLabel = useStore((state) => state.bandLabel)().toLowerCase()
@@ -42,7 +42,7 @@ const DownloadTimeseriesData = ({ data, fileType }) => {
                 'data': data,
             };
 
-            if(!variable.startsWith('cf')) {
+            if(!risk.startsWith('cf')) {
                 delete json['crop'];
             }
             
@@ -63,7 +63,7 @@ const DownloadTimeseriesData = ({ data, fileType }) => {
             jsonString = jsonString.replaceAll("\"attribution\"", "  \"attribution\"")
             jsonString = jsonString.replaceAll("\"accessed\"", "  \"accessed\"")
             jsonString = jsonString.replaceAll("\"variable\"", "  \"variable\"")
-            if(variable.startsWith('cf')) { jsonString = jsonString.replaceAll("\"crop\"", "  \"crop\"") }
+            if(risk.startsWith('cf')) { jsonString = jsonString.replaceAll("\"crop\"", "  \"crop\"") }
             jsonString = jsonString.replaceAll("\"extent\"", "  \"extent\"")
             jsonString = jsonString.replaceAll(", \"lon\"", "\n    \"lon\"")
             jsonString = jsonString.replaceAll("\"lat\"", "    \"lat\"")
@@ -79,13 +79,13 @@ const DownloadTimeseriesData = ({ data, fileType }) => {
                 type: "application/json",
             })
             // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
-            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-timeseries.json`.replaceAll('_', '-'))
+            saveAs(blob, `${risk}${risk.startsWith('cf') ? '-' + crop : ''}-timeseries.json`.replaceAll('_', '-'))
 
         } else if(fileType == 'CSV') {
             let csv = `# Attribution: Woodwell Risk (${new Date().getFullYear()}). Drought Monitor [data download]. https://woodwellrisk.github.io/drought-monitor/\n`;
             csv += `# Accessed: ${now}\n`;
             csv += `# Variable: ${riskTitle}\n`
-            if(variable.startsWith('cf')) { csv += `# Crop: ${crop}\n` }
+            if(risk.startsWith('cf')) { csv += `# Crop: ${crop}\n` }
             csv += `# Latitude min: ${minLat}\n`;
             csv += `# Latitude max: ${maxLat}\n`;
             csv += `# Longitude min: ${minLon}\n`;
@@ -100,7 +100,7 @@ const DownloadTimeseriesData = ({ data, fileType }) => {
             type: "text/csv;charset=utf-8",
             });
     
-            saveAs(blob, `${variable}${variable.startsWith('cf') ? '-' + crop : ''}-timeseries.csv`.replaceAll('_', '-'))
+            saveAs(blob, `${risk}${risk.startsWith('cf') ? '-' + crop : ''}-timeseries.csv`.replaceAll('_', '-'))
         } else {
             console.log('Unsupported file type. Please choose JSON or CSV.')
         }

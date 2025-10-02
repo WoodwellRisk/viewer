@@ -27,25 +27,24 @@ const Map = ({ mobile }) => {
   const center = useStore((state) => state.center)
   const glyphs = useStore((state) => state.glyphs)
 
-  const variable = useStore((state) => state.variable)
+  const risk = useStore((state) => state.risk)
   const crop = useStore((state) => state.crop)
   const band = useStore((state) => state.band)
   const clim = useStore((state) => state.clim)()
   const colormapName = useStore((state) => state.colormapName)()
-  const colormap = (variable == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
-    (variable.startsWith('cdd') || variable.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-      (variable.startsWith('tavg')) ? useCustomColormap(colormapName) :
-        // (variable.startsWith('precip')) ? useCustomColormap(colormapName) :
-        (variable.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-          (variable == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-            variable.startsWith('cf') ? useCustomColormap(colormapName) :
+  const colormap = (risk == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
+    (risk.startsWith('cdd') || risk.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
+      (risk.startsWith('tavg')) ? useCustomColormap(colormapName) :
+        // (risk.startsWith('precip')) ? useCustomColormap(colormapName) :
+        (risk.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
+          (risk == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
+          risk.startsWith('cf') ? useCustomColormap(colormapName) :
               useThemedColormap(colormapName)
 
   const opacity = useStore((state) => state.opacity)
   const display = useStore((state) => state.display)
   const setRegionData = useStore((state) => state.setRegionData)
   const setRegionDataLoading = useStore((state) => state.setRegionDataLoading)
-
   const showRegionPicker = useStore((state) => state.showRegionPicker)
 
   const showJustAccess = useStore((state) => state.showJustAccess)
@@ -80,7 +79,7 @@ const Map = ({ mobile }) => {
     <Box ref={container} sx={{ display: 'flex', flexBasis: '100%', justifyContent: 'center', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
 
       <MapContainer zoom={zoom} maxZoom={8.9} center={center} glyphs={glyphs} >
-        {variable != 'slr' && !variable.startsWith('tc') && (
+        {risk != 'slr' && !risk.startsWith('tc') && (
           <>
             <Fill
               id={'ocean-fill'}
@@ -104,7 +103,7 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-        {variable == 'slr' && (
+        {risk == 'slr' && (
           <>
             <Fill
               id={'land-fill'}
@@ -190,7 +189,7 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-        {(variable.startsWith('tc')) && (
+        {(risk.startsWith('tc')) && (
           <Line
             id={'tc-boundaries'}
             color={theme.rawColors.secondary}
@@ -213,10 +212,10 @@ const Map = ({ mobile }) => {
 
         {/* 
           they key={} in the Line and Fill components forces the components to re-render. 
-          so the variable prop controls whether any crop layer is shown and the change in the 
+          so the risk prop controls whether any crop layer is shown and the change in the 
           crop prop's state controls the actual re-render between crop layers.
         */}
-        {/* {(variable.startsWith('cf') && crop != "") && (
+        {/* {(risk.startsWith('cf') && crop != "") && (
           <>
             <Fill
               key={`${crop}_mask`}
@@ -237,15 +236,15 @@ const Map = ({ mobile }) => {
         )} */}
 
         <Raster
-          key={variable}
+          key={risk}
           display={display}
           opacity={opacity}
-          source={`https://storage.googleapis.com/risk-maps/zarr/${variable}.zarr`}
-          variable={variable}
+          source={`https://storage.googleapis.com/risk-maps/zarr/${risk}.zarr`}
+          variable={risk}
           clim={clim}
           colormap={colormap}
-          selector={variable.startsWith('cf') ? { crop, band } : { band }}
-          mode={(variable == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+          selector={risk.startsWith('cf') ? { crop, band } : { band }}
+          mode={(risk == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
           regionOptions={{ setData: handleRegionData, selector: {} }}
         />
 
@@ -283,7 +282,6 @@ const Map = ({ mobile }) => {
         <LayerOrder />
 
         <Router />
-
 
         {!mobile && (<Dimmer
           sx={{

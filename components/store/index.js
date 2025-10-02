@@ -18,10 +18,6 @@ const NEX_URL = 'https://www.nccs.nasa.gov/services/data-collections/land-based-
 const AGMIP_URL = 'https://agmip.org/'
 const MAPSPAM_URL = 'https://www.mapspam.info/'
 
-// NOTE: the order of the variables in the sidebar is determined both by the risks dictionary included in this
-// store AND in the router component. So to keep track of which variables have been added, we can still maintain most
-// lists in alphabetical order, but risks needs to be in a set order.
-
 const useStore = create((set, get) => ({
     // map container state
     zoom: 1,
@@ -36,16 +32,6 @@ const useStore = create((set, get) => ({
     glyphs: false,
 
     // general / raster state variables
-    variables: [
-        'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
-        //'lsp', 
-        'permafrost', 
-        //'pm25', 
-        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
-    ],
-    variable: 'drought',
-    setVariable: (variable) => set({ variable }),
-
     cropOptions: {'maize': true, 'rice': false, 'soy': false, 'wheat': false},
     setCropOptions: (cropOptions) => set({ cropOptions }),
     
@@ -122,39 +108,80 @@ const useStore = create((set, get) => ({
     setShowOverlays: (showOverlays) => set({ showOverlays }),
 
     // sidebar options
-    riskThemes: {
+    categoryNavigation: {
         'water stress': true, 
         'heat': false,
         'coastal risk': false,
         // 'flooding': false,
         'wildfire': false,
         'agriculture': false,
+        'health': false,
         'permafrost': false,
+        'energy': false,
+        'labor': false,
     },
-    setRiskThemes: (riskThemes) => set({ riskThemes }),
+    setCategoryNavigation: (categoryNavigation) => set({ categoryNavigation }),
+    categories: () => {
+        const {categoryNavigation} = get()
+        return Object.keys(categoryNavigation)
+    },
+    category: 'water stress',
+    setCategory: (category) => set({ category }),
 
-    risks: {
-        drought: true,
-        hot_days: false,
-        warm_nights: false,
-        lethal_heat: false,
-        tc_rp: false,
-        permafrost: false,
-        cf_irr: false,
-        cf_rain: false,
-        wdd: false,
-        // pm25: false,
-        // lsp: false,
-        slr: false,
-        tavg: false,
-        precip: false,
-        cdd: false,
-        hdd: false,
+    associatedRisks: {
+        'water stress': {'drought': true, 'precip': false}, 
+        'heat': {'hot_days': true, 'warm_nights': false, 'lethal_heat': false, 'tavg': false, 'cdd': false, 'hdd': false},
+        'coastal risk': {'tc_rp': true, 'slr': false},
+        // 'flooding': {},
+        'wildfire': {'wdd': true}, // 'pm25': false, 'lsp': false,
+        'agriculture': {'cf_rain': true, 'cf_irr': false},
+        'health': {'warm_nights': true},
+        'energy': {'cdd': true, 'hdd': false}, // 'lsp': false,
+        'labor': {'lethal_heat': true},
+        'permafrost': {'permafrost': true},
     },
-    setRisks: (risks) => set({ risks }),
+
+    riskNavigation: {'drought': true, 'precip': false}, 
+    setRiskNavigation: (riskNavigation) => set({ riskNavigation }),
+
+    risks: [
+        'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
+        //'lsp', 
+        'permafrost', 
+        //'pm25', 
+        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
+    ],
+    risk: 'drought',
+    setRisk: (risk) => set({ risk }),
+    // risk: () => {
+    //     const {associatedRisks} = get()
+    //     let risk = Object.keys(associatedRisks).filter((key) => associatedRisks[key] === true)[0]
+    //     return risk;
+    // },
+
+    // this is a more automated way to do the exact same thing, 
+    // but makes it difficult to control the order of the layers by theme
+    // associatedRisks: () => {
+    //     const {riskOptions, category} = get()
+    //     let riskTags = Object.keys(riskOptions).filter((key) => {
+    //         return riskOptions[key].tags.includes(category)
+    //     })
+
+    //     let associatedRisks = {}
+    //     riskTags.forEach((risk, index) => {
+    //         if(index == 0) {
+    //             associatedRisks[risk] = true;
+    //         } else {
+    //             associatedRisks[risk] = false;
+    //         }
+    //     })
+
+    //     return associatedRisks;
+    // },
 
     riskOptions: {
-        cdd: {            
+        cdd: {
+            tags: ['heat', 'energy'],
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Cooling degree days',
@@ -179,7 +206,8 @@ const useStore = create((set, get) => ({
             statsLabel: 'degree days',
             chartLabel: 'degree days',
         },
-        cf_irr: {   
+        cf_irr: {
+            tags: ['agriculture'],
             bands: [1990.0, 2030.0, 2050.0, 2090.0],
             bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
             bandLabel: 'Time period',
@@ -206,7 +234,8 @@ const useStore = create((set, get) => ({
             statsLabel: '%',
             chartLabel: 'Probability (%)',
         },
-        cf_rain: {            
+        cf_rain: {
+            tags: ['agriculture'],            
             bands: [1990.0, 2030.0, 2050.0, 2090.0],
             bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
             bandLabel: 'Time period',
@@ -232,7 +261,8 @@ const useStore = create((set, get) => ({
             statsLabel: '%',
             chartLabel: 'Probability (%)',
         },
-        drought: {            
+        drought: {   
+            tags: ['water stress'],         
             bands: [1.5, 2.0, 2.5, 3.0, 3.5],
             bandLabel: 'Warming level',
             riskTagLabel: 'Drought',
@@ -254,7 +284,8 @@ const useStore = create((set, get) => ({
             statsLabel: '%',
             chartLabel: 'Probability (%)',
         },
-        hdd: {            
+        hdd: {     
+            tags: ['heat', 'energy'],       
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Heating degree days',
@@ -280,6 +311,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'degree days',
         },
         hot_days: {
+            tags: ['heat'],
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Hot days',
@@ -301,6 +333,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'days per year',
         },
         lethal_heat: {
+            tags: ['heat', 'health', 'labor'],
             bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
             bandLabel: 'Warming level of emergence',
             riskTagLabel: 'Lethal heat',
@@ -324,6 +357,8 @@ const useStore = create((set, get) => ({
             chartLabel: '',
         },
         lsp: {
+            // tags: ['wildfire', 'energy'],
+            tags: [],
             bands: [2000.0, 2050.0, 2100.0],
             bandLabel: 'Time period',
             riskTagLabel: 'Lost solar potential',
@@ -345,6 +380,7 @@ const useStore = create((set, get) => ({
             chartLabel: '',
         },
         permafrost: {
+            tags: ['permafrost'],
             bands: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Permafrost',
@@ -370,6 +406,8 @@ const useStore = create((set, get) => ({
             chartLabel: 'Likelihood (%)',
         },
         pm25: {
+            // tags: ['wildfire', 'health'],
+            tags: [],
             bands: [2000.0, 2050.0, 2100.0],
             bandLabel: 'Time period',
             riskTagLabel: 'PM2.5',
@@ -391,6 +429,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'Concentration (μg / m^3)',
         },
         precip: {
+            tags: ['water stress'],
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Precipitation',
@@ -412,6 +451,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'Precipitation (mm)',
         },
         slr: {
+            tags: ['coastal risk'],
             bands: [2050.0],
             bandLabel: 'Depth value by 2050',
             riskTagLabel: 'Sea level rise',
@@ -435,6 +475,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'meters',
         },
         tavg: {
+            tags: ['heat'],
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
             riskTagLabel: 'Temperature',
@@ -456,6 +497,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'Temperature (ºC)',
         },
         tc_rp: {
+            tags: ['coastal risk'],
             bands: [2017.0, 2050.0],
             bandLabels: ['1980-2017', '2015-2050',],
             riskTagLabel: 'Tropical cyclones',
@@ -480,9 +522,10 @@ const useStore = create((set, get) => ({
             chartLabel: 'Return period (years)',
         },
         warm_nights: {
+            tags: ['heat', 'health'],
             bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
             bandLabel: 'Warming level',
-            riskTagLabel: 'Warm nights',
+            riskTagLabel: 'Tropical nights',
             riskTitle: 'Nights over 68°F',
             riskDescription:
             <Box className='risk-layer-description' sx={sx.data_description}>
@@ -502,6 +545,7 @@ const useStore = create((set, get) => ({
             chartLabel: 'nights per year',
         },
         wdd: {
+            tags: ['wildfire'],
             bands: [1.5, 2.0, 2.5, 3.0, 3.5],
             bandLabel: 'Warming level',
             riskTagLabel: 'Widlfires',
@@ -530,66 +574,66 @@ const useStore = create((set, get) => ({
     setRiskBands: (riskBands) => set({ riskBands }),
 
     colormapName: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].colormapName
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].colormapName
     },
 
     clim: () => {
-        const {riskOptions, variable} = get()
-        return [riskOptions[variable].clim.min, riskOptions[variable].clim.max]
+        const {riskOptions, risk} = get()
+        return [riskOptions[risk].clim.min, riskOptions[risk].clim.max]
     },
 
-    riskTagLabels: () => {
-        const {riskOptions, variables} = get()
-        let tagLabels = {}
-        variables.forEach((v) => {
-            tagLabels[v] = riskOptions[v].riskTagLabel;
+    riskLabels: () => {
+        const {riskOptions, risks} = get()
+        let labels = {}
+        risks.forEach((v) => {
+            labels[v] = riskOptions[v].riskTagLabel;
         })
-        return tagLabels
+        return labels
     },
 
     riskTagLookup: () => {
-        const {riskOptions, variables} = get()
+        const {riskOptions, risks} = get()
         let tagLookup = {}
-        variables.forEach((v) => {
-            tagLookup[riskOptions[v].riskTagLabel] = v;
+        risks.forEach((risk) => {
+            tagLookup[riskOptions[risk].riskTagLabel] = risk;
         })
         return tagLookup
     },
 
     riskTitle: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].riskTitle
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].riskTitle
     },
 
     riskDescription: () => {
-        const { riskOptions, variable } = get()
-        return riskOptions[variable].riskDescription
+        const { riskOptions, risk } = get()
+        return riskOptions[risk].riskDescription
     },
 
     bandLabel: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].bandLabel
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].bandLabel
     },
 
     colormapLabel: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].colormapLabel;
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].colormapLabel;
     },
 
     colormapUnits: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].colormapUnits;
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].colormapUnits;
     },
 
     statsLabel: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].statsLabel
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].statsLabel
     },
 
     chartLabel: () => {
-        const {riskOptions, variable} = get()
-        return riskOptions[variable].chartLabel
+        const {riskOptions, risk} = get()
+        return riskOptions[risk].chartLabel
     },
 
     // search options
