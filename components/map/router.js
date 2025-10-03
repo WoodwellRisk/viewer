@@ -17,6 +17,10 @@ const Router = () => {
     const associatedRisks = useStore((state) => state.associatedRisks)
     const risk = useStore((state) => state.risk)
     const setRisk = useStore((state) => state.setRisk)
+    const setRiskBands = useStore((state) => state.setRiskBands)
+    const setBand = useStore((state) => state.setBand)
+    const setBandIndex = useStore((state) => state.setBandIndex)
+    const riskOptions = useStore((state) => state.riskOptions)
     const setRiskNavigation = useStore((state) => state.setRiskNavigation)
     const zoom = useStore((state) => state.zoom)
     const setZoom = useStore((state) => state.setZoom)
@@ -42,11 +46,11 @@ const Router = () => {
             initialCategory = tempCategory.replace('-', ' ')
 
             // if the category is valid, we still need to validate that the layer is associated with that category 
-            if(tempLayer != null && typeof tempLayer == 'string' && Object.keys(associatedRisks[initialCategory]).includes(tempLayer)) {
+            if(tempLayer != null && typeof tempLayer == 'string' && associatedRisks[initialCategory].includes(tempLayer)) {
                 initialLayer = tempLayer
             } else {
                 // if the category exists, but the pairing [category, layer] does not, then default to the first layer in that category
-                initialLayer = Object.keys(associatedRisks[initialCategory])[0]
+                initialLayer = associatedRisks[initialCategory][0]
             }
         } else {
             // if neither the category is not valid, then default to first category and layer for landing page
@@ -116,17 +120,22 @@ const Router = () => {
         setCategory(savedCategory)
        
         let riskNavigation = {}
-        Object.keys(associatedRisks[savedCategory]).map((key) => {
-            riskNavigation[key] = key == savedLayer;
+        associatedRisks[savedCategory].forEach((r) => {
+            riskNavigation[r] = r == savedLayer;
         })
         setRiskNavigation(riskNavigation)
-        setRisk(savedLayer)
 
-        console.log("saved params: ")
-        console.log(savedCategory)
-        console.log(savedLayer)
-        console.log(riskNavigation)
-        console.log()
+        let bands = riskOptions[savedLayer].bands
+        let bandIndex
+        if (savedLayer == 'lethal_heat') {
+          bandIndex = riskOptions[savedLayer].bands.length - 1
+        } else {
+          bandIndex = 0
+        }
+        setRiskBands(bands)
+        setBandIndex(bandIndex)
+        setBand(riskOptions[savedLayer].bands[bandIndex])
+        setRisk(savedLayer)
 
         setZoom(savedZoom)
         setCenter(savedCenter)

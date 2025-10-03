@@ -116,8 +116,8 @@ const useStore = create((set, get) => ({
         'wildfire': false,
         'agriculture': false,
         'health': false,
-        'permafrost': false,
         'energy': false,
+        'permafrost': false,
         'labor': false,
     },
     setCategoryNavigation: (categoryNavigation) => set({ categoryNavigation }),
@@ -128,36 +128,31 @@ const useStore = create((set, get) => ({
     category: 'water stress',
     setCategory: (category) => set({ category }),
 
-    associatedRisks: {
-        'water stress': {'drought': true, 'precip': false}, 
-        'heat': {'hot_days': true, 'warm_nights': false, 'lethal_heat': false, 'tavg': false, 'cdd': false, 'hdd': false},
-        'coastal risk': {'tc_rp': true, 'slr': false},
-        // 'flooding': {},
-        'wildfire': {'wdd': true}, // 'pm25': false, 'lsp': false,
-        'agriculture': {'cf_rain': true, 'cf_irr': false},
-        'health': {'warm_nights': true},
-        'energy': {'cdd': true, 'hdd': false}, // 'lsp': false,
-        'labor': {'lethal_heat': true},
-        'permafrost': {'permafrost': true},
-    },
-
-    riskNavigation: {'drought': true, 'precip': false}, 
-    setRiskNavigation: (riskNavigation) => set({ riskNavigation }),
-
-    risks: [
-        'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
-        //'lsp', 
-        'permafrost', 
-        //'pm25', 
-        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
-    ],
-    risk: 'drought',
-    setRisk: (risk) => set({ risk }),
-    // risk: () => {
-    //     const {associatedRisks} = get()
-    //     let risk = Object.keys(associatedRisks).filter((key) => associatedRisks[key] === true)[0]
-    //     return risk;
+    // associatedRisks: {
+    //     'water stress': {'drought': true, 'precip': false}, 
+    //     'heat': {'hot_days': true, 'warm_nights': false, 'lethal_heat': false, 'tavg': false},
+    //     'coastal risk': {'tc_rp': true, 'slr': false},
+    //     // 'flooding': {},
+    //     'wildfire': {'wdd': true}, // 'pm25': false, 'lsp': false,
+    //     'agriculture': {'cf_rain': true, 'cf_irr': false},
+    //     'health': {'warm_nights': true, 'lethal_heat': false},
+    //     'energy': {'cdd': true, 'hdd': false}, // 'lsp': false,
+    //     'permafrost': {'permafrost': true},
+    //     'labor': {'lethal_heat': true},
     // },
+
+    associatedRisks: {
+        'water stress': ['drought', 'precip'], 
+        'heat': ['hot_days', 'warm_nights', 'lethal_heat', 'tavg', 'cdd', 'hdd'],
+        'coastal risk': ['tc_rp', 'slr'],
+        // 'flooding': [],
+        'wildfire': ['wdd'], // 'pm25': false, 'lsp': false,
+        'agriculture': ['cf_rain', 'cf_irr'],
+        'health': ['warm_nights', 'lethal_heat'],
+        'energy': ['cdd', 'hdd'], // 'lsp': false,
+        'permafrost': ['permafrost'],
+        'labor': ['lethal_heat'],
+    },
 
     // this is a more automated way to do the exact same thing, 
     // but makes it difficult to control the order of the layers by theme
@@ -177,6 +172,27 @@ const useStore = create((set, get) => ({
     //     })
 
     //     return associatedRisks;
+    // },
+
+    riskNavigation: {'drought': true, 'precip': false}, 
+    // maybe this should be a custom useEffect hook for when the risk is updated?
+    // and then disable it for the filter?
+    // except that then in the router component, there is is a call to setRiskNavigator and then setRisk :(((((
+    setRiskNavigation: (riskNavigation) => set({ riskNavigation }),
+
+    risks: [
+        'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
+        //'lsp', 
+        'permafrost', 
+        //'pm25', 
+        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
+    ],
+    risk: 'drought',
+    setRisk: (risk) => set({ risk }),
+    // risk: () => {
+    //     const {associatedRisks} = get()
+    //     let risk = Object.keys(associatedRisks).filter((key) => associatedRisks[key] === true)[0]
+    //     return risk;
     // },
 
     riskOptions: {
