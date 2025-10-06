@@ -14,7 +14,7 @@ import useStore from '../../store/index'
 // https://github.com/WoodwellRisk/drought-monitor/blob/react-v1/components/sidebar/charts/density-plot.js
 const BarChart = () => {
     const clim = useStore((state) => state.clim)()
-    const variable = useStore((state) => state.variable)
+    const risk = useStore((state) => state.risk)
     const band = useStore((state) => state.band)
     const chartLabel = useStore((state) => state.chartLabel)()
     const crop = useStore((state) => state.crop)
@@ -36,7 +36,7 @@ const BarChart = () => {
         }
     }
 
-    if (!regionData || !regionData[variable]) { // ex: if(!'drought' or Object["drought"]) {...}
+    if (!regionData || !regionData[risk]) { // ex: if(!'drought' or Object["drought"]) {...}
         return
     }
 
@@ -48,43 +48,43 @@ const BarChart = () => {
     const variableRange = [min, max]
 
     // bin the data
-    const nBins = variable == 'tavg' ? 12 : 10;
+    const nBins = risk == 'tavg' ? 12 : 10;
     const range = max - min;
-    const binWidth = (variable == "hot_days") || (variable == "warm_nights") ? 30 : range / nBins;
+    const binWidth = (risk == "hot_days") || (risk == "warm_nights") ? 30 : range / nBins;
 
     // the sea level rise, temperature and lethal heat bins need to be shifted
     // "out of the box", the binning method works for variables with range [0, value]
     // the sea level rise and temperature data layers go from [-value, value]
     // the lethal heat data only goes from [1, 4]
     let binEdges = Array(nBins + 1).fill(0).map((_, i) => Number((i * binWidth).toFixed(2)))
-    if (variable == 'slr') {
+    if (risk == 'slr') {
         binEdges = binEdges.map((d) => Number((d - 0.5).toFixed(1)))
-    } else if (variable == 'lethal_heat') {
+    } else if (risk == 'lethal_heat') {
         binEdges = binEdges.map((d) => Number((d + 1.0).toFixed(1)))
-    } else if (variable == 'tavg') {
+    } else if (risk == 'tavg') {
         binEdges = []
         let start = min;
         let end = max;
         for (let idx = min; idx < end + 5; idx += 5) {
             binEdges.push(idx);
           }
-        console.log(binEdges)
+        // console.log(binEdges)
     }
 
     const bin = d3.bin().domain(variableRange).thresholds(binEdges)
 
-    const xMin = (variable == 'tavg') ? min - 2.5 : min - binWidth;
-    const xMax = (variable == 'tavg') ? max + 5 : max + binWidth;
+    const xMin = (risk == 'tavg') ? min - 2.5 : min - binWidth;
+    const xMax = (risk == 'tavg') ? max + 5 : max + binWidth;
 
     // for some layers, there are values that are above the ranges in climRanges, where I created a "truncated" colormap. 
     // so for anything above or below those ranges, there is "no data" to show in the histogram.
     // i solved this by setting values above and below the colormap values to the min / max of climRanges.
     // https://stackoverflow.com/questions/22311544/get-indices-indexes-of-all-occurrences-of-an-element-in-an-array
     let data;
-    if(variable.startsWith('cf')) {
-        data = regionData[variable][crop];
+    if(risk.startsWith('cf')) {
+        data = regionData[risk][crop];
     } else {
-        data = regionData[variable];
+        data = regionData[risk];
     }
 
     let binnedData = useMemo(() => {

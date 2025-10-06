@@ -116,7 +116,7 @@ const MobileHeader = () => {
       >
         <Row sx={{height: '100%',}}>
           <Column start={[1]} width={[3]} sx={{ mt: [2], mb: [2], ml: [3] }}>
-            <Box sx={{ height: '100%', pt: [1], pointerEvents: 'all'}}>
+            <Box sx={{ height: '100%', alignContent: 'center', pointerEvents: 'all'}}>
               <Text>Woodwell Risk</Text>
             </Box>
           </Column>

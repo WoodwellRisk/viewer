@@ -5,7 +5,7 @@ import useStore from '../store/index'
 
 const LayerOrder = () => {
     const { map } = useMapbox()
-    const variable = useStore((state) => state.variable)
+    const risk = useStore((state) => state.risk)
     const zoom = useStore((state) => state.zoom)
     const showStatesZoom = useStore((state) => state.showStatesZoom)
     const place = useStore((state) => state.place)
@@ -28,7 +28,7 @@ const LayerOrder = () => {
       useEffect(() => {
         if(showSearchLayer && (showCountriesOutline || showStatesOutline)) {
             let layers = map.getStyle().layers;
-            console.log(layers)
+
             let states = layers.filter((layer) => layer.source == 'states')[0]
             let countries = layers.filter((layer) => layer.source == 'countries')[0]
             let searchLayer = layers.filter((layer) => layer.source.startsWith('search-layer'))[0]
@@ -45,7 +45,7 @@ const LayerOrder = () => {
       useEffect(() => {
         let layers = map.getStyle().layers; 
 
-        if(variable != 'slr' && !variable.startsWith('tc')) {
+        if(risk != 'slr' && !risk.startsWith('tc')) {
             let oceanFill = layers.filter((layer) => layer.source == 'ocean-fill')[0]
             let ocean = layers.filter((layer) => layer.source == 'ocean')[0]
             
@@ -53,7 +53,7 @@ const LayerOrder = () => {
                 map.moveLayer(oceanFill.id, ocean.id)
             }
         }
-        if(variable == 'slr') {
+        if(risk == 'slr') {
             let landFill = layers.filter((layer) => layer.source == 'land-fill')[0]
             let ocean = layers.filter((layer) => layer.source == 'ocean')[0]
             
@@ -61,7 +61,7 @@ const LayerOrder = () => {
                 map.moveLayer(landFill.id, ocean.id)
             }
         }
-      }, [variable])
+      }, [risk])
 
       return null
 }

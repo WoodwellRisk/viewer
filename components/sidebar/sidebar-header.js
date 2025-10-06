@@ -6,8 +6,6 @@ const SidebarHeader = ({ showMenu, toggleMenu }) => {
       sx={{
         margin: '0 auto',
         width: '100%',
-        pt: ['12px'],
-        pb: ['9px'],
         height: '56px',
         pl: [3, 4, 5, 6],
         pr: [3, 5, 5, 6],
@@ -15,6 +13,7 @@ const SidebarHeader = ({ showMenu, toggleMenu }) => {
         borderWidth: '0px',
         borderBottomWidth: '1px',
         borderColor: 'muted',
+        alignItems: 'center',
       }}
     >
       <Box>
@@ -42,7 +41,6 @@ const SidebarHeader = ({ showMenu, toggleMenu }) => {
                 width: '50px',
                 height: '30px',
                 transform: 'scale(2)',
-                mt: ['-3px'],
               }}
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 68 36'
@@ -71,7 +69,6 @@ const SidebarHeader = ({ showMenu, toggleMenu }) => {
                 width: '50px',
                 height: '30px',
                 transform: 'scale(2)',
-                mt: ['-3px'],
               }}
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 68 36'
@@ -95,14 +92,14 @@ const SidebarHeader = ({ showMenu, toggleMenu }) => {
 
       <Box sx={{ 
         display: 'block',
-         width: 'fit-content',
-         fontFamily: 'heading',
-         letterSpacing: 'smallcaps',
-         textTransform: 'uppercase',
-        //  fontWeight: 500,
-         textAlign: 'vertical',
+        height: '100%',
+        width: 'fit-content',
+        fontFamily: 'heading',
+        letterSpacing: 'smallcaps',
+        textTransform: 'uppercase',
+        alignContent: 'center',
       }}>
-        <Box sx={{ display: 'block', ml: 4, pt: 2.5, }}>
+        <Box sx={{ display: 'block', ml: 4 }}>
           Woodwell Risk
         </Box>
       </Box>

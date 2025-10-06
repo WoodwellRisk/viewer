@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 import useStore from '../../store/index'
 
 const DownloadBarData = ({ data, fileType }) => {
-    const variable = useStore((state) => state.variable);
+    const risk = useStore((state) => state.risk);
     const band = useStore((state) => state.band);
     const riskBands = useStore((state) => state.riskBands)
     const crop = useStore((state) => state.crop);
@@ -26,7 +26,7 @@ const DownloadBarData = ({ data, fileType }) => {
         if(fileType == 'JSON') {
             let dataString = ''
             bands.forEach((band, index) => {
-                console.log(index)
+                // console.log(index)
                 if(index != bands.length - 1) {
                     dataString += `    "${band}": ${JSON.stringify(data[band], NaN, null).replaceAll(",", ", ").replaceAll(",]", ", ]")},\n`
                 } else {
@@ -51,7 +51,7 @@ const DownloadBarData = ({ data, fileType }) => {
                 'data': '',
             };
 
-            if(!variable.startsWith('cf')) {
+            if(!risk.startsWith('cf')) {
                 delete json['crop'];
             }
             
@@ -72,9 +72,9 @@ const DownloadBarData = ({ data, fileType }) => {
             jsonString = jsonString.replaceAll("\"attribution\"", "  \"attribution\"")
             jsonString = jsonString.replaceAll("\"accessed\"", "  \"accessed\"")
             jsonString = jsonString.replaceAll("\"variable\"", "  \"variable\"")
-            if(variable.startsWith('cf')) { jsonString = jsonString.replaceAll("\"crop\"", "  \"crop\"") }
+            if(risk.startsWith('cf')) { jsonString = jsonString.replaceAll("\"crop\"", "  \"crop\"") }
             jsonString = jsonString.replaceAll("\"bands\"", "  \"bands\"")
-            if(bandLabel == 'time period' || variable == 'slr') {
+            if(bandLabel == 'time period' || risk == 'slr') {
                 jsonString = jsonString.replaceAll("\"bands\"", "\"time periods\"")
             } else {
                 jsonString = jsonString.replaceAll("\"bands\"", "\"warming levels\"")
@@ -98,7 +98,7 @@ const DownloadBarData = ({ data, fileType }) => {
                 type: "application/json",
             })
             // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
-            saveAs(blob, `${variable}-bar.json`.replaceAll('_', '-'))
+            saveAs(blob, `${risk}-bar.json`.replaceAll('_', '-'))
 
         } else if(fileType == 'CSV') {
             let csvMetadata = {
@@ -117,13 +117,13 @@ const DownloadBarData = ({ data, fileType }) => {
                 },
             }
 
-            if(!variable.startsWith('cf')) {
+            if(!risk.startsWith('cf')) {
                 delete csvMetadata['crop'];
             }
 
             csvMetadata = JSON.stringify(csvMetadata, NaN, 2)
 
-            if(bandLabel == 'time period' || variable == 'slr') {
+            if(bandLabel == 'time period' || risk == 'slr') {
                 csvMetadata = csvMetadata.replaceAll("\"bands\"", "\"time periods\"")
             } else {
                 csvMetadata = csvMetadata.replaceAll("\"bands\"", "\"warming levels\"")
@@ -138,7 +138,7 @@ const DownloadBarData = ({ data, fileType }) => {
                 csv += `# Accessed: ${now}\n`;
                 csv += `# Variable: ${riskTitle}\n`
                 if(variable.startsWith('cf')) { csv += `# Crop: ${crop}\n` }
-                if(variable == 'lethal_heat' || variable == 'slr') {
+                if(risk == 'lethal_heat' || risk == 'slr') {
                     csv += `# Description: ${bandLabel}\n`
                 } else {
                     csv += `# ${bandLabel.slice(0, 1).toUpperCase() + bandLabel.slice(1,)}: ${band}\n`
@@ -151,7 +151,7 @@ const DownloadBarData = ({ data, fileType }) => {
             */}
 
             let csv = ''
-            csv += `${(bandLabel == 'time period' || variable == 'slr') ? 'year' : 'warming level'}, bins, percent\n`
+            csv += `${(bandLabel == 'time period' || risk == 'slr') ? 'year' : 'warming level'}, bins, percent\n`
             bands.forEach(band => {
                 data[band].forEach((array) => {
                     csv += `${band}, ${array[0]}, ${array[1]}\n`;
@@ -161,12 +161,12 @@ const DownloadBarData = ({ data, fileType }) => {
             let blob = new Blob([csv], {
                 type: "text/csv;charset=utf-8",
             });
-            saveAs(blob, `${variable}-bar.csv`.replaceAll('_', '-'))
+            saveAs(blob, `${risk}-bar.csv`.replaceAll('_', '-'))
 
             let metadataBlob = new Blob([csvMetadata], {
                 type: "application/csvm+json",
             });
-            saveAs(metadataBlob, `${variable}-bar-metadata.json`.replaceAll('_', '-'))
+            saveAs(metadataBlob, `${risk}-bar-metadata.json`.replaceAll('_', '-'))
 
         } else {
             console.log('Unsupported file type. Please choose JSON or CSV.')
