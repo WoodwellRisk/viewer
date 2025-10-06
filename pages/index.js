@@ -25,7 +25,6 @@ function Index() {
         <Layout
           description={description}
           title={title}
-          header={false}
           dimmer={false}
           footer={false}
           metadata={false}
@@ -40,7 +39,6 @@ function Index() {
             description={description}
             title={title}
             card={logoURL}
-            header={true}
             dimmer={true}
             metadata={false}
             footer={false}

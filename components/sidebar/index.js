@@ -81,13 +81,6 @@ const Sidebar = () => {
       <Box id='sidebar' sx={{ position: 'relative', flex: 1, overflowY: 'scroll', }} >
         <Menu visible={showMenu} /> 
 
-        {/* <Box as='h2' variant='styles.h4' className='risk-title'>
-            Climate risk <Info>
-              Several layers on this map were created by aggregating climate model output not by year, but by warming level.
-              To learn more about this approach, please see our <Link href="https://woodwellrisk.github.io/tools/warming-levels/#evaluating-warming-level-calculations" target="_blank">methodology website</Link>.
-            </Info>
-          </Box> */}
-
         <Box as='h2' onClick={() => setShowAbout(!showAbout)} sx={sx['expand-section']} >
           ABOUT THIS SITE <Text sx={sx.arrow}>→</Text>
         </Box>
