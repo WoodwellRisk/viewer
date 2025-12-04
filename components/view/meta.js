@@ -35,34 +35,6 @@ const Meta = ({ title, description, card, url }) => {
         type='image/svg+xml'
         href='https://storage.googleapis.com/risk-maps/media/woodwell-risk.png'
       />
-      <link
-        rel='preload'
-        href='https://fonts.carbonplan.org/relative/relative-book-pro.woff2'
-        as='font'
-        type='font/woff2'
-        crossOrigin='anonymous'
-      />
-      <link
-        rel='preload'
-        href='https://fonts.carbonplan.org/relative/relative-medium-pro.woff2'
-        as='font'
-        type='font/woff2'
-        crossOrigin='anonymous'
-      />
-      <link
-        rel='preload'
-        href='https://fonts.carbonplan.org/relative/relative-mono-11-pitch-pro.woff2'
-        as='font'
-        type='font/woff2'
-        crossOrigin='anonymous'
-      />
-      <link
-        rel='preload'
-        href='https://fonts.carbonplan.org/relative/relative-faux-book-pro.woff2'
-        as='font'
-        type='font/woff2'
-        crossOrigin='anonymous'
-      />
       <meta name='theme-color' content={theme.colors.background} />
       <meta
         name='color-scheme'
