@@ -1,5 +1,4 @@
-[mit license]: https://badgen.net/badge/license/MIT/blue
-![MIT License][]
+ [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/WoodwellRisk/viewer/blob/main/LICENSE)
 
 # Woodwell Risk data viewer
 The purpose of this site is to increase public access to climate risk data while showcasing some of the datasets the Risk group uses to communicate climate risk to the communities and external partners it works with.
