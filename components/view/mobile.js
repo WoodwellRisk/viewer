@@ -27,7 +27,6 @@ function Mobile({ expanded }) {
       display: 'flex',
       width: '100vw',
       height: showAboutMobile ? '0vh' : '100vh',
-      ml: -3,
     },
     'about': {
       width: '100%',
@@ -73,7 +72,6 @@ function Mobile({ expanded }) {
       borderTopWidth: '1px',
       borderColor: 'muted',
       fontSize: [3],
-      ml: [-3],
       fontFamily: 'heading',
       letterSpacing: 'allcaps',
       textTransform: 'uppercase',

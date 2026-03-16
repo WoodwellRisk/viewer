@@ -34,9 +34,8 @@ function Menu({ visible }) {
         width: visible
           ? [
             0,
+            '300px',
             '350px',
-            '350px',
-            '400px',
           ]
           : [
             0,

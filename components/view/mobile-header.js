@@ -105,7 +105,6 @@ const MobileHeader = () => {
           position: 'fixed',
           width: '100vw',
           height: '50px',
-          ml: -3,
           bg: 'background',
           zIndex: 9000,
           borderWidth: '0px',
