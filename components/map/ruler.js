@@ -1,38 +1,38 @@
-import { IconButton, useThemeUI } from 'theme-ui'
-import { useCallback, useState } from 'react'
-import { useRuler } from '@carbonplan/maps'
-import { Globe } from '@carbonplan/icons'
+import { IconButton, useThemeUI } from 'theme-ui';
+import { useCallback, useState } from 'react';
+import { useRuler } from '@carbonplan/maps';
+import { Globe } from '@carbonplan/icons';
 
-const Ruler = ({ mobile=false }) => {
-  const { theme } = useThemeUI()
-  const [showAxes, setShowAxes] = useState(true)
-  const [showGrid, setShowGrid] = useState(false)
+const Ruler = ({ mobile = false }) => {
+  const { theme } = useThemeUI();
+  const [showAxes, setShowAxes] = useState(true);
+  const [showGrid, setShowGrid] = useState(false);
 
   const switchMode = useCallback(() => {
     if (showGrid) {
-      setShowAxes(false)
-      setShowGrid(false)
+      setShowAxes(false);
+      setShowGrid(false);
     } else if (showAxes) {
-      setShowGrid(true)
+      setShowGrid(true);
     } else {
-      setShowAxes(true)
+      setShowAxes(true);
     }
-  }, [showAxes, showGrid])
+  }, [showAxes, showGrid]);
 
   useRuler({
     showAxes,
     showGrid,
     fontFamily: theme.fonts.faux,
     gridColor: theme.colors.secondary,
-  })
+  });
 
   return (
     <IconButton
-      aria-label='Switch ruler mode'
+      aria-label="Switch ruler mode"
       onClick={switchMode}
       sx={{
-        stroke: 'primary', 
-        cursor: 'pointer', 
+        stroke: 'primary',
+        cursor: 'pointer',
         ml: [2],
         display: ['initial', 'initial', 'initial', 'initial'],
         position: 'absolute',
@@ -43,7 +43,7 @@ const Ruler = ({ mobile=false }) => {
     >
       <Globe sx={{ strokeWidth: 1.25 }} />
     </IconButton>
-  )
-}
+  );
+};
 
-export default Ruler
+export default Ruler;

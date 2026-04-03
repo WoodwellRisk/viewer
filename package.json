@@ -4,7 +4,7 @@
   "description": "Woodwell interactive climate risk maps",
   "main": "index.js",
   "scripts": {
-    "dev": "next -p 3000",
+    "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start"
   },
@@ -26,7 +26,7 @@
     "@carbonplan/icons": "^2.0.0",
     "@carbonplan/layouts": "^5.1.0",
     "@carbonplan/maps": "^3.4.1",
-    "@carbonplan/minimaps": "^2.6.0",
+    "@carbonplan/minimaps": "^2.7.3",
     "@carbonplan/theme": "^8.1.0",
     "@emotion/react": "^11.11.4",
     "@next/third-parties": "^15.3.3",
@@ -36,10 +36,11 @@
     "file-saver": "^2.0.5",
     "mapbox-gl": "^1.13.1",
     "nanoid": "^3.3.8",
-    "next": "^14.2.21",
+    "next": "<15",
     "polished": "^4.3.1",
     "react-animate-height": "^3.2.3",
     "theme-ui": "^0.16.2",
+    "uuid": "^13.0.0",
     "zustand": "^5.0.5"
   },
   "peerDependencies": {

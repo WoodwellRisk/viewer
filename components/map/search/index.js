@@ -1,42 +1,41 @@
 // Adapted from Carbonplan's <Input /> component:
 // https://github.com/carbonplan/components/blob/main/src/input.js
-import React, { forwardRef, useEffect } from 'react'
-import { Box, IconButton } from 'theme-ui'
-import { useMapbox } from '@carbonplan/maps'
-import { XCircle } from '@carbonplan/icons'
-import SearchUI from './search-ui'
+import React, { forwardRef, useEffect } from 'react';
+import { Box, IconButton } from 'theme-ui';
+import { useMapbox } from '@carbonplan/maps';
+import { XCircle } from '@carbonplan/icons';
+import SearchUI from './search-ui';
 
-import useStore from '../../store/index'
+import useStore from '../../store/index';
 
 const Search = () => {
-  const { map } = useMapbox()
+  const { map } = useMapbox();
 
-  const showSearch = useStore((state) => state.showSearch)
-  const setShowSearch = useStore((state) => state.setShowSearch)
-  const setSearchText = useStore((state) => state.setSearchText)
-  const setResults = useStore((state) => state.setResults)
-  const setLookup = useStore((state) => state.setLookup)
-  const setCoordinates = useStore((state) => state.setCoordinates)
-  const setBbox = useStore((state) => state.setBbox)
-  const place = useStore((state) => state.place)
-  const setPlace = useStore((state) => state.setPlace)
-
+  const showSearch = useStore((state) => state.showSearch);
+  const setShowSearch = useStore((state) => state.setShowSearch);
+  const setSearchText = useStore((state) => state.setSearchText);
+  const setResults = useStore((state) => state.setResults);
+  const setLookup = useStore((state) => state.setLookup);
+  const setCoordinates = useStore((state) => state.setCoordinates);
+  const setBbox = useStore((state) => state.setBbox);
+  const place = useStore((state) => state.place);
+  const setPlace = useStore((state) => state.setPlace);
 
   useEffect(() => {
-    if(showSearch == false) {
-       // remove any remaining search layer from map if it exists
-      if(map.getLayer(place)) {
-        map.removeLayer(place)
+    if (showSearch == false) {
+      // remove any remaining search layer from map if it exists
+      if (map.getLayer(place)) {
+        map.removeLayer(place);
       }
 
-      setSearchText("")
-      setPlace(null)
-      setCoordinates(null)
-      setBbox(null)
-      setLookup(null)
-      setResults([])
+      setSearchText('');
+      setPlace(null);
+      setCoordinates(null);
+      setBbox(null);
+      setLookup(null);
+      setResults([]);
     }
-  }, [showSearch])
+  }, [showSearch]);
 
   return (
     <>
@@ -50,36 +49,33 @@ const Search = () => {
         }}
       >
         <IconButton
-          aria-label='search map'
-          onClick={() => {setShowSearch(!showSearch)}
-        }
+          aria-label="search map"
+          onClick={() => {
+            setShowSearch(!showSearch);
+          }}
           sx={{ stroke: 'primary', cursor: 'pointer', width: 34, height: 34 }}
         >
           {!showSearch && (
             <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              width='34'
-              height='34'
-              strokeWidth='1.75'
-              fill='none'
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="34"
+              height="34"
+              strokeWidth="1.75"
+              fill="none"
             >
-              <circle cx='12' cy='12' r='10' />
-              <circle cx='10' cy='10' r='3' />
-              <line x1='12' x2='17' y1='12' y2='17' />
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="10" cy="10" r="3" />
+              <line x1="12" x2="17" y1="12" y2="17" />
             </svg>
           )}
-          {showSearch && (
-            <XCircle sx={{ strokeWidth: 1.75, width: 26, height: 26 }} />
-          )}
+          {showSearch && <XCircle sx={{ strokeWidth: 1.75, width: 26, height: 26 }} />}
         </IconButton>
 
-        {showSearch && (
-          <SearchUI />
-        )}
+        {showSearch && <SearchUI />}
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default forwardRef(Search)
+export default forwardRef(Search);

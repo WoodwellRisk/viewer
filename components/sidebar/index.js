@@ -1,37 +1,32 @@
-import { Box, Text } from 'theme-ui'
+import { Box, Text } from 'theme-ui';
 
-import SidebarDivider from './sidebar-divider'
-import SidebarHeader from './sidebar-header'
-import Menu from './menu'
-import Layers from './layers'
-import ExpandingSection from './expanding-section'
-import Overlays from './overlays'
-import Charts from './charts/index'
-import Footer from './footer'
+import SidebarDivider from './sidebar-divider';
+import SidebarHeader from './sidebar-header';
+import Menu from './menu';
+import Layers from './layers';
+import ExpandingSection from './expanding-section';
+import Overlays from './overlays';
+import Charts from './charts/index';
+import Footer from './footer';
 
-import useStore from '../store/index'
+import useStore from '../store/index';
 
 const Sidebar = () => {
-  const showRegionPicker = useStore((state) => state.showRegionPicker)
-  const setShowRegionPicker = useStore((state) => state.setShowRegionPicker)
-  const showAbout = useStore((state) => state.showAbout)
-  const setShowAbout = useStore((state) => state.setShowAbout)
-  const showMenu = useStore((state) => state.showMenu)
-  const setShowMenu = useStore((state) => state.setShowMenu)
-  const showOverlays = useStore((state) => state.showOverlays)
-  const setShowOverlays = useStore((state) => state.setShowOverlays)
-  
+  const showRegionPicker = useStore((state) => state.showRegionPicker);
+  const setShowRegionPicker = useStore((state) => state.setShowRegionPicker);
+  const showAbout = useStore((state) => state.showAbout);
+  const setShowAbout = useStore((state) => state.setShowAbout);
+  const showMenu = useStore((state) => state.showMenu);
+  const setShowMenu = useStore((state) => state.setShowMenu);
+  const showOverlays = useStore((state) => state.showOverlays);
+  const setShowOverlays = useStore((state) => state.setShowOverlays);
+
   const sx = {
     'sidebar-container': {
       position: 'relative',
       zIndex: 100,
       display: ['none', 'flex', 'flex'],
-      maxWidth: [
-        0,
-        '300px',
-        '350px',
-        '400px',
-      ],
+      maxWidth: [0, '300px', '350px', '400px'],
       height: '100%',
       flexBasis: '100%',
       flexDirection: 'column',
@@ -56,7 +51,7 @@ const Sidebar = () => {
         color: 'secondary',
       },
     },
-    'arrow': {
+    arrow: {
       display: 'inline-block',
       fontSize: [4],
       fontWeight: 300,
@@ -66,22 +61,22 @@ const Sidebar = () => {
       transition: 'transform 0.2s',
       transform: showAbout ? 'scaleX(-1)' : 'scaleX(1)',
     },
-    'charts': {
+    charts: {
       mb: [5],
       mx: 'auto',
       width: '100%',
       height: '300px',
     },
-  }
+  };
 
   return (
     <Box sx={sx['sidebar-container']}>
       <SidebarHeader showMenu={showMenu} toggleMenu={() => setShowMenu(!showMenu)} />
-      
-      <Box id='sidebar' sx={{ position: 'relative', flex: 1, overflowY: 'scroll', }} >
-        <Menu visible={showMenu} /> 
 
-        <Box as='h2' onClick={() => setShowAbout(!showAbout)} sx={sx['expand-section']} >
+      <Box id="sidebar" sx={{ position: 'relative', flex: 1, overflowY: 'scroll' }}>
+        <Menu visible={showMenu} />
+
+        <Box as="h2" onClick={() => setShowAbout(!showAbout)} sx={sx['expand-section']}>
           ABOUT THIS SITE <Text sx={sx.arrow}>→</Text>
         </Box>
         <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} />
@@ -89,25 +84,28 @@ const Sidebar = () => {
         <Layers />
         <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} />
 
-        <ExpandingSection label='Charts' expanded={showRegionPicker} setExpanded={setShowRegionPicker}>
+        <ExpandingSection
+          label="Charts"
+          expanded={showRegionPicker}
+          setExpanded={setShowRegionPicker}
+        >
           {showRegionPicker && (
             <Box sx={{ ...sx.charts }}>
               <Charts />
             </Box>
           )}
         </ExpandingSection>
-        <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} /> 
+        <SidebarDivider sx={{ width: '100%', ml: 0, my: 4 }} />
 
-        <ExpandingSection label='Overlays' expanded={showOverlays} setExpanded={setShowOverlays}>
+        <ExpandingSection label="Overlays" expanded={showOverlays} setExpanded={setShowOverlays}>
           <Overlays />
         </ExpandingSection>
         <SidebarDivider sx={{ width: '100%', ml: 0, mt: 4 }} />
 
         <Footer />
       </Box>
-
     </Box>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

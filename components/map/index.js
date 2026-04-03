@@ -1,84 +1,99 @@
-import { useState, useCallback, useRef } from 'react'
-import { useThemeUI, Box } from 'theme-ui'
-import { useThemedColormap } from '@carbonplan/colormaps'
-import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps'
-import { Dimmer } from '@carbonplan/components'
+import { useState, useCallback, useRef } from 'react';
+import { useThemeUI, Box } from 'theme-ui';
+import { useThemedColormap } from '@carbonplan/colormaps';
+import { Map as MapContainer, Raster, Fill, Line, RegionPicker } from '@carbonplan/maps';
+import { Dimmer } from '@carbonplan/components';
 
-import Loading from '../view/loading'
-import useCustomColormap from '../store/use-custom-colormap'
+import Loading from '../view/loading';
+import useCustomColormap from '../store/use-custom-colormap';
 // import Point from './point'
-import JustAccessLayer from './just-access-layer'
-import JustAccessPDF from './just-access-pdf'
-import ZoomReset from './zoom-reset'
-import Ruler from './ruler'
-import Router from './router'
-import LayerOrder from './layer-order'
-import Search from './search/index'
-import Spinner from './search/spinner'
-import SearchLayer from './search/search-layer'
+import JustAccessLayer from './just-access-layer';
+import JustAccessPDF from './just-access-pdf';
+import ZoomReset from './zoom-reset';
+import Ruler from './ruler';
+import Router from './router';
+import LayerOrder from './layer-order';
+import Search from './search/index';
+import Spinner from './search/spinner';
+import SearchLayer from './search/search-layer';
 
-import useStore from '../store/index'
+import useStore from '../store/index';
 
 const Map = ({ mobile }) => {
-  const { theme } = useThemeUI()
-  const container = useRef(null)
-  const [map, setMap] = useState(null)
-  const zoom = useStore((state) => state.zoom)
-  const center = useStore((state) => state.center)
-  const glyphs = useStore((state) => state.glyphs)
+  const { theme } = useThemeUI();
+  const container = useRef(null);
+  const [map, setMap] = useState(null);
+  const zoom = useStore((state) => state.zoom);
+  const center = useStore((state) => state.center);
+  const glyphs = useStore((state) => state.glyphs);
 
-  const risk = useStore((state) => state.risk)
-  const crop = useStore((state) => state.crop)
-  const band = useStore((state) => state.band)
-  const clim = useStore((state) => state.clim)()
-  const colormapName = useStore((state) => state.colormapName)()
-  const colormap = (risk == 'lethal_heat') ? useThemedColormap(colormapName, { count: 8 }).slice(0,).reverse() :
-    (risk.startsWith('cdd') || risk.startsWith('hdd')) ? useThemedColormap(colormapName).slice(0,).reverse().slice(10, -10) :
-      (risk.startsWith('tavg')) ? useCustomColormap(colormapName) :
-        // (risk.startsWith('precip')) ? useCustomColormap(colormapName) :
-        (risk.startsWith('tc')) ? useThemedColormap(colormapName).slice(0,).reverse() :
-          (risk == 'slr') ? useThemedColormap(colormapName).slice(0,).reverse() :
-          risk.startsWith('cf') ? useCustomColormap(colormapName) :
-              useThemedColormap(colormapName)
+  const risk = useStore((state) => state.risk);
+  const crop = useStore((state) => state.crop);
+  const band = useStore((state) => state.band);
+  const clim = useStore((state) => state.clim)();
+  const colormapName = useStore((state) => state.colormapName)();
+  const colormap =
+    risk == 'lethal_heat'
+      ? useThemedColormap(colormapName, { count: 8 }).slice(0).reverse()
+      : risk.startsWith('cdd') || risk.startsWith('hdd')
+        ? useThemedColormap(colormapName).slice(0).reverse().slice(10, -10)
+        : risk.startsWith('tavg')
+          ? useCustomColormap(colormapName)
+          : // (risk.startsWith('precip')) ? useCustomColormap(colormapName) :
+            risk.startsWith('tc')
+            ? useThemedColormap(colormapName).slice(0).reverse()
+            : risk == 'slr'
+              ? useThemedColormap(colormapName).slice(0).reverse()
+              : risk.startsWith('cf')
+                ? useCustomColormap(colormapName)
+                : useThemedColormap(colormapName);
 
-  const opacity = useStore((state) => state.opacity)
-  const display = useStore((state) => state.display)
-  const setRegionData = useStore((state) => state.setRegionData)
-  const setRegionDataLoading = useStore((state) => state.setRegionDataLoading)
-  const showRegionPicker = useStore((state) => state.showRegionPicker)
+  const opacity = useStore((state) => state.opacity);
+  const display = useStore((state) => state.display);
+  const setRegionData = useStore((state) => state.setRegionData);
+  const setRegionDataLoading = useStore((state) => state.setRegionDataLoading);
+  const showRegionPicker = useStore((state) => state.showRegionPicker);
 
-  const showJustAccess = useStore((state) => state.showJustAccess)
-  const showReport = useStore((state) => state.showReport)
-  const showLakes = useStore((state) => state.showLakes)
-  const showCountriesOutline = useStore((state) => state.showCountriesOutline)
-  const showRegionsOutline = useStore((state) => state.showRegionsOutline)
-  const showStatesOutline = useStore((state) => state.showStatesOutline)
-  const showStatesZoom = useStore((state) => state.showStatesZoom)
+  const showJustAccess = useStore((state) => state.showJustAccess);
+  const showReport = useStore((state) => state.showReport);
+  const showLakes = useStore((state) => state.showLakes);
+  const showCountriesOutline = useStore((state) => state.showCountriesOutline);
+  const showRegionsOutline = useStore((state) => state.showRegionsOutline);
+  const showStatesOutline = useStore((state) => state.showStatesOutline);
+  const showStatesZoom = useStore((state) => state.showStatesZoom);
 
-  const lookup = useStore((state) => state.lookup)
-  const place = useStore((state) => state.place)
-  const showSearch = useStore((state) => state.showSearch)
-  const setShowSearch = useStore((state) => state.setShowSearch)
-  const showSpinner = useStore((state) => state.showSpinner)
-  const showSearchLayer = useStore((state) => state.showSearchLayer)
+  const lookup = useStore((state) => state.lookup);
+  const place = useStore((state) => state.place);
+  const showSearch = useStore((state) => state.showSearch);
+  const setShowSearch = useStore((state) => state.setShowSearch);
+  const showSpinner = useStore((state) => state.showSpinner);
+  const showSearchLayer = useStore((state) => state.showSearchLayer);
 
   // this callback was modified from its source: https://github.com/carbonplan/oae-web/blob/3eff3fb99a24a024f6f9a8278add9233a31e853b/components/map.js#L93
-  const handleRegionData = useCallback((data) => {
-    // console.log(data)
-    if (data.value == null) {
-      setRegionDataLoading(true)
-    } else if (data.value) {
-      setRegionData(data.value)
-      setRegionDataLoading(false)
-    }
-  },
+  const handleRegionData = useCallback(
+    (data) => {
+      // console.log(data)
+      if (data.value == null) {
+        setRegionDataLoading(true);
+      } else if (data.value) {
+        setRegionData(data.value);
+        setRegionDataLoading(false);
+      }
+    },
     [setRegionData, setRegionDataLoading]
-  )
+  );
 
   return (
-    <Box ref={container} sx={{ display: 'flex', flexBasis: '100%', justifyContent: 'center', 'canvas.mapboxgl-canvas:focus': { outline: 'none', }, }} >
-
-      <MapContainer zoom={zoom} maxZoom={8.9} center={center} glyphs={glyphs} >
+    <Box
+      ref={container}
+      sx={{
+        display: 'flex',
+        flexBasis: '100%',
+        justifyContent: 'center',
+        'canvas.mapboxgl-canvas:focus': { outline: 'none' },
+      }}
+    >
+      <MapContainer zoom={zoom} maxZoom={8.9} center={center} glyphs={glyphs}>
         {risk != 'slr' && !risk.startsWith('tc') && (
           <>
             <Fill
@@ -189,7 +204,7 @@ const Map = ({ mobile }) => {
           </>
         )}
 
-        {(risk.startsWith('tc')) && (
+        {risk.startsWith('tc') && (
           <Line
             id={'tc-boundaries'}
             color={theme.rawColors.secondary}
@@ -244,20 +259,22 @@ const Map = ({ mobile }) => {
           clim={clim}
           colormap={colormap}
           selector={risk.startsWith('cf') ? { crop, band } : { band }}
-          mode={(risk == 'lethal_heat') ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
+          mode={risk == 'lethal_heat' ? 'grid' : 'texture'} // 'texture', 'grid', 'dotgrid'
           regionOptions={{ setData: handleRegionData, selector: {} }}
         />
 
-        {showSpinner && (
-          <Spinner />
-        )}
+        {showSpinner && <Spinner />}
 
         {place != null && lookup != null && showSearch && showSearchLayer && (
           <SearchLayer
             key={`search-layer-${place})}`}
             id={`search-layer-${Date.now()}`}
             // source={'https://storage.googleapis.com/risk-maps/vector/' + lookup }
-            source={lookup == 'cities' ? `https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson` : 'https://storage.googleapis.com/risk-maps/vector/' + lookup}
+            source={
+              lookup == 'cities'
+                ? `https://storage.googleapis.com/risk-maps/vector/${lookup}.geojson`
+                : 'https://storage.googleapis.com/risk-maps/vector/' + lookup
+            }
             opacity={0.0}
             // color={theme.rawColors.primary}
             color={'#860F4F'}
@@ -265,40 +282,36 @@ const Map = ({ mobile }) => {
           />
         )}
 
-        {!mobile && showJustAccess && (
-          <JustAccessLayer theme={theme} />
-        )}
+        {!mobile && showJustAccess && <JustAccessLayer theme={theme} />}
 
         <Ruler mobile={mobile} />
 
         <ZoomReset mobile={mobile} />
 
-        {!mobile && (
-          <Search showSearch={showSearch} setShowSearch={setShowSearch} />
-        )}
+        {!mobile && <Search showSearch={showSearch} setShowSearch={setShowSearch} />}
 
-        {showReport && (<JustAccessPDF />)}
+        {showReport && <JustAccessPDF />}
 
         <LayerOrder />
 
         <Router />
 
-        {!mobile && (<Dimmer
-          sx={{
-            display: ['initial', 'initial', 'initial', 'initial'],
-            position: 'absolute',
-            color: 'primary',
-            right: [70],
-            bottom: [20, 20, 20, 20],
-          }}
-        />
+        {!mobile && (
+          <Dimmer
+            sx={{
+              display: ['initial', 'initial', 'initial', 'initial'],
+              position: 'absolute',
+              color: 'primary',
+              right: [70],
+              bottom: [20, 20, 20, 20],
+            }}
+          />
         )}
 
         <Loading />
-
       </MapContainer>
     </Box>
-  )
-}
+  );
+};
 
-export default Map
+export default Map;

@@ -1,5 +1,5 @@
-import { Box, Flex } from 'theme-ui'
-import { keyframes } from '@emotion/react'
+import { Box, Flex } from 'theme-ui';
+import { keyframes } from '@emotion/react';
 
 const Loading = ({ mobile = false }) => {
   const fade = keyframes({
@@ -9,7 +9,7 @@ const Loading = ({ mobile = false }) => {
     to: {
       opacity: 0,
     },
-  })
+  });
 
   return (
     <Box
@@ -44,7 +44,7 @@ const Loading = ({ mobile = false }) => {
         loading map...
       </Flex>
     </Box>
-  )
-}
+  );
+};
 
-export default Loading
+export default Loading;

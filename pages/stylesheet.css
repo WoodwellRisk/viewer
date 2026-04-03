@@ -1,61 +1,61 @@
 /* woodwell fonts */
 @font-face {
-    font-family: "ginto-normal";
-    /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
-    src: url('../assets/ginto-normal-regular.ttf');
+  font-family: 'ginto-normal';
+  /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
+  src: url('../assets/ginto-normal-regular.ttf');
 }
 
 @font-face {
-    font-family: "ginto-medium";
-    /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
-    src: url('../assets/ginto-normal-medium.ttf');
+  font-family: 'ginto-medium';
+  /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
+  src: url('../assets/ginto-normal-medium.ttf');
 }
 
 @font-face {
-    font-family: "ginto-bold";
-    /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
-    src: url('../assets/ginto-normal-bold.ttf');
+  font-family: 'ginto-bold';
+  /* src: url('https://storage.googleapis.com/drought-monitor/media/fonts/GintoNormal-Regular.ttf'); */
+  src: url('../assets/ginto-normal-bold.ttf');
 }
 
 .mapboxgl-map {
-    font-family: 'ginto-normal';
+  font-family: 'ginto-normal';
 }
 
 .mapboxgl-popup {
-    border: 1px solid #1b1e23;
-    /* width: 100%;
+  border: 1px solid #1b1e23;
+  /* width: 100%;
     max-width: 450px; */
-    height: auto;
-    max-height: 450px;
+  height: auto;
+  max-height: 450px;
 }
 
 .mapboxgl-popup-tip {
-    display: none;
+  display: none;
 }
 
 .mapboxgl-popup-close-button {
-    color: #1b1e23;
+  color: #1b1e23;
 }
 
 .mapboxgl-popup-content {
-    color: #1b1e23;
-    font-family: 'ginto-normal';
-    font-size: 0.9rem;
-    box-shadow: none;
-    padding: 0.9375rem;
+  color: #1b1e23;
+  font-family: 'ginto-normal';
+  font-size: 0.9rem;
+  box-shadow: none;
+  padding: 0.9375rem;
 }
 
 .mapboxgl-popup-content > p {
-    font-weight: bold;
-    padding: 0rem;
-    margin: 0rem;
+  font-weight: bold;
+  padding: 0rem;
+  margin: 0rem;
 }
 
 .mapboxgl-popup-content > a {
-    display: inline-block;
-    color: #1b1e23;
-    text-decoration: underline;
-    margin-top: 0.25rem;
+  display: inline-block;
+  color: #1b1e23;
+  text-decoration: underline;
+  margin-top: 0.25rem;
 }
 
 /* iframe {
@@ -70,35 +70,34 @@
 } */
 
 @keyframes circle-dash {
-    0%,
-    25% {
-      stroke-dashoffset: 187;
-      transform: rotate(0);
-    }
-    50%,
-    75% {
-        stroke-dashoffset: 75;
-        transform: rotate(85deg);
-    }
-    100% {
-        stroke-dashoffset: 187;
-        transform: rotate(400deg);
-    }
+  0%,
+  25% {
+    stroke-dashoffset: 187;
+    transform: rotate(0);
+  }
+  50%,
+  75% {
+    stroke-dashoffset: 75;
+    transform: rotate(85deg);
+  }
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(400deg);
+  }
 }
 
 .path {
-    animation: circle-dash 2s ease-in-out infinite;
+  animation: circle-dash 2s ease-in-out infinite;
 }
 
 .report-link {
-    display: inline-block;
-    color: #1b1e23;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    padding-left: 0;
-    margin-top: 0.25rem;
-    box-sizing: border-box;
-    background: none;
-    border: none;
+  display: inline-block;
+  color: #1b1e23;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  padding-left: 0;
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+  background: none;
+  border: none;
 }
-  

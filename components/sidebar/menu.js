@@ -1,5 +1,5 @@
-import { Box, Link } from 'theme-ui'
-import { Row, Column } from '@carbonplan/components'
+import { Box, Link } from 'theme-ui';
+import { Row, Column } from '@carbonplan/components';
 
 function Menu({ visible }) {
   const link = {
@@ -23,7 +23,7 @@ function Menu({ visible }) {
     '&:hover': {
       color: 'text',
     },
-  }
+  };
 
   return (
     <Box
@@ -31,15 +31,7 @@ function Menu({ visible }) {
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? 'all' : 'none',
         position: 'fixed',
-        width: visible
-          ? [
-            0,
-            '300px',
-            '350px',
-          ]
-          : [
-            0,
-          ],
+        width: visible ? [0, '300px', '350px'] : [0],
         height: '100%',
         borderStyle: 'solid',
         borderWidth: '0px',
@@ -64,14 +56,14 @@ function Menu({ visible }) {
                 color: 'secondary',
               },
             }}
-            href='https://www.woodwellclimate.org/research-area/risk/'
+            href="https://www.woodwellclimate.org/research-area/risk/"
             target="_blank"
           >
             About
           </Link>
 
           <Link
-            href='https://woodwellrisk.github.io/'
+            href="https://woodwellrisk.github.io/"
             target="_blank"
             sx={{
               ...link,
@@ -85,7 +77,7 @@ function Menu({ visible }) {
           </Link>
 
           <Link
-            href='https://github.com/WoodwellRisk'
+            href="https://github.com/WoodwellRisk"
             target="_blank"
             sx={{
               ...link,
@@ -100,7 +92,7 @@ function Menu({ visible }) {
         </Column>
       </Row>
     </Box>
-  )
+  );
 }
 
-export default Menu
+export default Menu;

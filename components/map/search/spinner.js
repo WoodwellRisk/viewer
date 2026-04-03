@@ -1,14 +1,14 @@
-import React from "react";
-import { Box } from "theme-ui";
-import { keyframes } from "@emotion/react";
+import React from 'react';
+import { Box } from 'theme-ui';
+import { keyframes } from '@emotion/react';
 
 const Spinner = () => {
   const spin = keyframes({
     from: {
-      transform: "rotateZ(0deg)",
+      transform: 'rotateZ(0deg)',
     },
     to: {
-      transform: "rotateZ(360deg)",
+      transform: 'rotateZ(360deg)',
     },
   });
 
@@ -17,15 +17,15 @@ const Spinner = () => {
       <Box
         aria-label="Loading search results"
         sx={{
-          position: "absolute",
-          display: ["initial", "initial", "initial", "initial"],
-          left: ["49%"],
-          top: ["40%"],
+          position: 'absolute',
+          display: ['initial', 'initial', 'initial', 'initial'],
+          left: ['49%'],
+          top: ['40%'],
           padding: [0],
           margin: [0],
-          cursor: "pointer",
-          stroke: "primary",
-          color: "primary",
+          cursor: 'pointer',
+          stroke: 'primary',
+          color: 'primary',
         }}
       >
         <Box
@@ -58,17 +58,17 @@ const Spinner = () => {
 
       <Box
         sx={{
-          position: "absolute",
-          left: ["45%"],
-          top: ["46%"],
-          cursor: "pointer",
+          position: 'absolute',
+          left: ['45%'],
+          top: ['46%'],
+          cursor: 'pointer',
           ml: [2],
           mt: [2],
-          display: ["initial", "initial", "initial", "initial"],
-          position: "absolute",
-          color: "primary",
-          textTransform: "uppercase",
-          letterSpacing: "mono",
+          display: ['initial', 'initial', 'initial', 'initial'],
+          position: 'absolute',
+          color: 'primary',
+          textTransform: 'uppercase',
+          letterSpacing: 'mono',
         }}
       >
         Loading...

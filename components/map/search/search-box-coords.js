@@ -1,38 +1,38 @@
-import { useEffect } from 'react'
-import { Badge, Box, Input, Text, useThemeUI } from 'theme-ui'
+import { useEffect } from 'react';
+import { Badge, Box, Input, Text, useThemeUI } from 'theme-ui';
 
-import useStore from '../../store/index'
+import useStore from '../../store/index';
 
 const SearchBoxCoords = () => {
-  const { theme } = useThemeUI()
+  const { theme } = useThemeUI();
 
-  const setCoordinates = useStore((state) => state.setCoordinates)
+  const setCoordinates = useStore((state) => state.setCoordinates);
 
-  const latitudeInput = useStore((state) => state.latitudeInput)
-  const setLatitudeInput = useStore((state) => state.setLatitudeInput)
-  const latitude = useStore((state) => state.latitude)
-  const setLatitude = useStore((state) => state.setLatitude)
-  const validLatitude = useStore((state) => state.validLatitude)
-  const setValidLatitude = useStore((state) => state.setValidLatitude)
+  const latitudeInput = useStore((state) => state.latitudeInput);
+  const setLatitudeInput = useStore((state) => state.setLatitudeInput);
+  const latitude = useStore((state) => state.latitude);
+  const setLatitude = useStore((state) => state.setLatitude);
+  const validLatitude = useStore((state) => state.validLatitude);
+  const setValidLatitude = useStore((state) => state.setValidLatitude);
 
-  const longitudeInput = useStore((state) => state.longitudeInput)
-  const setLongitudeInput = useStore((state) => state.setLongitudeInput)
-  const longitude = useStore((state) => state.longitude)
-  const setLongitude = useStore((state) => state.setLongitude)
-  const validLongitude = useStore((state) => state.validLongitude)
-  const setValidLongitude = useStore((state) => state.setValidLongitude)
+  const longitudeInput = useStore((state) => state.longitudeInput);
+  const setLongitudeInput = useStore((state) => state.setLongitudeInput);
+  const longitude = useStore((state) => state.longitude);
+  const setLongitude = useStore((state) => state.setLongitude);
+  const validLongitude = useStore((state) => state.validLongitude);
+  const setValidLongitude = useStore((state) => state.setValidLongitude);
 
   const sx = {
     'search-by-latlon-container': {
       ':has(#lon-input:focus)': {
         '#lon-badge': {
-          borderColor: 'primary'
-        }
+          borderColor: 'primary',
+        },
       },
       ':has(#lat-input:focus)': {
         '#lat-badge': {
-          borderColor: 'primary'
-        }
+          borderColor: 'primary',
+        },
       },
     },
     'search-by-latlon': {
@@ -108,40 +108,40 @@ const SearchBoxCoords = () => {
       my: [1],
       p: [1],
       bg: theme.colors.background,
-    }
-  }
+    },
+  };
 
   const handleLatSearch = (event) => {
-    setLatitudeInput(event.target.value)
-  }
+    setLatitudeInput(event.target.value);
+  };
 
   const handleLonSearch = (event) => {
-    setLongitudeInput(event.target.value)
-  }
+    setLongitudeInput(event.target.value);
+  };
 
   const handleValidateCoordinates = () => {
-    let lat = Number(latitudeInput)
+    let lat = Number(latitudeInput);
     if (latitudeInput == '' || isNaN(lat) || lat < -90.0 || lat > 90.0) {
-      setValidLatitude(false)
+      setValidLatitude(false);
     } else {
-      setValidLatitude(true)
-      setLatitude(latitudeInput)
+      setValidLatitude(true);
+      setLatitude(latitudeInput);
     }
 
-    let lon = Number(longitudeInput)
+    let lon = Number(longitudeInput);
     if (longitudeInput == '' || isNaN(lon) || lon < -180.0 || lon > 180.0) {
-      setValidLongitude(false)
+      setValidLongitude(false);
     } else {
-      setValidLongitude(true)
-      setLongitude(longitudeInput)
+      setValidLongitude(true);
+      setLongitude(longitudeInput);
     }
-  }
+  };
 
   useEffect(() => {
-    if(longitude && latitude) {
-      setCoordinates([longitude, latitude])
+    if (longitude && latitude) {
+      setCoordinates([longitude, latitude]);
     }
-  }, [latitude, longitude])
+  }, [latitude, longitude]);
 
   return (
     <Box sx={sx['search-by-latlon-container']}>
@@ -150,7 +150,7 @@ const SearchBoxCoords = () => {
       </Badge>
       <Input
         id={'lat-input'}
-        placeholder='[-90, 90]'
+        placeholder="[-90, 90]"
         sx={sx['search-by-latlon']}
         onChange={handleLatSearch}
         value={latitudeInput}
@@ -166,7 +166,7 @@ const SearchBoxCoords = () => {
       </Badge>
       <Input
         id={'lon-input'}
-        placeholder='[-180, 180]'
+        placeholder="[-180, 180]"
         sx={sx['search-by-latlon']}
         onChange={handleLonSearch}
         value={longitudeInput}
@@ -178,9 +178,11 @@ const SearchBoxCoords = () => {
         </Box>
       )}
 
-      <Badge sx={sx['latlon-button']} onClick={handleValidateCoordinates}>Search</Badge>
+      <Badge sx={sx['latlon-button']} onClick={handleValidateCoordinates}>
+        Search
+      </Badge>
     </Box>
-  )
-}
+  );
+};
 
-export default SearchBoxCoords
+export default SearchBoxCoords;

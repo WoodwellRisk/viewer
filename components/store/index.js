@@ -1,711 +1,831 @@
-import { create } from 'zustand'
-import { Box } from 'theme-ui'
-import { Link } from '@carbonplan/components'
+import { create } from 'zustand';
+import { Box } from 'theme-ui';
+import { Link } from '@carbonplan/components';
 
-import {customColormaps} from './colormaps.js';
+import { customColormaps } from './colormaps.js';
 
 const sx = {
-    data_description: {
-        fontSize: '14px',
-        color: 'primary',
-    },
-    data_source: {
-        mt: 2,
-    }
-}
+  data_description: {
+    fontSize: '14px',
+    color: 'primary',
+  },
+  data_source: {
+    mt: 2,
+  },
+};
 
-const NEX_URL = 'https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6'
-const AGMIP_URL = 'https://agmip.org/'
-const MAPSPAM_URL = 'https://www.mapspam.info/'
+const NEX_URL =
+  'https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6';
+const AGMIP_URL = 'https://agmip.org/';
+const MAPSPAM_URL = 'https://www.mapspam.info/';
 
 const useStore = create((set, get) => ({
-    // map container state
-    zoom: 1,
-    setZoom: (zoom) => set({ zoom }),
+  // map container state
+  zoom: 1,
+  setZoom: (zoom) => set({ zoom }),
 
-    center: [-40, 40],
-    setCenter: (center) => set({ center }),
+  center: [-40, 40],
+  setCenter: (center) => set({ center }),
 
-    // glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
-    // glyphs: 'https://storage.googleapis.com/risk-maps/media/fonts/{fontstack}/{range}.pbf',
-    // glyphs: '../../assets/{fontstack}/{range}.pbf',
-    glyphs: false,
+  // glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+  // glyphs: 'https://storage.googleapis.com/risk-maps/media/fonts/{fontstack}/{range}.pbf',
+  // glyphs: '../../assets/{fontstack}/{range}.pbf',
+  glyphs: false,
 
-    // general / raster state variables
-    cropOptions: {'maize': true, 'rice': false, 'soy': false, 'wheat': false},
-    setCropOptions: (cropOptions) => set({ cropOptions }),
-    
-    crop: 'maize',
-    setCrop: (crop) => set({ crop }),
+  // general / raster state variables
+  cropOptions: { maize: true, rice: false, soy: false, wheat: false },
+  setCropOptions: (cropOptions) => set({ cropOptions }),
 
-    bandIndex: 0,
-    setBandIndex: (bandIndex) => set({ bandIndex }),
+  crop: 'maize',
+  setCrop: (crop) => set({ crop }),
 
-    band: 1.5,
-    setBand: (band) => set({ band }),
+  bandIndex: 0,
+  setBandIndex: (bandIndex) => set({ bandIndex }),
 
-    customColormaps: customColormaps,
+  band: 1.5,
+  setBand: (band) => set({ band }),
 
-    opacity: 1,
-    setOpacity: (opacity) => set({ opacity }),
+  customColormaps: customColormaps,
 
-    display: true,
-    setDisplay: (display) => set({ display }),
+  opacity: 1,
+  setOpacity: (opacity) => set({ opacity }),
 
-    regionData: { loading: true },
-    setRegionData: (regionData) => set({ regionData }),
+  display: true,
+  setDisplay: (display) => set({ display }),
 
-    regionLoadingData: true,
-    setRegionDataLoading: (regionLoadingData) => set({ regionLoadingData }),
+  regionData: { loading: true },
+  setRegionData: (regionData) => set({ regionData }),
 
-    showRegionPicker: false,
-    setShowRegionPicker: (showRegionPicker) => set({ showRegionPicker }),
+  regionLoadingData: true,
+  setRegionDataLoading: (regionLoadingData) => set({ regionLoadingData }),
 
-    chartTypes: {bar: true, timeseries: false},
-    setChartTypes: (chartTypes) => set({ chartTypes }),
+  showRegionPicker: false,
+  setShowRegionPicker: (showRegionPicker) => set({ showRegionPicker }),
 
-    showOceanMask: true,
-    setShowOceanMask: (showOceanMask) => set({ showOceanMask }),
+  chartTypes: { bar: true, timeseries: false },
+  setChartTypes: (chartTypes) => set({ chartTypes }),
 
-    showJustAccess: false,
-    setShowJustAccess: (showJustAccess) => set({ showJustAccess }),
+  showOceanMask: true,
+  setShowOceanMask: (showOceanMask) => set({ showOceanMask }),
 
-    reportURL: '',
-    setReportURL: (reportURL) => set({ reportURL }),
+  showJustAccess: false,
+  setShowJustAccess: (showJustAccess) => set({ showJustAccess }),
 
-    showReport: false,
-    setShowReport: (showReport) => set({ showReport }),
+  reportURL: '',
+  setReportURL: (reportURL) => set({ reportURL }),
 
-    showLakes: false,
-    setShowLakes: (showLakes) => set({ showLakes }),
+  showReport: false,
+  setShowReport: (showReport) => set({ showReport }),
 
-    showLandOutline: true,
-    setShowLandOutline: (showLandOutline) => set({ showLandOutline }),
+  showLakes: false,
+  setShowLakes: (showLakes) => set({ showLakes }),
 
-    showCountriesOutline: false,
-    setShowCountriesOutline: (showCountriesOutline) => set({ showCountriesOutline }),
+  showLandOutline: true,
+  setShowLandOutline: (showLandOutline) => set({ showLandOutline }),
 
-    showRegionsOutline: false,
-    setShowRegionsOutline: (showRegionsOutline) => set({ showRegionsOutline }),
+  showCountriesOutline: false,
+  setShowCountriesOutline: (showCountriesOutline) => set({ showCountriesOutline }),
 
-    showStatesOutline: false,
-    setShowStatesOutline: (showStatesOutline) => set({ showStatesOutline }),
-    showStatesZoom: 2.5, 
+  showRegionsOutline: false,
+  setShowRegionsOutline: (showRegionsOutline) => set({ showRegionsOutline }),
 
-    sliding: false,
-    setSliding: (sliding) => set({ sliding }),
+  showStatesOutline: false,
+  setShowStatesOutline: (showStatesOutline) => set({ showStatesOutline }),
+  showStatesZoom: 2.5,
 
-    showAbout: false,
-    setShowAbout: (showAbout) => set({ showAbout }),
+  sliding: false,
+  setSliding: (sliding) => set({ sliding }),
 
-    showAboutMobile: false,
-    setShowAboutMobile: (showAboutMobile) => set({ showAboutMobile }),
+  showAbout: false,
+  setShowAbout: (showAbout) => set({ showAbout }),
 
-    showMenu: false,
-    setShowMenu: (showMenu) => set({ showMenu }),
+  showAboutMobile: false,
+  setShowAboutMobile: (showAboutMobile) => set({ showAboutMobile }),
 
-    showOverlays: false,
-    setShowOverlays: (showOverlays) => set({ showOverlays }),
+  showMenu: false,
+  setShowMenu: (showMenu) => set({ showMenu }),
 
-    // sidebar options
-    categoryNavigation: {
-        'water stress': true, 
-        'heat': false,
-        'coastal risk': false,
-        // 'flooding': false,
-        'wildfire': false,
-        'agriculture': false,
-        'health': false,
-        'energy': false,
-        'permafrost': false,
-        'labor': false,
+  showOverlays: false,
+  setShowOverlays: (showOverlays) => set({ showOverlays }),
+
+  // sidebar options
+  categoryNavigation: {
+    'water stress': true,
+    heat: false,
+    'coastal risk': false,
+    // 'flooding': false,
+    wildfire: false,
+    agriculture: false,
+    health: false,
+    energy: false,
+    permafrost: false,
+    labor: false,
+  },
+  setCategoryNavigation: (categoryNavigation) => set({ categoryNavigation }),
+  categories: () => {
+    const { categoryNavigation } = get();
+    return Object.keys(categoryNavigation);
+  },
+  category: 'water stress',
+  setCategory: (category) => set({ category }),
+
+  // associatedRisks: {
+  //     'water stress': {'drought': true, 'precip': false},
+  //     'heat': {'hot_days': true, 'warm_nights': false, 'lethal_heat': false, 'tavg': false},
+  //     'coastal risk': {'tc_rp': true, 'slr': false},
+  //     // 'flooding': {},
+  //     'wildfire': {'wdd': true}, // 'pm25': false, 'lsp': false,
+  //     'agriculture': {'cf_rain': true, 'cf_irr': false},
+  //     'health': {'warm_nights': true, 'lethal_heat': false},
+  //     'energy': {'cdd': true, 'hdd': false}, // 'lsp': false,
+  //     'permafrost': {'permafrost': true},
+  //     'labor': {'lethal_heat': true},
+  // },
+
+  associatedRisks: {
+    'water stress': ['drought', 'precip'],
+    heat: ['hot_days', 'warm_nights', 'lethal_heat', 'tavg', 'cdd', 'hdd'],
+    'coastal risk': ['tc_rp', 'slr'],
+    // 'flooding': [],
+    wildfire: ['wdd'], // 'pm25': false, 'lsp': false,
+    agriculture: ['cf_rain', 'cf_irr'],
+    health: ['warm_nights', 'lethal_heat'],
+    energy: ['cdd', 'hdd'], // 'lsp': false,
+    permafrost: ['permafrost'],
+    labor: ['lethal_heat'],
+  },
+
+  // this is a more automated way to do the exact same thing,
+  // but makes it difficult to control the order of the layers by theme
+  // associatedRisks: () => {
+  //     const {riskOptions, category} = get()
+  //     let riskTags = Object.keys(riskOptions).filter((key) => {
+  //         return riskOptions[key].tags.includes(category)
+  //     })
+
+  //     let associatedRisks = {}
+  //     riskTags.forEach((risk, index) => {
+  //         if(index == 0) {
+  //             associatedRisks[risk] = true;
+  //         } else {
+  //             associatedRisks[risk] = false;
+  //         }
+  //     })
+
+  //     return associatedRisks;
+  // },
+
+  riskNavigation: { drought: true, precip: false },
+  // maybe this should be a custom useEffect hook for when the risk is updated?
+  // and then disable it for the filter?
+  // except that then in the router component, there is is a call to setRiskNavigator and then setRisk :(((((
+  setRiskNavigation: (riskNavigation) => set({ riskNavigation }),
+
+  risks: [
+    'cdd',
+    'cf_irr',
+    'cf_rain',
+    'drought',
+    'hdd',
+    'hot_days',
+    'lethal_heat',
+    //'lsp',
+    'permafrost',
+    //'pm25',
+    'precip',
+    'tavg',
+    'tc_rp',
+    'slr',
+    'wdd',
+    'warm_nights',
+  ],
+  risk: 'drought',
+  setRisk: (risk) => set({ risk }),
+  // risk: () => {
+  //     const {associatedRisks} = get()
+  //     let risk = Object.keys(associatedRisks).filter((key) => associatedRisks[key] === true)[0]
+  //     return risk;
+  // },
+
+  riskOptions: {
+    cdd: {
+      tags: ['heat', 'energy'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Cooling degree days',
+      riskTitle: 'Cooling degree days',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            The annual cumulative sum of the difference between daily average temperature and a base
+            temperature of 65°F, but only for days where the daily average temperature is over 65°F.
+          </Box>
+          <Box sx={{ mt: [2] }}>
+            Cooling degree days is a metric designed to quantify the energy demand for air
+            conditioning at a specific location. We used a uniform base temperature of 65°F to
+            compare cooling degree days across locations.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'cool',
+      clim: { min: 0.0, max: 10000 },
+      colormapLabel: 'Cooling degree days',
+      colormapUnits: '',
+      statsLabel: 'degree days',
+      chartLabel: 'degree days',
     },
-    setCategoryNavigation: (categoryNavigation) => set({ categoryNavigation }),
-    categories: () => {
-        const {categoryNavigation} = get()
-        return Object.keys(categoryNavigation)
+    cf_irr: {
+      tags: ['agriculture'],
+      bands: [1990.0, 2030.0, 2050.0, 2090.0],
+      bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100'],
+      bandLabel: 'Time period',
+      riskTagLabel: 'Irrigated crops',
+      riskTitle: 'Irrigated crop failure',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            The probability of at least a 10% yield failure for a given crop, clipped to{' '}
+            <Link href={MAPSPAM_URL} target="_blank">
+              SPAM 2020
+            </Link>{' '}
+            irrigated crop extents.
+          </Box>
+          <Box sx={{ mt: [2] }}>
+            Future risk to irrigated crops takes into account changing climate conditions without
+            constraints on crop water availability. Any socioeconomic forcing or adaptation efforts
+            are held constant at 2015 levels.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={AGMIP_URL} target="_blank">
+              AgMIP
+            </Link>{' '}
+            GGCMI Phase 3 based on CMIP6. To learn more about how this data layer was created,
+            please see our{' '}
+            <Link href="https://woodwellrisk.github.io/risks/agriculture/" target="_blank">
+              methodology website.
+            </Link>
+          </Box>
+        </Box>
+      ),
+      colormapName: 'greenyellowred',
+      clim: { min: 0.0, max: 100 },
+      colormapLabel: 'Probability of yield failure',
+      colormapUnits: '%',
+      statsLabel: '%',
+      chartLabel: 'Probability (%)',
     },
-    category: 'water stress',
-    setCategory: (category) => set({ category }),
-
-    // associatedRisks: {
-    //     'water stress': {'drought': true, 'precip': false}, 
-    //     'heat': {'hot_days': true, 'warm_nights': false, 'lethal_heat': false, 'tavg': false},
-    //     'coastal risk': {'tc_rp': true, 'slr': false},
-    //     // 'flooding': {},
-    //     'wildfire': {'wdd': true}, // 'pm25': false, 'lsp': false,
-    //     'agriculture': {'cf_rain': true, 'cf_irr': false},
-    //     'health': {'warm_nights': true, 'lethal_heat': false},
-    //     'energy': {'cdd': true, 'hdd': false}, // 'lsp': false,
-    //     'permafrost': {'permafrost': true},
-    //     'labor': {'lethal_heat': true},
-    // },
-
-    associatedRisks: {
-        'water stress': ['drought', 'precip'], 
-        'heat': ['hot_days', 'warm_nights', 'lethal_heat', 'tavg', 'cdd', 'hdd'],
-        'coastal risk': ['tc_rp', 'slr'],
-        // 'flooding': [],
-        'wildfire': ['wdd'], // 'pm25': false, 'lsp': false,
-        'agriculture': ['cf_rain', 'cf_irr'],
-        'health': ['warm_nights', 'lethal_heat'],
-        'energy': ['cdd', 'hdd'], // 'lsp': false,
-        'permafrost': ['permafrost'],
-        'labor': ['lethal_heat'],
+    cf_rain: {
+      tags: ['agriculture'],
+      bands: [1990.0, 2030.0, 2050.0, 2090.0],
+      bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100'],
+      bandLabel: 'Time period',
+      riskTagLabel: 'Rainfed crops',
+      riskTitle: 'Rainfed crop failure',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            The probability of at least a 10% yield failure for a given crop, clipped to{' '}
+            <Link href={MAPSPAM_URL} target="_blank">
+              SPAM 2020
+            </Link>{' '}
+            rainfed crop extents.
+          </Box>
+          <Box sx={{ mt: [2] }}>
+            Future risk to rainfed crops takes into account changing climate conditions. Any
+            socioeconomic forcing or adaptation efforts are held constant at 2015 levels.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={AGMIP_URL} target="_blank">
+              AgMIP
+            </Link>{' '}
+            GGCMI Phase 3 based on CMIP6. To learn more about how this data layer was created,
+            please see our{' '}
+            <Link href="https://woodwellrisk.github.io/risks/agriculture/" target="_blank">
+              methodology website.
+            </Link>
+          </Box>
+        </Box>
+      ),
+      colormapName: 'greenyellowred',
+      clim: { min: 0.0, max: 100 },
+      colormapLabel: 'Probability of yield failure',
+      colormapUnits: '%',
+      statsLabel: '%',
+      chartLabel: 'Probability (%)',
     },
-
-    // this is a more automated way to do the exact same thing, 
-    // but makes it difficult to control the order of the layers by theme
-    // associatedRisks: () => {
-    //     const {riskOptions, category} = get()
-    //     let riskTags = Object.keys(riskOptions).filter((key) => {
-    //         return riskOptions[key].tags.includes(category)
-    //     })
-
-    //     let associatedRisks = {}
-    //     riskTags.forEach((risk, index) => {
-    //         if(index == 0) {
-    //             associatedRisks[risk] = true;
-    //         } else {
-    //             associatedRisks[risk] = false;
-    //         }
-    //     })
-
-    //     return associatedRisks;
-    // },
-
-    riskNavigation: {'drought': true, 'precip': false}, 
-    // maybe this should be a custom useEffect hook for when the risk is updated?
-    // and then disable it for the filter?
-    // except that then in the router component, there is is a call to setRiskNavigator and then setRisk :(((((
-    setRiskNavigation: (riskNavigation) => set({ riskNavigation }),
-
-    risks: [
-        'cdd', 'cf_irr', 'cf_rain', 'drought', 'hdd', 'hot_days', 'lethal_heat', 
-        //'lsp', 
-        'permafrost', 
-        //'pm25', 
-        'precip', 'tavg', 'tc_rp', 'slr', 'wdd', 'warm_nights',
-    ],
-    risk: 'drought',
-    setRisk: (risk) => set({ risk }),
-    // risk: () => {
-    //     const {associatedRisks} = get()
-    //     let risk = Object.keys(associatedRisks).filter((key) => associatedRisks[key] === true)[0]
-    //     return risk;
-    // },
-
-    riskOptions: {
-        cdd: {
-            tags: ['heat', 'energy'],
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Cooling degree days',
-            riskTitle: 'Cooling degree days',
-            riskDescription: 
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    The annual cumulative sum of the difference between daily average temperature and a base temperature of 65°F, but only for days where the daily average temperature is over 65°F. 
-                </Box>
-                <Box sx={{mt: [2]}}>
-                    Cooling degree days is a metric designed to quantify the energy demand for air conditioning at a specific location.
-                    We used a uniform base temperature of 65°F to compare cooling degree days across locations.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'cool',
-            clim: { min: 0.0, max: 10000 },
-            colormapLabel: 'Cooling degree days',
-            colormapUnits: '',
-            statsLabel: 'degree days',
-            chartLabel: 'degree days',
-        },
-        cf_irr: {
-            tags: ['agriculture'],
-            bands: [1990.0, 2030.0, 2050.0, 2090.0],
-            bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
-            bandLabel: 'Time period',
-            riskTagLabel: 'Irrigated crops',
-            riskTitle: 'Irrigated crop failure',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    The probability of at least a 10% yield failure for a given crop, clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> irrigated crop extents.
-                </Box>
-                <Box sx={{mt: [2]}}>
-                    Future risk to irrigated crops takes into account changing climate conditions without constraints on crop water availability. 
-                    Any socioeconomic forcing or adaptation efforts are held constant at 2015 levels.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> GGCMI Phase 3 based on CMIP6. 
-                    To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/agriculture/' target='_blank'>methodology website.</Link>
-                </Box>
-            </Box>,
-            colormapName: 'greenyellowred',
-            clim: { min: 0.0, max: 100 },
-            colormapLabel: 'Probability of yield failure',
-            colormapUnits: '%',
-            statsLabel: '%',
-            chartLabel: 'Probability (%)',
-        },
-        cf_rain: {
-            tags: ['agriculture'],            
-            bands: [1990.0, 2030.0, 2050.0, 2090.0],
-            bandLabels: ['1981-2000', '2021-2040', '2041-2060', '2081-2100',],
-            bandLabel: 'Time period',
-            riskTagLabel: 'Rainfed crops',
-            riskTitle: 'Rainfed crop failure',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    The probability of at least a 10% yield failure for a given crop, clipped to <Link href={MAPSPAM_URL} target='_blank'>SPAM 2020</Link> rainfed crop extents.
-                </Box>
-                <Box sx={{mt: [2]}}>
-                    Future risk to rainfed crops takes into account changing climate conditions. Any socioeconomic forcing or adaptation efforts are held constant at 2015 levels.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={AGMIP_URL} target='_blank'>AgMIP</Link> GGCMI Phase 3 based on CMIP6. 
-                    To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/agriculture/' target='_blank'>methodology website.</Link>
-                </Box>
-            </Box>,
-            colormapName: 'greenyellowred',
-            clim: { min: 0.0, max: 100 },
-            colormapLabel: 'Probability of yield failure',
-            colormapUnits: '%',
-            statsLabel: '%',
-            chartLabel: 'Probability (%)',
-        },
-        drought: {   
-            tags: ['water stress'],         
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Drought',
-            riskTitle: 'Extreme drought',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Probability of extreme drought. The likelihood of an event with a 10% or less chance of occurrence in the base period of 1°C of climate warming (2000-2020).
-                    Hyper-arid regions are masked as drought cannot occur under permanently dry conditions. Drought is defined as a temporary negative anomaly in local water balance conditions.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'warm',
-            clim: { min: 0.0, max: 75.0 },
-            colormapLabel: 'Probability of extreme drought',
-            colormapUnits: '',
-            statsLabel: '%',
-            chartLabel: 'Probability (%)',
-        },
-        hdd: {     
-            tags: ['heat', 'energy'],       
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Heating degree days',
-            riskTitle: 'Heating degree days',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    The annual cumulative sum of the difference between 65°F and the daily average temperature, but only for days where the daily average temperature is under 65°F. 
-                </Box>
-                <Box sx={{mt: [2]}}>
-                    Heating degree days is a metric designed to quantify the energy demand for building heating at a specific location. 
-                    We used a uniform base temperature of 65°F to compare heating degree days across locations.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'cool',
-            clim: { min: 0.0, max: 15000 },
-            colormapLabel: 'Heating degree days',
-            colormapUnits: '',
-            statsLabel: 'degree days',
-            chartLabel: 'degree days',
-        },
-        hot_days: {
-            tags: ['heat'],
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Hot days',
-            riskTitle: 'Days over 90°F',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    The number of days in a year with a daily maximum temperature over 90°F (~32.2°C).
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'fire',
-            clim: { min: 0.0, max: 365.0 },
-            colormapLabel: 'Number of days per year',
-            colormapUnits: '',
-            statsLabel: 'days',
-            chartLabel: 'days per year',
-        },
-        lethal_heat: {
-            tags: ['heat', 'health', 'labor'],
-            bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
-            bandLabel: 'Warming level of emergence',
-            riskTagLabel: 'Lethal heat',
-            riskTitle: 'Lethal heat',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    High temperatures and humidity may cause severe health problems therefore our lethal heat metric is derived from relative humidity and temperature.
-                    It describes conditions that may be lethal for a healthy, non-heat-adapted human exposed for extended periods of time.
-                    This data illustrates the warming level at which at least 1 day of at least 6 hours of lethal heat per year begins to occur.
-                </Box>
-                <Box sx={sx.data_source}>
-                    To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/heat/#lethal-heat-' target='_blank'>methodology website.</Link>
-                </Box>
-            </Box>,
-            colormapName: 'fire',
-            clim: { min: 1.0, max: 4.0 },
-            colormapLabel: '°C',
-            colormapUnits: '',
-            statsLabel: '°C',
-            chartLabel: '',
-        },
-        lsp: {
-            // tags: ['wildfire', 'energy'],
-            tags: [],
-            bands: [2000.0, 2050.0, 2100.0],
-            bandLabel: 'Time period',
-            riskTagLabel: 'Lost solar potential',
-            riskTitle: 'Lost solar potential',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Lost solar potential
-                </Box>
-                {/* <Box sx={sx.data_source}>
+    drought: {
+      tags: ['water stress'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Drought',
+      riskTitle: 'Extreme drought',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            Probability of extreme drought. The likelihood of an event with a 10% or less chance of
+            occurrence in the base period of 1°C of climate warming (2000-2020). Hyper-arid regions
+            are masked as drought cannot occur under permanently dry conditions. Drought is defined
+            as a temporary negative anomaly in local water balance conditions.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'warm',
+      clim: { min: 0.0, max: 75.0 },
+      colormapLabel: 'Probability of extreme drought',
+      colormapUnits: '',
+      statsLabel: '%',
+      chartLabel: 'Probability (%)',
+    },
+    hdd: {
+      tags: ['heat', 'energy'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Heating degree days',
+      riskTitle: 'Heating degree days',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            The annual cumulative sum of the difference between 65°F and the daily average
+            temperature, but only for days where the daily average temperature is under 65°F.
+          </Box>
+          <Box sx={{ mt: [2] }}>
+            Heating degree days is a metric designed to quantify the energy demand for building
+            heating at a specific location. We used a uniform base temperature of 65°F to compare
+            heating degree days across locations.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'cool',
+      clim: { min: 0.0, max: 15000 },
+      colormapLabel: 'Heating degree days',
+      colormapUnits: '',
+      statsLabel: 'degree days',
+      chartLabel: 'degree days',
+    },
+    hot_days: {
+      tags: ['heat'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Hot days',
+      riskTitle: 'Days over 90°F',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            The number of days in a year with a daily maximum temperature over 90°F (~32.2°C).
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'fire',
+      clim: { min: 0.0, max: 365.0 },
+      colormapLabel: 'Number of days per year',
+      colormapUnits: '',
+      statsLabel: 'days',
+      chartLabel: 'days per year',
+    },
+    lethal_heat: {
+      tags: ['heat', 'health', 'labor'],
+      bands: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
+      bandLabel: 'Warming level of emergence',
+      riskTagLabel: 'Lethal heat',
+      riskTitle: 'Lethal heat',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            High temperatures and humidity may cause severe health problems therefore our lethal
+            heat metric is derived from relative humidity and temperature. It describes conditions
+            that may be lethal for a healthy, non-heat-adapted human exposed for extended periods of
+            time. This data illustrates the warming level at which at least 1 day of at least 6
+            hours of lethal heat per year begins to occur.
+          </Box>
+          <Box sx={sx.data_source}>
+            To learn more about how this data layer was created, please see our{' '}
+            <Link href="https://woodwellrisk.github.io/risks/heat/#lethal-heat-" target="_blank">
+              methodology website.
+            </Link>
+          </Box>
+        </Box>
+      ),
+      colormapName: 'fire',
+      clim: { min: 1.0, max: 4.0 },
+      colormapLabel: '°C',
+      colormapUnits: '',
+      statsLabel: '°C',
+      chartLabel: '',
+    },
+    lsp: {
+      // tags: ['wildfire', 'energy'],
+      tags: [],
+      bands: [2000.0, 2050.0, 2100.0],
+      bandLabel: 'Time period',
+      riskTagLabel: 'Lost solar potential',
+      riskTitle: 'Lost solar potential',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>Lost solar potential</Box>
+          {/* <Box sx={sx.data_source}>
                     ...
                 </Box> */}
-            </Box>,
-            colormapName: 'cool',
-            clim: { min: 0.0, max: 10.0 },
-            colormapLabel: '',
-            colormapUnits: '%',
-            statsLabel: '%',
-            chartLabel: '',
-        },
-        permafrost: {
-            tags: ['permafrost'],
-            bands: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Permafrost',
-            riskTitle: 'Permafrost loss',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    The likelihood of permafrost extent. Permafrost is considered to be present if the active layer thickness, or the depth of the soil layer that thaws seasonally in the summer, is less than 3 meters.
-                    Glaciated areas are masked. In general, it is hard to monitor permafrost under glaciers and ice sheets and not much is known about permafrost in Antarctica.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from CMIP6 climate model output.
-                </Box>
-                <Box sx={sx.data_source}>
-                    To learn more about how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/permafrost/' target='_blank'>methodology website.</Link>
-                </Box>
-            </Box>,
-            colormapName: 'cool',
-            clim: { min: 0.0, max: 100.0 },
-            colormapLabel: 'Likelihood',
-            colormapUnits: '(%)',
-            statsLabel: '%',
-            chartLabel: 'Likelihood (%)',
-        },
-        pm25: {
-            // tags: ['wildfire', 'health'],
-            tags: [],
-            bands: [2000.0, 2050.0, 2100.0],
-            bandLabel: 'Time period',
-            riskTagLabel: 'PM2.5',
-            riskTitle: 'PM2.5 concentration',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    PM2.5
-                </Box>
-                {/* <Box sx={sx.data_source}>
+        </Box>
+      ),
+      colormapName: 'cool',
+      clim: { min: 0.0, max: 10.0 },
+      colormapLabel: '',
+      colormapUnits: '%',
+      statsLabel: '%',
+      chartLabel: '',
+    },
+    permafrost: {
+      tags: ['permafrost'],
+      bands: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Permafrost',
+      riskTitle: 'Permafrost loss',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            The likelihood of permafrost extent. Permafrost is considered to be present if the
+            active layer thickness, or the depth of the soil layer that thaws seasonally in the
+            summer, is less than 3 meters. Glaciated areas are masked. In general, it is hard to
+            monitor permafrost under glaciers and ice sheets and not much is known about permafrost
+            in Antarctica.
+          </Box>
+          <Box sx={sx.data_source}>Base data from CMIP6 climate model output.</Box>
+          <Box sx={sx.data_source}>
+            To learn more about how this data layer was created, please see our{' '}
+            <Link href="https://woodwellrisk.github.io/risks/permafrost/" target="_blank">
+              methodology website.
+            </Link>
+          </Box>
+        </Box>
+      ),
+      colormapName: 'cool',
+      clim: { min: 0.0, max: 100.0 },
+      colormapLabel: 'Likelihood',
+      colormapUnits: '(%)',
+      statsLabel: '%',
+      chartLabel: 'Likelihood (%)',
+    },
+    pm25: {
+      // tags: ['wildfire', 'health'],
+      tags: [],
+      bands: [2000.0, 2050.0, 2100.0],
+      bandLabel: 'Time period',
+      riskTagLabel: 'PM2.5',
+      riskTitle: 'PM2.5 concentration',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>PM2.5</Box>
+          {/* <Box sx={sx.data_source}>
                     ...
                 </Box> */}
-            </Box>,
-            colormapName: 'cool',
-            clim: { min: 0.0, max: 25.0 },
-            colormapLabel: 'Concentration',
-            colormapUnits: '(μg / m^3)',
-            statsLabel: 'μg / m^3',
-            chartLabel: 'Concentration (μg / m^3)',
-        },
-        precip: {
-            tags: ['water stress'],
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Precipitation',
-            riskTitle: 'Annual precipitation',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Average annual precipitation.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'water',
-            clim: { min: 0, max: 2500 },
-            colormapLabel: 'Precipitation',
-            colormapUnits: '(mm)',
-            statsLabel: 'mm',
-            chartLabel: 'Precipitation (mm)',
-        },
-        slr: {
-            tags: ['coastal risk'],
-            bands: [2050.0],
-            bandLabel: 'Depth value by 2050',
-            riskTagLabel: 'Sea level rise',
-            riskTitle: 'Sea level rise',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Future sea level change from the <Link href='https://www.ipcc.ch/assessment-report/ar6/' target='_blank'>IPCC AR6</Link> report under a medium confidence fossil-fueled development pathway (SSP5-8.5) scenario.
-                    The layer represents the median model projections from 2020 to 2050, relative to a <Link href='https://podaac.jpl.nasa.gov/announcements/2021-08-09-Sea-level-projections-from-the-IPCC-6th-Assessment-Report' target='_blank'>1995-2014 baseline period</Link>.
-                </Box>
-                <Box sx={sx.data_source}>
-                    The base data is from <Link href='https://sealevel.nasa.gov/data_tools/17' target='_blank'>NASA Sea Level Change</Link>{' '}
-                    with the vertical land movement data replaced with data from <Link href='https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355' target='_blank'>Hammond et al. (2021)</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'redteal', // tealgrey also looks good
-            clim: { min: -0.5, max: 0.5 },
-            colormapLabel: 'Sea level rise',
-            colormapUnits: '(m)',
-            statsLabel: 'meters',
-            chartLabel: 'meters',
-        },
-        tavg: {
-            tags: ['heat'],
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Temperature',
-            riskTitle: 'Annual temperature',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Average annual temperature.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'magma',
-            clim: { min: -25, max: 30 },
-            colormapLabel: 'Temperature',
-            colormapUnits: '(°C)',
-            statsLabel: 'ºC',
-            chartLabel: 'Temperature (ºC)',
-        },
-        tc_rp: {
-            tags: ['coastal risk'],
-            bands: [2017.0, 2050.0],
-            bandLabels: ['1980-2017', '2015-2050',],
-            riskTagLabel: 'Tropical cyclones',
-            bandLabel: 'Time period',
-            riskTitle: 'Tropical cyclone risk',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Return period of Category 3+ tropical cyclones. The layer is based on generating thousands of years of simulated storm tracks within 100km of each location.
-                    The resulting simulations include track locations and intensity, which can be used to make estimates of tropical cyclone approach probabilities for 1980-2017 and 2015-2050 under RCP8.5 conditions.
-                </Box>
-                <Box sx={sx.data_source}>
-                    The data presented here was generated using the open-source STORM model and our Coastal Risk Framework.
-                    For a more detailed discussion on how this data layer was created, please see our <Link href='https://woodwellrisk.github.io/risks/tropical-cyclones/' target='_blank'>methodology website.</Link>
-                </Box>
-            </Box>,
-            colormapName: 'fire',
-            clim: { min: 0.0, max: 100 },
-            colormapLabel: 'Return period of Category 3+ storm',
-            colormapUnits: '(years)',
-            statsLabel: 'years',
-            chartLabel: 'Return period (years)',
-        },
-        warm_nights: {
-            tags: ['heat', 'health'],
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5,],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Tropical nights',
-            riskTitle: 'Nights over 68°F',
-            riskDescription:
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Heat stress. The number of days in a year with nightly minimum temperatures over 68°F (20°C). 
-                    Increasing nighttime temperatures have implications for human health, agricultural yield, and the spread of pests and diseases.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'fire',
-            clim: { min: 0.0, max: 365.0 },
-            colormapLabel: 'Number of nights per year',
-            colormapUnits: '',
-            statsLabel: 'nights',
-            chartLabel: 'nights per year',
-        },
-        wdd: {
-            tags: ['wildfire'],
-            bands: [1.5, 2.0, 2.5, 3.0, 3.5],
-            bandLabel: 'Warming level',
-            riskTagLabel: 'Widlfires',
-            riskTitle: 'Widlfire danger days',
-            riskDescription: 
-            <Box className='risk-layer-description' sx={sx.data_description}>
-                <Box>
-                    Wildfire danger days. The number of days in a year at or more extreme than the worst 5% of days of fire weather index (FWI) in the base period of 1°C of climate warming (2000-2020). 
-                    Non-vegetated regions are masked as wildfire is unlikely to occur in areas lacking fuel. 
-                    FWI is based on meteorological variables only.
-                </Box>
-                <Box sx={sx.data_source}>
-                    Base data from <Link href={NEX_URL} target='_blank'>NEX-GDDP-CMIP6</Link>.
-                </Box>
-            </Box>,
-            colormapName: 'fire',
-            clim: { min: 0.0, max: 75.0 },
-            colormapLabel: 'Number of days per year',
-            colormapUnits: '',
-            statsLabel: 'danger days',
-            chartLabel: 'days per year',
-        },
+        </Box>
+      ),
+      colormapName: 'cool',
+      clim: { min: 0.0, max: 25.0 },
+      colormapLabel: 'Concentration',
+      colormapUnits: '(μg / m^3)',
+      statsLabel: 'μg / m^3',
+      chartLabel: 'Concentration (μg / m^3)',
     },
-
-    riskBands: [1.5, 2.0, 2.5, 3.0, 3.5],
-    setRiskBands: (riskBands) => set({ riskBands }),
-
-    colormapName: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].colormapName
+    precip: {
+      tags: ['water stress'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Precipitation',
+      riskTitle: 'Annual precipitation',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>Average annual precipitation.</Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'water',
+      clim: { min: 0, max: 2500 },
+      colormapLabel: 'Precipitation',
+      colormapUnits: '(mm)',
+      statsLabel: 'mm',
+      chartLabel: 'Precipitation (mm)',
     },
-
-    clim: () => {
-        const {riskOptions, risk} = get()
-        return [riskOptions[risk].clim.min, riskOptions[risk].clim.max]
+    slr: {
+      tags: ['coastal risk'],
+      bands: [2050.0],
+      bandLabel: 'Depth value by 2050',
+      riskTagLabel: 'Sea level rise',
+      riskTitle: 'Sea level rise',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            Future sea level change from the{' '}
+            <Link href="https://www.ipcc.ch/assessment-report/ar6/" target="_blank">
+              IPCC AR6
+            </Link>{' '}
+            report under a medium confidence fossil-fueled development pathway (SSP5-8.5) scenario.
+            The layer represents the median model projections from 2020 to 2050, relative to a{' '}
+            <Link
+              href="https://podaac.jpl.nasa.gov/announcements/2021-08-09-Sea-level-projections-from-the-IPCC-6th-Assessment-Report"
+              target="_blank"
+            >
+              1995-2014 baseline period
+            </Link>
+            .
+          </Box>
+          <Box sx={sx.data_source}>
+            The base data is from{' '}
+            <Link href="https://sealevel.nasa.gov/data_tools/17" target="_blank">
+              NASA Sea Level Change
+            </Link>{' '}
+            with the vertical land movement data replaced with data from{' '}
+            <Link
+              href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021JB022355"
+              target="_blank"
+            >
+              Hammond et al. (2021)
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'redteal', // tealgrey also looks good
+      clim: { min: -0.5, max: 0.5 },
+      colormapLabel: 'Sea level rise',
+      colormapUnits: '(m)',
+      statsLabel: 'meters',
+      chartLabel: 'meters',
     },
-
-    riskLabels: () => {
-        const {riskOptions, risks} = get()
-        let labels = {}
-        risks.forEach((v) => {
-            labels[v] = riskOptions[v].riskTagLabel;
-        })
-        return labels
+    tavg: {
+      tags: ['heat'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Temperature',
+      riskTitle: 'Annual temperature',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>Average annual temperature.</Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'magma',
+      clim: { min: -25, max: 30 },
+      colormapLabel: 'Temperature',
+      colormapUnits: '(°C)',
+      statsLabel: 'ºC',
+      chartLabel: 'Temperature (ºC)',
     },
-
-    riskTagLookup: () => {
-        const {riskOptions, risks} = get()
-        let tagLookup = {}
-        risks.forEach((risk) => {
-            tagLookup[riskOptions[risk].riskTagLabel] = risk;
-        })
-        return tagLookup
+    tc_rp: {
+      tags: ['coastal risk'],
+      bands: [2017.0, 2050.0],
+      bandLabels: ['1980-2017', '2015-2050'],
+      riskTagLabel: 'Tropical cyclones',
+      bandLabel: 'Time period',
+      riskTitle: 'Tropical cyclone risk',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            Return period of Category 3+ tropical cyclones. The layer is based on generating
+            thousands of years of simulated storm tracks within 100km of each location. The
+            resulting simulations include track locations and intensity, which can be used to make
+            estimates of tropical cyclone approach probabilities for 1980-2017 and 2015-2050 under
+            RCP8.5 conditions.
+          </Box>
+          <Box sx={sx.data_source}>
+            The data presented here was generated using the open-source STORM model and our Coastal
+            Risk Framework. For a more detailed discussion on how this data layer was created,
+            please see our{' '}
+            <Link href="https://woodwellrisk.github.io/risks/tropical-cyclones/" target="_blank">
+              methodology website.
+            </Link>
+          </Box>
+        </Box>
+      ),
+      colormapName: 'fire',
+      clim: { min: 0.0, max: 100 },
+      colormapLabel: 'Return period of Category 3+ storm',
+      colormapUnits: '(years)',
+      statsLabel: 'years',
+      chartLabel: 'Return period (years)',
     },
-
-    riskTitle: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].riskTitle
+    warm_nights: {
+      tags: ['heat', 'health'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Tropical nights',
+      riskTitle: 'Nights over 68°F',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            Heat stress. The number of days in a year with nightly minimum temperatures over 68°F
+            (20°C). Increasing nighttime temperatures have implications for human health,
+            agricultural yield, and the spread of pests and diseases.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'fire',
+      clim: { min: 0.0, max: 365.0 },
+      colormapLabel: 'Number of nights per year',
+      colormapUnits: '',
+      statsLabel: 'nights',
+      chartLabel: 'nights per year',
     },
-
-    riskDescription: () => {
-        const { riskOptions, risk } = get()
-        return riskOptions[risk].riskDescription
+    wdd: {
+      tags: ['wildfire'],
+      bands: [1.5, 2.0, 2.5, 3.0, 3.5],
+      bandLabel: 'Warming level',
+      riskTagLabel: 'Widlfires',
+      riskTitle: 'Widlfire danger days',
+      riskDescription: (
+        <Box className="risk-layer-description" sx={sx.data_description}>
+          <Box>
+            Wildfire danger days. The number of days in a year at or more extreme than the worst 5%
+            of days of fire weather index (FWI) in the base period of 1°C of climate warming
+            (2000-2020). Non-vegetated regions are masked as wildfire is unlikely to occur in areas
+            lacking fuel. FWI is based on meteorological variables only.
+          </Box>
+          <Box sx={sx.data_source}>
+            Base data from{' '}
+            <Link href={NEX_URL} target="_blank">
+              NEX-GDDP-CMIP6
+            </Link>
+            .
+          </Box>
+        </Box>
+      ),
+      colormapName: 'fire',
+      clim: { min: 0.0, max: 75.0 },
+      colormapLabel: 'Number of days per year',
+      colormapUnits: '',
+      statsLabel: 'danger days',
+      chartLabel: 'days per year',
     },
+  },
 
-    bandLabel: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].bandLabel
-    },
+  riskBands: [1.5, 2.0, 2.5, 3.0, 3.5],
+  setRiskBands: (riskBands) => set({ riskBands }),
 
-    colormapLabel: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].colormapLabel;
-    },
+  colormapName: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].colormapName;
+  },
 
-    colormapUnits: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].colormapUnits;
-    },
+  clim: () => {
+    const { riskOptions, risk } = get();
+    return [riskOptions[risk].clim.min, riskOptions[risk].clim.max];
+  },
 
-    statsLabel: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].statsLabel
-    },
+  riskLabels: () => {
+    const { riskOptions, risks } = get();
+    let labels = {};
+    risks.forEach((v) => {
+      labels[v] = riskOptions[v].riskTagLabel;
+    });
+    return labels;
+  },
 
-    chartLabel: () => {
-        const {riskOptions, risk} = get()
-        return riskOptions[risk].chartLabel
-    },
+  riskTagLookup: () => {
+    const { riskOptions, risks } = get();
+    let tagLookup = {};
+    risks.forEach((risk) => {
+      tagLookup[riskOptions[risk].riskTagLabel] = risk;
+    });
+    return tagLookup;
+  },
 
-    // search options
-    showSearch: false,
-    setShowSearch: (showSearch) => set({ showSearch }),
+  riskTitle: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].riskTitle;
+  },
 
-    showSpinner: false,
-    setShowSpinner: (showSpinner) => set({ showSpinner }),
+  riskDescription: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].riskDescription;
+  },
 
-    showSearchLayer: true,
-    setShowSearchLayer: (showSearchLayer) => set({ showSearchLayer }),
+  bandLabel: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].bandLabel;
+  },
 
-    // result is the filtered search result that we want to zoom to on the map
-    result: [],
-    setResult: (result) => set({ result }),
+  colormapLabel: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].colormapLabel;
+  },
 
-    // results is for the search results drop down, so can be an array of arrays of length [0, 10]
-    results: [],
-    setResults: (results) => set({ results }),
+  colormapUnits: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].colormapUnits;
+  },
 
-    searchText: '',
-    setSearchText: (searchText) => set({ searchText }),
+  statsLabel: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].statsLabel;
+  },
 
-    coordinates: null,
-    setCoordinates: (coordinates) => set({ coordinates }),
+  chartLabel: () => {
+    const { riskOptions, risk } = get();
+    return riskOptions[risk].chartLabel;
+  },
 
-    bbox: null,
-    setBbox: (bbox) => set({ bbox }),
+  // search options
+  showSearch: false,
+  setShowSearch: (showSearch) => set({ showSearch }),
 
-    searchBy: 'place',
-    setSearchBy: (searchBy) => set({ searchBy }),
+  showSpinner: false,
+  setShowSpinner: (showSpinner) => set({ showSpinner }),
 
-    place: null,
-    setPlace: (place) => set({ place }),
+  showSearchLayer: true,
+  setShowSearchLayer: (showSearchLayer) => set({ showSearchLayer }),
 
-    lookup: null,
-    setLookup: (lookup) => set({ lookup }),
+  // result is the filtered search result that we want to zoom to on the map
+  result: [],
+  setResult: (result) => set({ result }),
 
-    latitudeInput: '',
-    setLatitudeInput: (latitudeInput) => set({ latitudeInput }),
+  // results is for the search results drop down, so can be an array of arrays of length [0, 10]
+  results: [],
+  setResults: (results) => set({ results }),
 
-    latitude: '',
-    setLatitude: (latitude) => set({ latitude }),
+  searchText: '',
+  setSearchText: (searchText) => set({ searchText }),
 
-    validLatitude: true,
-    setValidLatitude: (validLatitude) => set({ validLatitude }),
+  coordinates: null,
+  setCoordinates: (coordinates) => set({ coordinates }),
 
-    longitudeInput: '',
-    setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
+  bbox: null,
+  setBbox: (bbox) => set({ bbox }),
 
-    longitude: '',
-    setLongitude: (longitude) => set({ longitude }),
+  searchBy: 'place',
+  setSearchBy: (searchBy) => set({ searchBy }),
 
-    validLongitude: true,
-    setValidLongitude: (validLongitude) => set({ validLongitude }),
+  place: null,
+  setPlace: (place) => set({ place }),
 
-}))
+  lookup: null,
+  setLookup: (lookup) => set({ lookup }),
 
-export default useStore
+  latitudeInput: '',
+  setLatitudeInput: (latitudeInput) => set({ latitudeInput }),
+
+  latitude: '',
+  setLatitude: (latitude) => set({ latitude }),
+
+  validLatitude: true,
+  setValidLatitude: (validLatitude) => set({ validLatitude }),
+
+  longitudeInput: '',
+  setLongitudeInput: (longitudeInput) => set({ longitudeInput }),
+
+  longitude: '',
+  setLongitude: (longitude) => set({ longitude }),
+
+  validLongitude: true,
+  setValidLongitude: (validLongitude) => set({ validLongitude }),
+}));
+
+export default useStore;

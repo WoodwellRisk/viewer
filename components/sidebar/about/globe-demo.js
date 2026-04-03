@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react'
-import { Minimap, Path, Graticule } from '@carbonplan/minimaps'
-import { equirectangular } from '@carbonplan/minimaps/projections'
-import { useThemeUI } from 'theme-ui'
+import { useState, useEffect } from 'react';
+import { Minimap, Path, Graticule } from '@carbonplan/minimaps';
+import { equirectangular } from '@carbonplan/minimaps/projections';
+import { useThemeUI } from 'theme-ui';
 
 const GlobeDemo = ({ showGraticule }) => {
-  const { theme } = useThemeUI()
-  const [opacity, setOpacity] = useState(0.2)
+  const { theme } = useThemeUI();
+  const [opacity, setOpacity] = useState(0.2);
 
   useEffect(() => {
-    showGraticule == false ? setOpacity(0.0) : setOpacity(0.2)
-  }, [showGraticule])
+    showGraticule == false ? setOpacity(0.0) : setOpacity(0.2);
+  }, [showGraticule]);
 
   return (
     <>
@@ -21,10 +21,8 @@ const GlobeDemo = ({ showGraticule }) => {
         />
         <Graticule stroke={theme.colors.primary} opacity={opacity} />
       </Minimap>
-
-
     </>
-  )
-}
+  );
+};
 
-export default GlobeDemo
+export default GlobeDemo;

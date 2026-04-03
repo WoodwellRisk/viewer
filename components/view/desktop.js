@@ -1,10 +1,9 @@
-import { Flex } from 'theme-ui'
-import Sidebar from '../sidebar'
-import About from '../sidebar/about'
-import Map from '../map'
+import { Flex } from 'theme-ui';
+import Sidebar from '../sidebar';
+import About from '../sidebar/about';
+import Map from '../map';
 
 function Desktop() {
-
   return (
     <Flex
       sx={{
@@ -23,9 +22,8 @@ function Desktop() {
       <About mobile={false} />
 
       <Map mobile={false} />
-
     </Flex>
-  )
+  );
 }
 
-export default Desktop
+export default Desktop;
