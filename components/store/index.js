@@ -143,7 +143,7 @@ const useStore = create((set, get) => ({
   // },
 
   associatedRisks: {
-    'water stress': ['drought', 'precip'],
+    'water stress': ['drought'], // 'precip'],
     heat: ['hot_days', 'warm_nights', 'lethal_heat', 'tavg', 'cdd', 'hdd'],
     'coastal risk': ['tc_rp', 'slr'],
     // 'flooding': [],
@@ -192,7 +192,7 @@ const useStore = create((set, get) => ({
     //'lsp',
     'permafrost',
     //'pm25',
-    'precip',
+    //'precip',
     'tavg',
     'tc_rp',
     'slr',
